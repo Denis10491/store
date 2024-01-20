@@ -1,0 +1,44 @@
+@import url('./uikit-rtl.min.css');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f3f3f3;
+    min-height: 100vh;
+}
+
+button {
+    cursor: pointer;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.main {
+    padding: 40px 0;
+}
+.container {
+    margin: 0 40px;
+}
+
+.header__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+.header__nav-item {
+    cursor: pointer;
+    color: #fff;
+    margin: 0 8px 0 0;
+}
+
+.title {
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}

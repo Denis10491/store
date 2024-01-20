@@ -1,0 +1,42 @@
+<template>
+    <div class="uk-child-width-expand@s uk-text-center uk-width-1-1" uk-grid>
+        <div v-for="product in products" :key="product.id" uk-img 
+            class="uk-card uk-card-secondary uk-card-body uk-width-1-3@m uk-card-hover uk-background-cover"
+            :data-src="product.imgPath"
+        >
+            <h3 class="uk-card-title">{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+            <div class="uk-flex uk-flex-center uk-flex-middle">
+                <button class="uk-button uk-button-primary uk-margin-small-right" @click="productsStore.addToBasket(product.id, '+')">{{ product.price + ' Р' }}</button>
+                <div class="uk-flex uk-flex-center uk-flex-middle" v-if="productsInBasket[product.id]">
+                    <button class="uk-button uk-button-default uk-margin-small-right" @click="productsStore.addToBasket(product.id, '+')">+</button>
+                    <p>{{ productsInBasket[product.id]["count"] }}</p>
+                    <button class="uk-button uk-button-default uk-margin-small-left" @click="productsStore.addToBasket(product.id, '-')">-</button>
+                </div>
+            </div>
+            <router-link :to="'/product/' + product.id" class="uk-button uk-button-default uk-margin-small-left uk-margin-small-top">Подробнее</router-link>
+        </div>
+    </div>
+</template>
+
+<script>
+import { useProductsStore } from '../store/products';
+
+export default {
+    name: 'HomePage',
+
+    setup() {
+        const productsStore = useProductsStore()
+        return { productsStore }
+    },
+
+    computed: {
+        products() {
+            return this.productsStore.list
+        },
+        productsInBasket() {
+            return this.productsStore.listInBasket
+        }
+    }
+}
+</script>
