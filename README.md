@@ -13,6 +13,19 @@ Backend stack: Laravel 10, Spatie
 - RESTful API with roles. Admin panel
 - SPA with using a Vue Router and custom middlewares
 - Profile with the ability to view orders with filters
+## Config
+
+Admin account
+- Login: admin@admin
+- Password: admin
+
+Database
+- DB_HOST: 127.0.0.1
+- DB_PORT: 3306
+- DB_DATABASE: storedb
+- DB_USERNAME: root
+- DB_PASSWORD: root
+
 ## API Reference
 
 #### Create new account
