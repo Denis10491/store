@@ -19,7 +19,7 @@ export const useStatisticsStore = defineStore('statistics', {
         },
 
         async getBestSellingProducts(year, month) {
-            const response = await axios.get('/statistics/orders/bestselling?year='+year+'&month='+month, {
+            const response = await axios.get('/statistics/products/bestselling?year='+year+'&month='+month, {
                 headers: {
                     Authorization: this.token
                 }

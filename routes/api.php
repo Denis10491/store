@@ -27,7 +27,6 @@ Route::get('/products/show/{id}', [ProductsController::class, 'show']);
 /* Auth */
 Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('/user/show', [UserController::class, 'show']);
-    Route::get('/user', [UserController::class, 'index']);
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
     Route::post('/orders/store', [OrdersController::class, 'store']);
     Route::get('/orders/show', [OrdersController::class, 'show']);
@@ -43,6 +42,6 @@ Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function() {
     /* Statistics */
     Route::group(['prefix' => 'statistics'], function() {
         Route::get('/orders/count', [StatisticsController::class, 'countOfOrdersByMonth']);
-        Route::get('/orders/bestselling', [StatisticsController::class, 'bestSellingByMonth']);
+        Route::get('/products/bestselling', [StatisticsController::class, 'bestSellingByMonth']);
     });
 });
