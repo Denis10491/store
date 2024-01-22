@@ -1,7 +1,7 @@
 <template>
     <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
         <div class="uk-card-media-left uk-cover-container">
-            <img :src="product.imgPath" alt="image" uk-cover>
+            <img :src="getImg(product.imgPath)" alt="image" uk-cover>
         </div>
         <div>
             <div class="uk-card-body">
@@ -45,6 +45,12 @@ export default {
     setup() {
         const productsStore = useProductsStore()
         return { productsStore }
+    },
+
+    methods: {
+        getImg(path) {
+            return (path.slice(0, 4) == 'http') ? path : '../' + path;
+        }
     },
 
     computed: {

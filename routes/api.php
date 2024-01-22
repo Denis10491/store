@@ -36,7 +36,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function() {
     Route::get('/orders/index', [OrdersController::class, 'index']);
     Route::post('/products/store', [ProductsController::class, 'store']);
-    Route::put('/products/update', [ProductsController::class, 'update']);
+    Route::post('/products/update/{id}', [ProductsController::class, 'update']);
     Route::delete('/products/destroy/{id}', [ProductsController::class, 'destroy']);
 
     /* Statistics */

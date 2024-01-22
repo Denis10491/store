@@ -1,9 +1,9 @@
 <template>
-<div class="uk-card uk-card-default uk-padding-small uk-margin-small-bottom " v-if="data">
-    <div class="uk-cover-container">
-        <img :src="data.imgPath" alt="product" uk-cover>
+<div class="product-card uk-card uk-card-default uk-padding-small uk-margin-small-bottom uk-flex uk-width-1-1" v-if="data">
+    <div class="product-card-img uk-card-media-left uk-cover-container">
+        <img :src="data.imgPath" alt="image" uk-cover>
     </div>
-    <div class="uk-width-1-1">
+    <div class="uk-width-1-1 uk-margin-small-left">
         <div v-if="isAdmin">
             <h3 class="title">{{ data.name }}</h3>
             <p><span>Description: </span>{{ data.description }}</p>
@@ -46,7 +46,7 @@ import { useProductsStore } from '../store/products';
 
 export default {
     name: 'ProductComponent',
-    props: [ 'data', 'isAdmin', 'renderFormForUpdateProductById' ],
+    props: [ 'data', 'isAdmin', 'renderFormProductById' ],
 
     setup() {
         const productsStore = useProductsStore();
@@ -55,7 +55,7 @@ export default {
 
     methods: {
         selectThis() {
-            this.renderFormForUpdateProductById({id: this.data.id})
+            this.renderFormProductById({id: this.data.id})
         }
     },
 
@@ -68,6 +68,10 @@ export default {
 </script>
 
 <style scoped>
+.product-card-img {
+    width: 200px;
+    height: 100%;
+}
 .product-control {
     height: auto;
 }

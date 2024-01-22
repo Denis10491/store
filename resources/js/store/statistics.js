@@ -25,9 +25,6 @@ export const useStatisticsStore = defineStore('statistics', {
                 }
             });
             let products = await response.data.data;
-            // products.sort((a, b) => {
-            //     return a.count - b.count
-            // });
             this.bestSelling = await products;
         }
     }

@@ -15,8 +15,7 @@ class Nutritional extends Model
     protected $fillable = [
         'proteins',
         'fats',
-        'carbohydrates',
-        'text'
+        'carbohydrates'
     ];
 
     public function product() {

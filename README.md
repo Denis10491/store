@@ -122,6 +122,51 @@ Database
 | :-------- | :------- | :-------------------------------- |
 | `Authorization`| `Bearer ${token}` | **Required** |
 
+#### Create new product (admin only)
+
+```http
+  POST /api/products/store
+```
+
+|  Header  | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `Authorization`| `Bearer ${token}` | **Required** |
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Required**. Id of item to fetch |
+| `name`    | `string` | **Required** |
+| `description` | `string` | **Required** |
+| `image`   | `file`   | **Required** |
+| `composition`   | `string`   | **Required** |
+| `price`      | `int` | **Required** |
+| `proteins`      | `string` | **Required** |
+| `fats`      | `string` | **Required** |
+| `carbohydrates` | `string` | **Required** |
+
+#### Update product by id (admin only)
+
+```http
+  POST /api/products/update/${id}
+```
+
+|  Header  | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `Authorization`| `Bearer ${token}` | **Required** |
+| `Content-Type`| `multipart/form-data` | **Required** |
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Required**. Id of item to fetch |
+| `name`    | `string` | Optional |
+| `description` | `string` | Optional |
+| `image`   | `file`   | Optional. Image of product |
+| `composition`   | `string`   | Optional |
+| `price`      | `int` | Optional |
+| `proteins`      | `string` | Optional |
+| `fats`      | `string` | Optional |
+| `carbohydrates` | `string` | Optional |
+
 #### Delete product by id (admin only)
 
 ```http

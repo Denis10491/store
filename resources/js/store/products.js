@@ -9,17 +9,54 @@ export const useProductsStore = defineStore('products', {
     }),
 
     actions: {
-        async create(product) {
-            console.log(product)
-            // return axios.post('/products/store', {
-            //     name: name, description: description
-            // }, {
-            //     headers: {
-            //         Authorization: token
-            //     }
-            // })
-            // .then(() => true)
-            // .catch(() => false)
+        create(form) {
+            const formData = new FormData();
+
+            formData.append('name', form.name);
+            formData.append('description', form.description);
+            formData.append('image', form.img);
+            formData.append('proteins', form.nutritional.proteins);
+            formData.append('fats', form.nutritional.fats);
+            formData.append('carbohydrates', form.nutritional.carbohydrates);
+            formData.append('composition', form.composition);
+            formData.append('price', form.price);
+
+            return axios.post('/products/store', formData, {
+                headers: {
+                    Authorization: this.token,
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(() => {
+                this.getAll();
+                return true;
+            })
+            .catch(() => false)
+        },
+
+        update(form) {
+            const formData = new FormData();
+
+            if (form.img) formData.append('image', form.img);
+            formData.append('name', form.name);
+            formData.append('description', form.description);
+            formData.append('proteins', form.nutritional.proteins);
+            formData.append('fats', form.nutritional.fats);
+            formData.append('carbohydrates', form.nutritional.carbohydrates);
+            formData.append('composition', form.composition);
+            formData.append('price', form.price);
+
+            return axios.post('/products/update/'+form.id, formData, {
+                headers: {
+                    Authorization: this.token,
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(() => {
+                this.getAll();
+                return true;
+            })
+            .catch(() => false)
         },
 
         addToBasket(id, type) {
@@ -32,13 +69,17 @@ export const useProductsStore = defineStore('products', {
             localStorage.setItem('basket', JSON.stringify(this.listInBasket));
         },
 
-        async deleteFromDB(productId) {
-            const response = await axios.delete('/products/destroy/'+productId, {
+        deleteFromDB(productId) {
+            return axios.delete('/products/destroy/'+productId, {
                 headers: {
                     Authorization: this.token
                 }
-            });
-            if (response) this.getAll()
+            })
+            .then(() => {
+                this.getAll();
+                return true;
+            })
+            .catch(() => false)
         },
 
         removeById(id) {
