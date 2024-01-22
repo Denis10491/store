@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductsInOrders;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,15 +16,11 @@ class OrdersController extends Controller
      */
     public function index()
     {
-        $orders = Order::query()->select('id', 'address', 'created_at')->orderBy('created_at', 'DESC')->get();
-        foreach($orders as $key => $order) {
-            $orders[$key]["products"] = DB::table('products_in_orders')
-                ->join('orders', 'products_in_orders.order_id', '=', 'orders.id')
-                ->join('products', 'products_in_orders.product_id', '=', 'products.id')
+        $orders = Order::select('id', 'address', 'created_at')->orderBy('created_at', 'DESC')->get();
+        foreach ($orders as $key => $order) {
+            $orders[$key]["products"] = ProductsInOrders::join('products', 'products_in_orders.product_id', '=', 'products.id')
                 ->where('products_in_orders.order_id', $order["id"])
-                ->select(
-                    'products.name', 'products.price',
-                    'products_in_orders.count', 'products_in_orders.product_id')
+                ->select('products.name', 'products.price', 'products_in_orders.count', 'products_in_orders.product_id')
                 ->get();
         }
 

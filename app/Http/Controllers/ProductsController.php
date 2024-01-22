@@ -59,7 +59,8 @@ class ProductsController extends Controller
      */
     public function show(string $id)
     {
-        return response(['status' => true, 'data' => Product::with('nutritional')->where('id', $id)->first()]);
+        $product = Product::with('nutritional')->find($id);
+        return response(['status' => $product ? true : false, 'data' => $product]);
     }
 
     /**
@@ -83,20 +84,20 @@ class ProductsController extends Controller
             Product::where('id', $id)->update(["imgPath" => 'storage/'.$path]);
         }
 
-        $product = Product::where('id', $id)->first();
         Product::where('id', $id)->update([
             "name" => $credentials["name"], 
             "description" => $credentials["description"],
             "composition" => $credentials["composition"], 
             "price" => $credentials["price"]
         ]);
+        $product = Product::find($id);
 
-        $nutritional = Nutritional::where('id', $product["nutritional_id"])->first();
         Nutritional::where('id', $product["nutritional_id"])->update([
             'proteins' => $credentials["proteins"],
             'fats' => $credentials["fats"],
             'carbohydrates' => $credentials["carbohydrates"],
         ]);
+        $nutritional = Nutritional::find($product["nutritional_id"]);
 
         $product["nutritional"] = $nutritional;
         return response(['status' => true, 'data' => $product]);
@@ -107,6 +108,7 @@ class ProductsController extends Controller
      */
     public function destroy(string $id)
     {
-        return response(['status' => Product::where('id', $id)->delete()]);
+        $status = Product::destroy($id);
+        return response(['status' => $status]);
     }
 }
