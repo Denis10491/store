@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\StatisticsController;
@@ -19,15 +19,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 /* Guest */
-Route::post('/login', [UserController::class, 'login'])->name('login');
-Route::post('/register', [UserController::class, 'register'])->name('register');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/products/index', [ProductsController::class, 'index']);
 Route::get('/products/show/{id}', [ProductsController::class, 'show']);
 
 /* Auth */
 Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('/user/show', [UserController::class, 'show']);
-    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/orders/store', [OrdersController::class, 'store']);
     Route::get('/orders/show', [OrdersController::class, 'show']);
 });
