@@ -1,13 +1,19 @@
 <template>
 <div class="uk-flex uk-flex-between">
-    <div class="uk-width-1-1">
-        <div v-for="product in products" :key="product.id" class="uk-width-1-1" uk-grid>
+    <div class="uk-width-1-1" v-if="loaded">
+        <div v-for="product in products[currentPage]" :key="product.id" class="uk-width-1-1" uk-grid>
             <Product
-                :data="productsStore.getProductById(product.id)"
+                :data="product"
                 :isAdmin="true"
                 :renderFormProductById="renderFormProductById"
+                :page="currentPage"
             />
         </div>
+        <Paginator
+            :currentPage="currentPage"
+            :changePage="changePage"
+            :numOfMaxPage="productsStore.numOfMaxPage"
+        />
     </div>
 
     <form id="product-form" class="uk-card uk-card-default uk-flex uk-flex-column uk-width-1-2 uk-margin-small-left uk-padding-small uk-height-1-1"
@@ -51,13 +57,16 @@
 <script>
 import { useProductsStore } from '../../store/products';
 import Product from '../Product.vue';
+import Paginator from '../Paginator.vue';
 
 export default {
     name: 'AdminProductsComponent',
-    components: { Product },
+    components: { Product, Paginator },
 
     data() {
         return {
+            loaded: true,
+            currentPage: 1,
             titleProductForm: 'Create product',
             productForm: {
                 id: null,
@@ -80,12 +89,25 @@ export default {
         const productsStore = useProductsStore();
         return { productsStore }
     },
+
     methods: {
         async send() {
             (this.titleProductForm == 'Create product') 
             ? this.isFormRequestStatus = await this.productsStore.create(this.productForm)
             : this.isFormRequestStatus = await this.productsStore.update(this.productForm);
+            if (this.isFormRequestStatus) this.productsStore.getPage(this.currentPage);
 
+        },
+
+        changePage(num) {
+            this.loaded = false;
+            this.productsStore.getPage(num);
+            setTimeout(() => {
+                (this.productsStore.numOfMaxPage < num)
+                ? this.currentPage = this.productsStore.numOfMaxPage
+                : this.currentPage = num;
+                this.loaded = true;
+            }, 500);
         },
 
         renderFormProductById(data = null) {

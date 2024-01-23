@@ -18,7 +18,7 @@ export default {
     },
 
     mounted() {
-        this.productsStore.getAll();
+        this.productsStore.getPage(1);
     }
 }
 </script>

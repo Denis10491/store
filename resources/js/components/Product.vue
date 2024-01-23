@@ -15,7 +15,7 @@
             </div>
             <p class="uk-margin-small-bottom"><span>Price: </span>{{ data.price }}</p>
             <button class="uk-button uk-button-primary" @click="selectThis()">Update</button>
-            <button class="uk-button uk-button-danger uk-margin-small-left" @click="productsStore.deleteFromDB(data.id)">Remove</button>
+            <button class="uk-button uk-button-danger uk-margin-small-left" @click="productsStore.deleteFromDB(data.id, page)">Remove</button>
         </div>
         <div v-else>
             <h3 class="uk-card-title">{{ data.name }}</h3>
@@ -46,7 +46,7 @@ import { useProductsStore } from '../store/products';
 
 export default {
     name: 'ProductComponent',
-    props: [ 'data', 'isAdmin', 'renderFormProductById' ],
+    props: [ 'data', 'page', 'isAdmin', 'renderFormProductById' ],
 
     setup() {
         const productsStore = useProductsStore();

@@ -5,8 +5,16 @@ export const useProductsStore = defineStore('products', {
     state: () => ({
         list: [],
         listInBasket: JSON.parse(localStorage.getItem('basket') ?? "{}"),
-        token: 'Bearer ' + sessionStorage.getItem('token')
+        token: 'Bearer ' + sessionStorage.getItem('token'),
+        maxPerPage: 0,
+        count: 0
     }),
+
+    getters: {
+        numOfMaxPage() {
+            return Math.round(this.count / this.maxPerPage) + 1;
+        }
+    },
 
     actions: {
         create(form) {
@@ -52,10 +60,7 @@ export const useProductsStore = defineStore('products', {
                     'Content-Type': 'multipart/form-data'
                 }
             })
-            .then(() => {
-                this.getAll();
-                return true;
-            })
+            .then(() => true)
             .catch(() => false)
         },
 
@@ -69,14 +74,14 @@ export const useProductsStore = defineStore('products', {
             localStorage.setItem('basket', JSON.stringify(this.listInBasket));
         },
 
-        deleteFromDB(productId) {
+        deleteFromDB(productId, page = null) {
             return axios.delete('/products/destroy/'+productId, {
                 headers: {
                     Authorization: this.token
                 }
             })
             .then(() => {
-                this.getAll();
+                if (page) this.getPage(page);
                 return true;
             })
             .catch(() => false)
@@ -87,15 +92,21 @@ export const useProductsStore = defineStore('products', {
             localStorage.setItem('basket', JSON.stringify(this.listInBasket));
         },
 
-        async getAll() {
-            const response = await axios.get('/products/index');
-            this.list = response.data.data.map(item => {
+        async getPage(num) {
+            const response = await axios.get('/products/index/'+num);
+            this.list[num] = await response.data.data.data.map(item => {
                 item["count"] = 0; return item;
             });
+            this.maxPerPage = await response.data.data.per_page;
+            this.count = await response.data.data.total;
         },
 
         getProductById(id) {
-            return this.list.find(product => product.id == id);
+            let product = null
+            this.list.forEach(page => {
+                product = page.find(product => product.id == id);  
+            })
+            return product
         },
 
         getProductInBasketById(id) {

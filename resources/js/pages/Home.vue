@@ -1,6 +1,6 @@
 <template>
-    <div class="uk-child-width-expand@s uk-text-center uk-width-1-1" uk-grid>
-        <div v-for="product in products" :key="product.id" uk-img 
+    <div v-if="loaded" class="uk-child-width-expand@s uk-text-center uk-width-1-1" uk-grid>
+        <div v-for="product in products[currentPage]" :key="product.id" uk-img 
             class="uk-card uk-card-secondary uk-card-body uk-width-1-3@m uk-card-hover uk-background-cover"
             :data-src="product.imgPath"
         >
@@ -17,17 +17,46 @@
             <router-link :to="'/product/' + product.id" class="uk-button uk-button-default uk-margin-small-left uk-margin-small-top">Подробнее</router-link>
         </div>
     </div>
+    <h2 class="uk-card uk-card-default uk-padding uk-width-auto" v-else>Loading...</h2>
+
+    <Paginator
+        :currentPage="currentPage"
+        :changePage="changePage"
+        :numOfMaxPage="productsStore.numOfMaxPage"
+    />
 </template>
 
 <script>
 import { useProductsStore } from '../store/products';
+import Paginator from '../components/Paginator.vue';
 
 export default {
     name: 'HomePage',
+    components: { Paginator },
+
+    data() {
+        return {
+            loaded: true,
+            currentPage: 1
+        }
+    },
 
     setup() {
         const productsStore = useProductsStore()
         return { productsStore }
+    },
+
+    methods: {
+        changePage(num) {
+            this.loaded = false;
+            this.productsStore.getPage(num);
+            setTimeout(() => {
+                (this.productsStore.numOfMaxPage < num)
+                ? this.currentPage = this.productsStore.numOfMaxPage
+                : this.currentPage = num;
+                this.loaded = true;
+            }, 500);
+        }
     },
 
     computed: {

@@ -12,9 +12,9 @@ class ProductsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $page)
     {
-        $data = Product::with('nutritional')->latest()->get();
+        $data = Product::with('nutritional')->latest()->paginate(30, '*', 'page', $page);
         return response(['status' => true, 'data' => $data], 200);
     }
 

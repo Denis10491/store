@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 /* Guest */
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::get('/products/index', [ProductsController::class, 'index']);
+Route::get('/products/index/{id}', [ProductsController::class, 'index']);
 Route::get('/products/show/{id}', [ProductsController::class, 'show']);
 
 /* Auth */

@@ -57,8 +57,10 @@ export default {
         sum() {
             let sumOfproductsInBasket = 0;
             Object.keys(this.productsStore.listInBasket).map(id => {
-                this.productsStore.list.map(product => {
-                    if (product.id == id) sumOfproductsInBasket += product.price * this.productsStore.listInBasket[id]["count"];
+                this.productsStore.list.forEach(page => {
+                    page.forEach(product => {
+                        if (product.id == id) sumOfproductsInBasket += product.price * this.productsStore.listInBasket[id]["count"];
+                    });  
                 });
             });
             return sumOfproductsInBasket;

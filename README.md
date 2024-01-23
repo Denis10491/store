@@ -199,7 +199,7 @@ Database
 #### Get statistics of the best-selling products for the month (admin only)
 
 ```http
-  GET /api/statistics/orders/bestselling
+  GET /api/products/orders/bestselling
 ```
 
 |  Header  | Type     | Description                       |
