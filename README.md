@@ -3,7 +3,7 @@
 
 Frontend stack: Vue.js 3, Pinia, Chart.js, VueRouter, Axios, UIkit
 
-Backend stack: Laravel 10, Spatie
+Backend stack: Laravel 10, Spatie, MySQL
 
 
 ## Features
@@ -13,6 +13,7 @@ Backend stack: Laravel 10, Spatie
 - RESTful API with roles. Admin panel
 - SPA with using a Vue Router and custom middlewares
 - Profile with the ability to view orders with filters
+
 ## Config
 
 Admin account
@@ -26,6 +27,55 @@ Database
 - DB_DATABASE: storedb
 - DB_USERNAME: root
 - DB_PASSWORD: root
+
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/Divrun/Store
+```
+
+Go to the project directory
+
+```bash
+  cd store
+```
+
+Install dependencies composer.json
+
+```bash
+  composer install
+```
+
+Install dependencies package.json
+
+```bash
+  npm install
+```
+
+Migration to database
+```bash
+  php artisan migrate
+```
+
+Seed to database
+```bash
+  php artisan db:seed
+```
+
+Start the Backend server
+
+```bash
+  php artisan serve
+```
+
+Start the Frontend server
+
+```bash
+  npm run dev
+```
 
 ## API Reference
 
@@ -204,7 +254,7 @@ Database
 #### Get statistics of the best-selling products for the month (admin only)
 
 ```http
-  GET /api/products/orders/bestselling
+  GET /api/statistics/products/bestselling
 ```
 
 |  Header  | Type     | Description                       |
@@ -215,42 +265,3 @@ Database
 | :-------- | :------- | :-------------------------------- |
 | `year`      | `string` | **Required** |
 | `month`      | `string` | **Required** |
-
-## Run Locally
-
-Clone the project
-
-```bash
-  git clone https://github.com/Divrun/Store
-```
-
-Go to the project directory
-
-```bash
-  cd store
-```
-
-Install dependencies composer.json
-
-```bash
-  composer install
-```
-
-Install dependencies package.json
-
-```bash
-  npm install
-```
-
-Start the Backend server
-
-```bash
-  php artisan serve
-```
-
-Start the Frontend server
-
-```bash
-  npm run dev
-```
-

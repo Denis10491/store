@@ -31,7 +31,7 @@ export default {
 
     methods: {
         logout() {
-            axios.post('/logout', {
+            axios.get('/logout', {
                 headers: {
                     Authorization: 'Bearer ' + sessionStorage.getItem('token')
                 }

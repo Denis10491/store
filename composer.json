@@ -1,5 +1,5 @@
 {
-    "name": "store",
+    "name": "store/store",
     "type": "project",
     "description": "SPA store Vue 3/Laravel.",
     "keywords": ["store", "laravel", "vue"],

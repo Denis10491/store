@@ -30,7 +30,7 @@ export const useUserStore = defineStore('user', {
         },
 
         logout() {
-            return axios.post('/logout', {
+            return axios.get('/logout', {
                 headers: {
                     Authorization: this.token
                 }

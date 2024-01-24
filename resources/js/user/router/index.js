@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import guest from '../middleware/guest';
 import auth from '../middleware/auth';
-import admin from '../middleware/admin';
 import { useUserStore } from '../store/user'
 import middlewareController from './middlewareController';
 
@@ -11,8 +10,7 @@ const routes = [
     { path: '/basket', component: () => import('../pages/Basket.vue') },
     { path: '/profile', component: () => import('../pages/Profile.vue'), meta: { middleware: [auth] } },
     { path: '/login', component: () => import('../pages/Login.vue'), meta: { middleware: [guest] } },
-    { path: '/signup', component: () => import('../pages/Signup.vue'), meta: { middleware: [guest] } },
-    { path: '/logout', component: () => import('../pages/Logout.vue'), meta: { middleware: [auth] } },
+    { path: '/signup', component: () => import('../pages/Signup.vue'), meta: { middleware: [guest] } }
 ]
 
 const router = createRouter({
