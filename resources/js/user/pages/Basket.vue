@@ -1,12 +1,12 @@
 <template>
-<div class="basket-cards uk-flex justify-between" v-if="Object.keys(productsInBasket).length > 0">
+<div v-if="Object.keys(productsInBasket).length > 0" class="basket-cards uk-flex justify-between">
     <div class="uk-flex uk-flex-column">
         <div class="uk-grid-collapse" v-for="product in productsInBasket" :key="product.id" uk-grid>
             <Product :data=productsStore.getProductById(product.id) />
         </div>
     </div>
 
-    <form class="uk-card uk-card-default uk-flex uk-flex-column uk-margin-small-left uk-padding-small uk-width-1-2 uk-height-1-1"
+    <form class="uk-card uk-card-default uk-flex uk-flex-column uk-margin-small-left uk-padding uk-width-1-2 uk-height-1-1 border"
         @submit.prevent="order()"
     >
         <h3>Оформление заказа</h3>
@@ -22,7 +22,7 @@
         </div>
     </form>
 </div>
-<h2 class="uk-card uk-card-default uk-padding uk-width-auto" v-else>Basket is empty</h2>
+<h2 v-else class="uk-card uk-card-default uk-padding uk-width-auto border">Basket is empty</h2>
 </template>
 
 <script>

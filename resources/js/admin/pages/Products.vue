@@ -1,6 +1,13 @@
 <template>
-<div class="uk-flex uk-flex-between">
-    <div class="uk-width-1-1" v-if="loaded">
+
+<div>
+    <ul uk-tab>
+        <li :class="{'uk-active': menu.cards}"><a @click="changeTab('list')" href="#">list</a></li>
+        <li :class="{'uk-active': menu.create}"><a @click="changeTab('create')" href="#">create</a></li>
+    </ul>
+</div>
+<div v-if="loaded">
+    <div v-show="menu.list" class="uk-width-1-1">
         <div v-for="product in products[currentPage]" :key="product.id" class="uk-width-1-1" uk-grid>
             <Product
                 :data="product"
@@ -16,7 +23,7 @@
         />
     </div>
 
-    <form id="product-form" class="uk-card uk-card-default uk-flex uk-flex-column uk-width-1-2 uk-margin-small-left uk-padding-small uk-height-1-1"
+    <form v-show="menu.create" id="product-form" class="border uk-card uk-card-default uk-flex uk-flex-column uk-width-1-2 uk-margin-small-left uk-padding uk-height-1-1"
         @submit.prevent="send()"
     >
         <div class="product-form-header uk-flex uk-flex-between uk-margin-small-bottom">
@@ -52,12 +59,15 @@
         </div>
     </form>
 </div>
+<div v-else class="uk-padding-small">
+    <p>Loading...</p>
+</div>
 </template>
 
 <script>
-import { useProductsStore } from '../../store/products';
-import Product from '../Product.vue';
-import Paginator from '../Paginator.vue';
+import { useProductsStore } from '../store/products';
+import Product from '../components/Product.vue';
+import Paginator from '../../components/Paginator.vue';
 
 export default {
     name: 'AdminProductsComponent',
@@ -65,6 +75,10 @@ export default {
 
     data() {
         return {
+            menu: {
+                list: true,
+                create: false
+            },
             loaded: true,
             currentPage: 1,
             titleProductForm: 'Create product',
@@ -97,6 +111,13 @@ export default {
             : this.isFormRequestStatus = await this.productsStore.update(this.productForm);
             if (this.isFormRequestStatus) this.productsStore.getPage(this.currentPage);
 
+        },
+
+        changeTab(name) {
+            Object.keys(this.menu).map(key => {
+                this.menu[key] = false
+                if (key == name) this.menu[key] = true;
+            });
         },
 
         changePage(num) {
@@ -155,14 +176,12 @@ export default {
     computed: {
         products() {
             return this.productsStore.list;
-        },
-        productsInBasket() {
-            return this.productsStore.listInBasket;
         }
     },
 
-    mounted() {
+    async mounted() {
         this.updateDataForProductForm();
+        this.loaded = await this.productsStore.getPage(1);
     }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
-    <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
-        <div class="uk-card-media-left uk-cover-container">
+    <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin border" uk-grid>
+        <div class="uk-card-media-left uk-cover-container border">
             <img :src="getImg(product.imgPath)" alt="image" uk-cover>
         </div>
         <div>

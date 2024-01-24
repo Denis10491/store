@@ -1,7 +1,8 @@
 <template>
-    <div v-if="loaded" class="uk-child-width-expand@s uk-text-center uk-width-1-1" uk-grid>
+    <div v-if="loaded" class="uk-child-width-1-2@s uk-child-width-1-3 uk-text-center uk-width-1-1" uk-grid>
         <div v-for="product in products[currentPage]" :key="product.id" uk-img 
-            class="uk-card uk-card-secondary uk-card-body uk-width-1-3@m uk-card-hover uk-background-cover"
+            class="uk-card uk-card-secondary uk-card-body uk-card-hover uk-background-cover border"
+            uk-scrollspy="cls: uk-animation-fade; delay: 100;"
             :data-src="product.imgPath"
         >
             <h3 class="uk-card-title">{{ product.name }}</h3>
@@ -17,7 +18,7 @@
             <router-link :to="'/product/' + product.id" class="uk-button uk-button-default uk-margin-small-left uk-margin-small-top">Подробнее</router-link>
         </div>
     </div>
-    <h2 class="uk-card uk-card-default uk-padding uk-width-auto" v-else>Loading...</h2>
+    <h2 class="uk-card uk-card-default uk-padding uk-width-auto border" v-else>Loading...</h2>
 
     <Paginator
         :currentPage="currentPage"
@@ -28,7 +29,7 @@
 
 <script>
 import { useProductsStore } from '../store/products';
-import Paginator from '../components/Paginator.vue';
+import Paginator from '../../components/Paginator.vue';
 
 export default {
     name: 'HomePage',

@@ -18,6 +18,7 @@ Backend stack: Laravel 10, Spatie
 Admin account
 - Login: admin@admin
 - Password: admin
+- Path: /admin
 
 Database
 - DB_HOST: 127.0.0.1
@@ -54,8 +55,12 @@ Database
 #### Get all products
 
 ```http
-  GET /api/products/index
+  GET /api/products/index/${id}
 ```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `string` | **Required**. Id of item to fetch |
 
 #### Get product by id
 

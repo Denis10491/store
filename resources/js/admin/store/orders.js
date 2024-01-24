@@ -1,50 +1,35 @@
 import { defineStore } from "pinia";
-import { useUserStore } from "./user";
 
 export const useOrdersStore = defineStore('orders', {
     state: () => ({
         list: [],
         filteredList: [],
-        token: 'Bearer ' + sessionStorage.getItem('token') ?? ""
+        token: 'Bearer ' + sessionStorage.getItem('token') ?? "",
+        maxPerPage: 0,
+        count: 0
     }),
 
+    getters: {
+        numOfMaxPage() {
+            return Math.round(this.count / this.maxPerPage) + 1;
+        }
+    },
+
     actions: {
-        async getAll() {
-            const response = await axios.get('/orders/index', {
+        async getPage(num) {
+            const response = await axios.get('/orders/index/'+num, {
                 headers: {
                     Authorization: this.token
                 }
             });
             if (!response) return false;
-            this.list = await response.data.data;
-            this.filteredList = await response.data.data;
+            this.list[num] = await response.data.data.data;
+            this.filteredList[num] = await response.data.data.data;
+            this.maxPerPage = await response.data.data.per_page;
+            this.count = await response.data.data.total;
+            return true;
         },
 
-        create(products, address) {
-            return axios.post('/orders/store', {
-                products: JSON.stringify(products), address: address
-            }, {
-                headers: {
-                    Authorization: this.token
-                }
-            })
-            .then(response => {
-                localStorage.removeItem('basket');
-                return response;
-            })
-            .catch(() => false);
-        },
-
-        async showByUserId() {
-            const response = await axios.get('/orders/show', {
-                headers: {
-                    Authorization: this.token
-                }
-            });
-            if (!response) return false;
-            this.list = await response.data.data;
-            this.filteredList = await response.data.data;
-        },
 
         filter(dateStart = null, dateEnd = null, productName = null) {
             // Date Start
@@ -109,6 +94,6 @@ export const useOrdersStore = defineStore('orders', {
                 default:
                     return 0
             }
-        },
+        }
     }
-})
+});

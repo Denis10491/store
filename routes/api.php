@@ -19,9 +19,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 /* Guest */
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::get('/products/index/{id}', [ProductsController::class, 'index']);
+Route::get('/products/index/{page}', [ProductsController::class, 'index']);
 Route::get('/products/show/{id}', [ProductsController::class, 'show']);
 
 /* Auth */
@@ -34,7 +34,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
  
 /* Admin */
 Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function() {
-    Route::get('/orders/index', [OrdersController::class, 'index']);
+    Route::get('/orders/index/{page}', [OrdersController::class, 'index']);
     Route::post('/products/store', [ProductsController::class, 'store']);
     Route::post('/products/update/{id}', [ProductsController::class, 'update']);
     Route::delete('/products/destroy/{id}', [ProductsController::class, 'destroy']);

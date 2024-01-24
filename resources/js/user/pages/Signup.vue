@@ -1,14 +1,16 @@
 <template>
-    <form class="uk-card uk-card-default uk-padding" @submit.prevent="send()">
-        <h3>Create new account</h3>
-        <input type="text" class="uk-input" placeholder="Name" v-model="name">
-        <input type="email" class="uk-input" placeholder="Email" v-model="email">
-        <input type="password" class="uk-input" placeholder="Password" v-model="password">
-        <button class="uk-button uk-background-primary uk-light">SignUp</button>
-        <div v-if="!isFormRequestStatus" class="uk-alert-danger uk-padding-small">
-            <p>We cannot register you. Try again</p>
-        </div>
-    </form>
+    <div class="uk-flex uk-flex-center container">
+        <form class="uk-card uk-card-default uk-padding border" @submit.prevent="send()">
+            <h3>Create new account</h3>
+            <input type="text" class="uk-input" placeholder="Name" v-model="name">
+            <input type="email" class="uk-input" placeholder="Email" v-model="email">
+            <input type="password" class="uk-input" placeholder="Password" v-model="password">
+            <button class="uk-button uk-background-primary uk-light">SignUp</button>
+            <div v-if="!isFormRequestStatus" class="uk-alert-danger uk-padding-small">
+                <p>We cannot register you. Try again</p>
+            </div>
+        </form>
+    </div>
 </template>
 
 <script>

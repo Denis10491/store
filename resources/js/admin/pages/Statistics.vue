@@ -51,7 +51,7 @@
 import { Bar } from 'vue-chartjs'
 import { Pie } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement, Colors } from 'chart.js'
-import { useStatisticsStore } from '../../store/statistics'
+import { useStatisticsStore } from '../../user/store/statistics'
 
 export default {
     name: 'AdminStatisticsComponent',

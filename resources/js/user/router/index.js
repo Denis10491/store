@@ -10,7 +10,6 @@ const routes = [
     { path: '/product/:id', component: () => import('../pages/Product.vue'), props: true },
     { path: '/basket', component: () => import('../pages/Basket.vue') },
     { path: '/profile', component: () => import('../pages/Profile.vue'), meta: { middleware: [auth] } },
-    { path: '/admin', component: () => import('../pages/Admin.vue'), meta: { middleware: [admin] } },
     { path: '/login', component: () => import('../pages/Login.vue'), meta: { middleware: [guest] } },
     { path: '/signup', component: () => import('../pages/Signup.vue'), meta: { middleware: [guest] } },
     { path: '/logout', component: () => import('../pages/Logout.vue'), meta: { middleware: [auth] } },

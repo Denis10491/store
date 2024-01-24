@@ -14,9 +14,9 @@ class OrdersController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $page)
     {
-        $orders = Order::select('id', 'address', 'created_at')->orderBy('created_at', 'DESC')->get();
+        $orders = Order::select('id', 'address', 'created_at')->orderBy('id', 'DESC')->paginate(30, '*', 'page', $page);
         foreach ($orders as $key => $order) {
             $orders[$key]["products"] = ProductsInOrders::join('products', 'products_in_orders.product_id', '=', 'products.id')
                 ->where('products_in_orders.order_id', $order["id"])

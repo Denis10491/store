@@ -1,6 +1,6 @@
 <template>
 <h1 class="title">Profile</h1>
-<div class="uk-card uk-card-default uk-padding uk-width-auto">
+<div class="uk-card uk-card-default uk-padding uk-width-auto border">
     <h3>Orders</h3>
     <div class="uk-margin-top">
         <Orders :data="orders" />

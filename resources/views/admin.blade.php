@@ -16,7 +16,18 @@
     @vite('resources/css/app.css')
 </head>
 <body>
-    <div id="app"></div>
-    @vite('resources/js/user/app.js')
+    @php
+        $user = Auth::user();
+    @endphp
+    @if (Auth::check() && $user->hasRole('admin'))
+        <div id="app" class="uk-flex"></div>
+    @else
+    <div class="uk-flex uk-flex-column uk-flex-middle">
+        <h3 class="title">Access is denied</h3>
+        <a href="/">To the store</a>
+    </div>
+    @endif
+
+    @vite('resources/js/admin/app.js')
 </body>
 </html>

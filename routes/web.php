@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,4 +13,8 @@ use App\Http\Controllers\CategoryController;
 |
 */
 
+
+Route::view('/admin', 'admin')->where('any', '.*');
+Route::view('/admin/{any}', 'admin')->where('any', '.*');
+Route::view('/login', 'index')->name('login');
 Route::view('/{any}', 'index')->where('any', '.*');
