@@ -3,13 +3,16 @@
         <ul v-if="userStore.isAuth" class="uk-nav uk-nav-default uk-width-1-1 uk-flex uk-flex-middle">
             <a href="/" class="header__logo">Store</a>
             <li><router-link to="/basket" class="header__nav-item">Basket</router-link></li>
+            <li><router-link to="/about" class="header__nav-item">About</router-link></li>
             <li><router-link to="/profile" class="header__nav-item">Profile</router-link></li>
         </ul>
         <ul v-else class="uk-nav uk-nav-default uk-width-1-1 uk-flex uk-flex-middle">
             <a href="/" class="header__logo">Store</a>
+            <li><router-link to="/about" class="header__nav-item">About</router-link></li>
             <li><router-link to="/basket" class="header__nav-item">Basket</router-link></li>
         </ul>
 
+        <a href="https://github.com/Divrun/Store-Laravel-Vue" target="_blanc" class="uk-icon-button" uk-icon="github"></a>
         <a v-if="userStore.isAuth" href="#" class="uk-icon-button" uk-icon="sign-out" @click="userStore.logout()"></a>
         <nav v-else class="uk-flex uk-flex-middle">
             <router-link to="/login" class="header__nav-item">Login</router-link>

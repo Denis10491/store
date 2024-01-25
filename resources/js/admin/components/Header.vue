@@ -18,7 +18,8 @@
 
         <div class="uk-flex uk-flex-center uk-flex-middle">
             <span class="uk-margin-small-right uk-text-uppercase uk-text-small">administrator</span>
-        <a href="#" class="uk-icon-button" uk-icon="sign-out" @click="logout()"></a>
+            <a href="https://github.com/Divrun/Store-Laravel-Vue" target="_blanc" class="uk-icon-button" uk-icon="github"></a>
+            <a href="#" class="uk-icon-button" uk-icon="sign-out" @click="logout()"></a>
         </div>
     </header>
 </template>
