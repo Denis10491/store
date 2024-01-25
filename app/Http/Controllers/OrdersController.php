@@ -56,12 +56,12 @@ class OrdersController extends Controller
         return response(['status' => true]);
     }
 
-    public function show()
+    public function show(string $page)
     {
-        if (!Auth::check()) return response(['status' => false, 'Unathorizated' => false], 401);
-
         $user = Auth::user();
-        $orders = Order::query()->where('user_id', $user->id)->select('id', 'address', 'created_at')->latest()->get();
+        if (!$user) return response(['status' => false, 'Unathorizated' => false], 401);
+
+        $orders = Order::where('user_id', $user->id)->select('id', 'address', 'created_at')->orderBy('id', 'DESC')->paginate(30, '*', 'page', $page);
         foreach($orders as $key => $order) {
             $orders[$key]["products"] = DB::table('products_in_orders')
                 ->join('orders', 'products_in_orders.order_id', '=', 'orders.id')

@@ -22,7 +22,7 @@ export default {
     },
 
     created() {
-        this.ordersStore.showByUserId();
+        this.ordersStore.getPage(1);
     },
 
     computed: {

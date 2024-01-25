@@ -26,21 +26,35 @@
         >Clear</button>
     </nav>
 
-    <div class="order-card uk-card uk-margin-small-top uk-margin-small-bottom" v-if="data">
-        <div v-for="order in data" :key="order.id">
-            <hr>
-            <div class="order-title">
-                <h3>{{ 'Date: ' + order.created_at.slice(0, 10) }}</h3>
-                <h3>{{ 'Address: ' + order.address }}</h3>
-            </div>
-            <div class="order-products">
-                <p v-for="product in order.products" :key="product.id">{{ product.name + ' x'+product.count+' ('+product.price+')' }}</p>
-            </div>
-            <h3>{{ 'Price: ' + priceOfOrder(order.products) }}</h3>
-        </div>
-    </div>
+    <table v-if="loaded" class="uk-table uk-table-divider uk-table-middle uk-table-striped">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Address</th>
+                <th>Products</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="order in orders[currentPage]" :key="order.id">
+                <td>{{ order.id }}</td>
+                <td>{{ order.address }}</td>
+                <td>
+                    <p v-for="product in order.products" :key="product.id">{{ product.name + ' x'+product.count+' ('+product.price+')' }}</p>
+                </td>
+                <td>{{ priceOfOrder(order.products) }}</td>
+            </tr>
+        </tbody>
+    </table>
 
-    <div v-if="data.length == 0" class="uk-padding-small">
+    <Paginator
+        v-if="loaded"
+        :currentPage="currentPage"
+        :changePage="changePage"
+        :numOfMaxPage="ordersStore.numOfMaxPage"
+    />
+
+    <div v-if="!loaded" class="uk-padding-small">
         <p>Loading...</p>
     </div>
 </template>
@@ -54,6 +68,8 @@ export default {
 
     data() {
         return {
+            loaded: false,
+            currentPage: 1,
             filter: {
                 dateStart: null,
                 dateEnd: null,
@@ -68,6 +84,17 @@ export default {
     },
 
     methods: {
+        changePage(num) {
+            this.loaded = false;
+            this.ordersStore.getPage(num);
+            setTimeout(() => {
+                (this.ordersStore.numOfMaxPage < num)
+                ? this.currentPage = this.ordersStore.numOfMaxPage
+                : this.currentPage = num;
+                this.loaded = true;
+            }, 500);
+        },
+
         priceOfOrder(products) {
             let price = 0;
             products.map(product => {
@@ -84,6 +111,16 @@ export default {
             }
             this.ordersStore.filter();
         }
+    },
+
+    computed: {
+        orders() {
+            return this.ordersStore.filteredList ?? [];
+        }
+    },
+
+    async mounted() {
+        this.loaded = await this.ordersStore.getPage(1);
     }
 }
 </script>
@@ -100,5 +137,8 @@ export default {
 }
 .order-title > * {
     margin: 0 10px 0 0;
+}
+.uk-table th {
+    text-align: start;
 }
 </style>

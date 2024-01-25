@@ -46,7 +46,7 @@ class StatisticsController extends Controller
         $ordersIds = Order::whereBetween('created_at', [
             $credentials["year"].'-'.$credentials["month"].'-01 00:00:00',
             $credentials["year"].'-'.$credentials["month"].'-31 00:00:00'
-        ])->pluck('id');
+        ])->orderBy('created_at', 'DESC')->pluck('id');
         
         $productsInOrders = []; $stashProducts = []; $data = [];
         foreach($ordersIds as $orderId) {

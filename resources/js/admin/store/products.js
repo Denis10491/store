@@ -7,7 +7,8 @@ export const useProductsStore = defineStore('products', {
         list: [],
         token: 'Bearer ' + sessionStorage.getItem('token'),
         maxPerPage: 0,
-        count: 0
+        count: 0,
+        selectedId: null
     }),
 
     getters: {
@@ -85,5 +86,13 @@ export const useProductsStore = defineStore('products', {
             this.count = await response.data.data.total;
             return true;
         },
+
+        getProductById(id) {
+            let product = null
+            this.list.forEach(page => {
+                product = page.find(product => product.id == id);  
+            })
+            return product
+        }
     }
 });

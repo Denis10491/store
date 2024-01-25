@@ -13,7 +13,7 @@
             <p class="uk-margin-small-left"><span>Carbohydrates: </span>{{ data.nutritional.carbohydrates }}</p>
         </div>
         <p class="uk-margin-small-bottom"><span>Price: </span>{{ data.price }}</p>
-        <button class="uk-button uk-button-primary" @click="selectThis()">Update</button>
+        <a href="#open-form-product" class="uk-button uk-button-primary" uk-toggle @click="productsStore.selectedId = data.id">Update</a>
         <button class="uk-button uk-button-danger uk-margin-small-left" @click="productsStore.deleteFromDB(data.id, page)">Remove</button>
     </div>
 </div>
@@ -24,7 +24,7 @@ import { useProductsStore } from '../store/products';
 
 export default {
     name: 'ProductComponent',
-    props: [ 'data', 'page', 'isAdmin', 'renderFormProductById' ],
+    props: [ 'data', 'page' ],
 
     setup() {
         const productsStore = useProductsStore();
@@ -32,18 +32,8 @@ export default {
     },
 
     methods: {
-        selectThis() {
-            this.renderFormProductById({id: this.data.id})
-        },
-
         getImg(path) {
-            return (path.substr(0, 7) == 'storage') ? '../'+path : path;
-        }
-    },
-
-    computed: {
-        productInBasket() {
-            return this.productsStore.getProductInBasketById(this.data.id)
+            return (path.substr(0, 7) == 'storage') ? window.location.origin+'/'+path : path;
         }
     }
 }

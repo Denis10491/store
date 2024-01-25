@@ -14,7 +14,7 @@ class ProductsController extends Controller
      */
     public function index(string $page)
     {
-        $data = Product::with('nutritional')->latest()->paginate(30, '*', 'page', $page);
+        $data = Product::with('nutritional')->orderBy('id', 'DESC')->paginate(30, '*', 'page', $page);
         return response(['status' => true, 'data' => $data], 200);
     }
 

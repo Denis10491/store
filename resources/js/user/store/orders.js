@@ -4,7 +4,9 @@ export const useOrdersStore = defineStore('orders', {
     state: () => ({
         list: [],
         filteredList: [],
-        token: 'Bearer ' + sessionStorage.getItem('token') ?? ""
+        token: 'Bearer ' + sessionStorage.getItem('token') ?? "",
+        maxPerPage: 0,
+        count: 0
     }),
 
     actions: {
@@ -21,17 +23,6 @@ export const useOrdersStore = defineStore('orders', {
                 return response;
             })
             .catch(() => false);
-        },
-
-        async showByUserId() {
-            const response = await axios.get('/orders/show', {
-                headers: {
-                    Authorization: this.token
-                }
-            });
-            if (!response) return false;
-            this.list = await response.data.data;
-            this.filteredList = await response.data.data;
         },
 
         filter(dateStart = null, dateEnd = null, productName = null) {
@@ -65,6 +56,20 @@ export const useOrdersStore = defineStore('orders', {
                     return order.products.find(product => (product.name.indexOf(productName) > 0));
                 });
             }
+        },
+
+        async getPage(num) {
+            const response = await axios.get('/orders/show/'+num, {
+                headers: {
+                    Authorization: this.token
+                }
+            });
+            if (!response) return false;
+            this.list[num] = await response.data.data.data;
+            this.filteredList[num] = await response.data.data.data;
+            this.maxPerPage = await response.data.data.per_page;
+            this.count = await response.data.data.total;
+            return true;
         },
 
         getMonth(date) {

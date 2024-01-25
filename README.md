@@ -13,6 +13,7 @@ Backend stack: Laravel 10, Spatie, MySQL
 - RESTful API with roles. Admin panel
 - SPA with using a Vue Router and custom middlewares
 - Profile with the ability to view orders with filters
+- Viewing orders and products in the form of lists and tables
 
 ## Config
 
@@ -65,6 +66,11 @@ Seed to database
   php artisan db:seed
 ```
 
+Connect image storage
+```bash
+  php artisan storage:link
+```
+
 Start the Backend server
 
 ```bash
@@ -102,7 +108,7 @@ Start the Frontend server
 | `email` | `string` | **Required** |
 | `password` | `string` | **Required** |
 
-#### Get all products
+#### Get products page
 
 ```http
   GET /api/products/index/${id}
@@ -154,23 +160,22 @@ Start the Frontend server
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `products`      | `json` | **Required**. Format: {"${product_id}":{"id":${product_id},"count":${count}} |
 | `address`| `string` | **Required** |
 
-#### Get orders of the current authorized user
+#### Get page orders of the current authorized user
 
 ```http
-  GET /api/orders/show
+  GET /api/orders/show/${page}
 ```
 
 |  Header  | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `Authorization`| `Bearer ${token}` | **Required** |
 
-#### Get all orders (admin only)
+#### Get page orders (admin only)
 
 ```http
-  GET /api/orders/index
+  GET /api/orders/index/${page}
 ```
 
 |  Header  | Type     | Description                       |
