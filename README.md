@@ -3,7 +3,7 @@
 
 Frontend stack: Vue.js 3, Pinia, Chart.js, VueRouter, Axios, UIkit
 
-Backend stack: Laravel 10, Spatie, MySQL
+Backend stack: Laravel 10, Docker, Spatie, MySQL
 
 
 ## Features
@@ -11,6 +11,7 @@ Backend stack: Laravel 10, Spatie, MySQL
 - Admin panel with the ability to manage products, view statistics and a list of orders with filters. 
 - Displaying monthly statistics on orders and best-selling products using chart.js
 - RESTful API with roles. Admin panel
+- Deploying an application via docker
 - SPA with using a Vue Router and custom middlewares
 - Profile with the ability to view orders with filters
 - Viewing orders and products in the form of lists and tables
@@ -23,7 +24,7 @@ Admin account
 - Path: /admin
 
 Database
-- DB_HOST: 127.0.0.1
+- DB_HOST: mysql
 - DB_PORT: 3306
 - DB_DATABASE: storedb
 - DB_USERNAME: root
@@ -33,55 +34,36 @@ Database
 ## Run Locally
 
 Clone the project
-
 ```bash
-  git clone https://github.com/Divrun/Store
+  git clone https://github.com/Divrun/Store-Laravel-Vue
 ```
 
 Go to the project directory
-
 ```bash
-  cd store
+  cd Store-Laravel-Vue
 ```
 
-Install dependencies composer.json
-
+Run docker build an application image
 ```bash
-  composer install
+  docker build -t vuelaravel .
 ```
 
-Install dependencies package.json
-
+Run docker compose
 ```bash
-  npm install
+  docker compose up
 ```
 
-Migration to database
+Run migrations and seeds
 ```bash
-  php artisan migrate
-```
-
-Seed to database
-```bash
-  php artisan db:seed
+  docker compose exec app php artisan migrate:fresh --seed
 ```
 
 Connect image storage
 ```bash
-  php artisan storage:link
+  docker compose exec app php artisan storage:link
 ```
 
-Start the Backend server
-
-```bash
-  php artisan serve
-```
-
-Start the Frontend server
-
-```bash
-  npm run dev
-```
+Open project: http://127.0.0.1:8000
 
 ## API Reference
 

@@ -1,0 +1,96 @@
+version: '3.7'
+
+services:
+  # elasticsearch:
+  #   image: elasticsearch:latest
+  #   volumes:
+  #     - ./configs/elasticsearch/config.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+  #     - ./docker_volumes/elasticsearch/data:/usr/share/elasticsearch/data
+  #   environment:
+  #     ES_JAVA_OPTS: "-Xmx512m -Xms512m"
+  #     ELASTIC_USERNAME: "admin"
+  #     ELASTIC_PASSWORD: "admin"
+  #     discovery.type: single-node
+  #   networks:
+  #     - local
+  #   ports:
+  #     - 9200:9200
+  #     - 9300:9300
+  
+  # logstash:
+  #   image: logstash:latesst
+  #   volumes:
+  #     - ./configs/logstash/config.yml:/usr/share/logstash/config/logstash.yml:ro
+  #   environment:
+  #     LS_JAVA_OPTS: "-Xmx512m -Xms512m"
+  #   ports:
+  #     - "5044:5044"
+  #     - "5000:5000"
+  #     - "9600:9600"
+  #   networks:
+  #     - local
+  #   depends_on:
+  #     - elasticsearch
+
+  # kibana:
+  #   image: kibana:latest
+  #   depends_on:
+  #     - elasticsearch
+  #   volumes:
+  #     - ./configs/kibana/config.yml:/usr/share/kibana/config/kibana.yml:ro
+  #   networks:
+  #     - local
+  #   ports:
+  #     - "5601:5601"
+
+  app: 
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: vuelaravel
+    restart: always
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www/html
+      - .env:/var/www/html/.env
+    networks:
+      - local
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: storedb
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+    volumes:
+      - local:/var/lib/mysql
+    networks:
+      - local
+
+  phpmyadmin:
+    depends_on:
+      - mysql
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - local
+
+networks:
+  local:
+    driver: bridge
+
+volumes:
+  local:
+    driver: local
