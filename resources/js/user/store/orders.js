@@ -26,34 +26,44 @@ export const useOrdersStore = defineStore('orders', {
         },
 
         filter(dateStart = null, dateEnd = null, productName = null) {
+            this.filteredList = this.list;
+
             // Date Start
             if (dateStart) {
                 let filterDateStart = new Date(dateStart);
-                this.filteredList = this.filteredList.filter(order => {
-                    let currentDate = new Date(order.created_at);
-                    return (
-                        currentDate.getFullYear() >= filterDateStart.getFullYear() &&
-                        this.getMonth(currentDate) >= filterDateStart.getMonth() &&
-                        currentDate.getDate() >= filterDateStart.getDate()
-                    ) ? true : false;
+                this.filteredList = this.filteredList.map(page => {
+                    return page.filter(order => {
+                        let currentDate = new Date(order.created_at);
+                        return (
+                            currentDate.getFullYear() >= filterDateStart.getFullYear() &&
+                            this.getMonth(currentDate) >= filterDateStart.getMonth() &&
+                            currentDate.getDate() >= filterDateStart.getDate()
+                        ) ? true : false;
+                    });
                 });
             }
+
             // Date End
             if (dateEnd) {
                 let filterDateEnd = new Date(dateEnd);
-                this.filteredList = this.filteredList.filter(order => {
-                    let currentDate = new Date(order.created_at);
-                    return (
-                        currentDate.getFullYear() <= filterDateEnd.getFullYear() &&
-                        this.getMonth(currentDate) <= filterDateEnd.getMonth() &&
-                        currentDate.getDate() <= filterDateEnd.getDate()
-                    ) ? true : false;
+                this.filteredList = this.filteredList.map(page => {
+                    return page.filter(order => {
+                        let currentDate = new Date(order.created_at);
+                        return (
+                            currentDate.getFullYear() <= filterDateEnd.getFullYear() &&
+                            this.getMonth(currentDate) <= filterDateEnd.getMonth() &&
+                            currentDate.getDate() <= filterDateEnd.getDate()
+                        ) ? true : false;
+                    });
                 });
             }
+
             // Products
             if (productName) {
-                this.filteredList = this.filteredList.filter(order => {
-                    return order.products.find(product => (product.name.indexOf(productName) > 0));
+                this.filteredList = this.filteredList.map(page => {
+                    return page.filter(order => {
+                        return (order.products.find(product => product.name.includes(productName))) ? true : false;
+                    });
                 });
             }
         },

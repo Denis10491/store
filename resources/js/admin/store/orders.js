@@ -6,12 +6,13 @@ export const useOrdersStore = defineStore('orders', {
         filteredList: [],
         token: 'Bearer ' + sessionStorage.getItem('token') ?? "",
         maxPerPage: 0,
-        count: 0
+        count: 0,
+        countForFilteredList: 0
     }),
 
     getters: {
         numOfMaxPage() {
-            return Math.round(this.count / this.maxPerPage) + 1;
+            return Math.round(this.countForFilteredList / this.maxPerPage) + 1;
         }
     },
 
@@ -22,45 +23,67 @@ export const useOrdersStore = defineStore('orders', {
                     Authorization: this.token
                 }
             });
-            if (!response) return false;
-            this.list[num] = await response.data.data.data;
-            this.filteredList[num] = await response.data.data.data;
-            this.maxPerPage = await response.data.data.per_page;
-            this.count = await response.data.data.total;
-            return true;
+            if (response) {
+                this.list[num] = await response.data.data.data;
+                this.filteredList[num] = await response.data.data.data;
+                this.maxPerPage = await response.data.data.per_page;
+                this.count = await response.data.data.total;
+                this.countForFilteredList = await response.data.data.total;
+                return true;
+            }
+            return false;
         },
 
 
         filter(dateStart = null, dateEnd = null, productName = null) {
+            let stashListOrders = [];
+
             // Date Start
             if (dateStart) {
                 let filterDateStart = new Date(dateStart);
-                this.filteredList = this.filteredList.filter(order => {
-                    let currentDate = new Date(order.created_at);
-                    return (
-                        currentDate.getFullYear() >= filterDateStart.getFullYear() &&
-                        this.getMonth(currentDate) >= filterDateStart.getMonth() &&
-                        currentDate.getDate() >= filterDateStart.getDate()
-                    ) ? true : false;
+                this.list.map(page => {
+                    page.map(order => {
+                        let currentDate = new Date(order.created_at);
+                        if (
+                            currentDate.getFullYear() >= filterDateStart.getFullYear() &&
+                            this.getMonth(currentDate) >= filterDateStart.getMonth() &&
+                            currentDate.getDate() >= filterDateStart.getDate()
+                        ) stashListOrders.push(order)
+                    })
                 });
             }
+
             // Date End
             if (dateEnd) {
                 let filterDateEnd = new Date(dateEnd);
-                this.filteredList = this.filteredList.filter(order => {
-                    let currentDate = new Date(order.created_at);
-                    return (
-                        currentDate.getFullYear() <= filterDateEnd.getFullYear() &&
-                        this.getMonth(currentDate) <= filterDateEnd.getMonth() &&
-                        currentDate.getDate() <= filterDateEnd.getDate()
-                    ) ? true : false;
+                this.list.map(page => {
+                    page.map(order => {
+                        let currentDate = new Date(order.created_at);
+                        if (
+                            currentDate.getFullYear() <= filterDateEnd.getFullYear() &&
+                            this.getMonth(currentDate) <= filterDateEnd.getMonth() &&
+                            currentDate.getDate() <= filterDateEnd.getDate()
+                        ) stashListOrders.push(order);
+                    });
                 });
             }
+
             // Products
             if (productName) {
-                this.filteredList = this.filteredList.filter(order => {
-                    return order.products.find(product => (product.name.indexOf(productName) > 0));
+                this.list.map(page => {
+                    page.map(order => {
+                        if (order.products.find(product => product.name.includes(productName))) stashListOrders.push(order);
+                    });
                 });
+            }
+
+            if (stashListOrders.length == 0) this.filteredList = this.list;
+            else {
+                this.filteredList = [];
+                for (let i = 1; i < stashListOrders.length; i += this.maxPerPage) {
+                    this.filteredList[i] = stashListOrders.slice(i, i + this.maxPerPage);
+                }
+                this.countForFilteredList = this.filteredList.length
             }
         },
 

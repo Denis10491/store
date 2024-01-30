@@ -11,6 +11,13 @@
 import Header from './components/Header.vue';
 
 export default {
-    components: { Header }
+    components: { Header },
+
+    created() {
+        if (!localStorage.getItem('firstTime')) {
+            window.location.href = '/about';
+            localStorage.setItem('firstTime', true)
+        }
+    }
 }
 </script>

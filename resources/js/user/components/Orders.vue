@@ -33,6 +33,7 @@
                 <th>Address</th>
                 <th>Products</th>
                 <th>Price</th>
+                <th>Date</th>
             </tr>
         </thead>
         <tbody>
@@ -43,6 +44,7 @@
                     <p v-for="product in order.products" :key="product.id">{{ product.name + ' x'+product.count+' ('+product.price+')' }}</p>
                 </td>
                 <td>{{ priceOfOrder(order.products) }}</td>
+                <td>{{ order.created_at.slice(0, 10).replaceAll('-', '.') }}</td>
             </tr>
         </tbody>
     </table>

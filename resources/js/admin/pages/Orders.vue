@@ -19,7 +19,7 @@
             </div>
         </div>
         <button class="uk-button uk-button-primary uk-height-1-1 uk-margin-small-left"
-            @click="ordersStore.filter(filter.dateStart, filter.dateEnd, filter.productName)"
+            @click="acceptFilter()"
         >Accept</button>
         <button class="uk-button uk-button-default uk-height-1-1 uk-margin-small-left"
             @click="clearFilter()"
@@ -33,6 +33,7 @@
                 <th>Address</th>
                 <th>Products</th>
                 <th>Price</th>
+                <th>Date</th>
             </tr>
         </thead>
         <tbody>
@@ -43,6 +44,7 @@
                     <p v-for="product in order.products" :key="product.id">{{ product.name + ' x'+product.count+' ('+product.price+')' }}</p>
                 </td>
                 <td>{{ priceOfOrder(order.products) }}</td>
+                <td>{{ order.created_at.slice(0, 10).replaceAll('-', '.') }}</td>
             </tr>
         </tbody>
     </table>
@@ -85,6 +87,11 @@ export default {
     },
     
     methods: {
+        acceptFilter() {
+            this.ordersStore.filter(this.filter.dateStart, this.filter.dateEnd, this.filter.productName);
+            this.currentPage = 1;
+        },
+
         changePage(num) {
             this.loaded = false;
             this.ordersStore.getPage(num);
@@ -116,7 +123,7 @@ export default {
 
     computed: {
         orders() {
-            return this.ordersStore.list;
+            return this.ordersStore.filteredList;
         }
     },
 
