@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { useProductsStore } from '../store/products';
+import { useProductsStore } from '../../store/products';
 
 export default {
     name: 'AdminProductFormComponent',

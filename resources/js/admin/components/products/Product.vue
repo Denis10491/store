@@ -1,5 +1,5 @@
 <template>
-<div class="product-card uk-card uk-card-default uk-padding uk-margin-small-bottom uk-flex uk-width-1-1 border" v-if="data">
+<div v-if="data" class="product-card uk-card uk-card-default uk-padding uk-margin-small-bottom uk-flex uk-width-1-1 border">
     <div class="product-card-img uk-card-media-left uk-cover-container">
         <img :src="getImg(data.imgPath)" class="border" alt="image" uk-cover>
     </div>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { useProductsStore } from '../store/products';
+import { useProductsStore } from '../../store/products';
 
 export default {
     name: 'ProductComponent',

@@ -80,9 +80,9 @@
 </template>
 
 <script>
-import ProductForm from '../components/Product.Form.vue';
+import ProductForm from '../components/Products/Product.Form.vue';
 import { useProductsStore } from '../store/products';
-import Product from '../components/Product.vue';
+import Product from '../components/Products/Product.vue';
 import Paginator from '../../components/Paginator.vue';
 
 export default {
