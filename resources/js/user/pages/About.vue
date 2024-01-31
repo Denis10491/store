@@ -9,44 +9,21 @@
             </ul>
         </div>
 
-        <div v-if="menu.en">
-            Dear users,
-            <br><br>
-            We would like to inform you that this online store is not a real commercial project, but rather a personal project to demonstrate web application development skills.
-            <br><br>
-            If you are interested in studying the source code of this project, you can find it on GitHub at the following link: <a href="https://github.com/Divrun/Store-Laravel-Vue" target="_blanc">https://github.com/Divrun/Store-Laravel-Vue</a>
-            <br><br>
-            Thank you for your understanding.
-        </div>
-        <div v-if="menu.ru">
-            Уважаемые пользователи,
-            <br><br>
-            Хотели бы вас проинформировать, что данный интернет-магазин не является настоящим коммерческим проектом, а лишь личным проектом для демонстрации навыков разработки веб-приложений.
-            <br><br>
-            Если вы заинтересованы в изучении исходного кода этого проекта, вы можете найти его на GitHub по следующей ссылке: <a href="https://github.com/Divrun/Store-Laravel-Vue" target="_blanc">https://github.com/Divrun/Store-Laravel-Vue</a>
-            <br><br>
-            Спасибо за понимание.
-        </div>
-        <div v-if="menu.stack">
-            Frontend: Vue.js 3, Pinia, Chart.js, VueRouter, Axios, UIkit
-            <br><br>
-            Backend: Laravel 10, Spatie, MySQL
-        </div>
-        <div v-if="menu.features" class="uk-margin-left">
-            <ul>
-                <li>RESTful API with roles. Admin panel with the ability to manage products, view statistics and a list of orders with filters.</li>
-                <li>Displaying monthly statistics on orders and best-selling products using chart.js</li>
-                <li>Viewing orders and products in the form of lists and tables</li>
-                <li>Profile with the ability to view orders with filters</li>
-                <li>SPA with using a Vue3, Vue Router, Axios, UIkit</li>
-            </ul>
-        </div>
+        <keep-alive>
+            <component :is="activeTab" />
+        </keep-alive>
     </div>
 </template>
 
 <script>
+import English from '../components/about/English.vue';
+import Russian from '../components/about/Russian.vue';
+import Stack from '../components/about/Stack.vue';
+import Features from '../components/about/Features.vue';
+
 export default {
     name: 'AboutPage',
+    components: { English, Russian, Stack, Features },
 
     data() {
         return {
@@ -65,6 +42,21 @@ export default {
                 this.menu[key] = false
                 if (key == name) this.menu[key] = true;
             });
+        }
+    },
+
+    computed: {
+        activeTab() {
+            switch(true) {
+                case this.menu.en:
+                    return English;
+                case this.menu.ru:
+                    return Russian;
+                case this.menu.stack:
+                    return Stack;
+                case this.menu.features:
+                    return Features;
+            }
         }
     }
 }
