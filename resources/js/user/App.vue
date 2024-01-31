@@ -1,23 +1,23 @@
 <template>
     <main class="main container">
         <Header></Header>
+
         <div class="content">
             <router-view></router-view>
         </div>
     </main>
+    
+    <Message></Message>
 </template>
 
 <script>
-import Header from './components/Header.vue';
+import { defineAsyncComponent } from 'vue';
+import Message from './components/Message.vue'
 
 export default {
-    components: { Header },
-
-    created() {
-        if (!localStorage.getItem('firstTime')) {
-            window.location.href = '/about';
-            localStorage.setItem('firstTime', true)
-        }
+    components: {
+        Header: defineAsyncComponent(() => import('./components/Header.vue')),
+        Message
     }
 }
 </script>
