@@ -55,7 +55,7 @@ export async function logout() {
     }
 }
 
-export async function productById(id) {
+export async function productById(id: string | number): Promise<any> {
     try {
         const response = await axios.get('/products/show/'+id);
         return response.data.data;

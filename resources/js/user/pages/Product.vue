@@ -20,10 +20,12 @@
                         v-if="!productInBasket" 
                         @click="productsStore.addToBasket(id, '+')"
                     >{{ product.price + ' Р' }}</button>
+
                     <button class="uk-button uk-button-primary uk-margin-small-right" 
                         v-else
                         @click="productsStore.addToBasket(id, '+')"
                     >{{ product.price + 'Р' }}</button>
+
                     <div class="uk-flex uk-flex-center uk-flex-middle" v-if="productInBasket">
                         <button class="uk-button uk-button-default uk-margin-small-right" @click="productsStore.addToBasket(id, '+')">+</button>
                         <p>{{ productInBasket.count }}</p>
@@ -35,31 +37,24 @@
     </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { Product } from '../../helpers/interfaces';
+import { productById } from '../services/api';
 import { useProductsStore } from '../store/products';
 
-export default {
-    name: 'basketPage',
-    props: [ 'id' ],
+const productsStore = useProductsStore()
 
-    setup() {
-        const productsStore = useProductsStore()
-        return { productsStore }
-    },
-
-    methods: {
-        getImg(path) {
-            return (path.slice(0, 4) == 'http') ? path : '../' + path;
-        }
-    },
-
-    computed: {
-        product() {
-            return this.productsStore.getProductById(this.id)
-        },
-        productInBasket() {
-            return this.productsStore.getProductInBasketById(this.id)
-        }
-    }
+interface Props {
+    id: string| number
 }
+const props = defineProps<Props>()
+
+let data = ref();
+productById(props.id).then(response => data.value = response);
+
+const product = computed<Product>(() => data.value);
+const productInBasket = computed(() => productsStore.getProductInBasketById(props.id));
+
+const getImg = (path: string): string => (path.slice(0, 4) == 'http') ? path : '../' + path;
 </script>
