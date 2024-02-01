@@ -1,30 +1,15 @@
 import { defineStore } from "pinia";
+import { pageOfOrders } from "../services/api";
 
 export const useOrdersStore = defineStore('orders', {
     state: () => ({
         list: [],
         filteredList: [],
-        token: 'Bearer ' + sessionStorage.getItem('token') ?? "",
         maxPerPage: 0,
         count: 0
     }),
 
     actions: {
-        create(products, address) {
-            return axios.post('/orders/store', {
-                products: JSON.stringify(products), address: address
-            }, {
-                headers: {
-                    Authorization: this.token
-                }
-            })
-            .then(response => {
-                localStorage.removeItem('basket');
-                return response;
-            })
-            .catch(() => false);
-        },
-
         filter(dateStart = null, dateEnd = null, productName = null) {
             this.filteredList = this.list;
 
@@ -69,16 +54,11 @@ export const useOrdersStore = defineStore('orders', {
         },
 
         async getPage(num) {
-            const response = await axios.get('/orders/show/'+num, {
-                headers: {
-                    Authorization: this.token
-                }
-            });
-            if (!response) return false;
-            this.list[num] = await response.data.data.data;
-            this.filteredList[num] = await response.data.data.data;
-            this.maxPerPage = await response.data.data.per_page;
-            this.count = await response.data.data.total;
+            const response = await pageOfOrders(num);
+            this.list[num] = await response.data;
+            this.filteredList[num] = await response.data;
+            this.maxPerPage = await response.per_page;
+            this.count = await response.total;
             return true;
         },
 

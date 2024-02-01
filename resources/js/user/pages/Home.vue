@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-    <h2 class="uk-card uk-card-default uk-padding uk-width-auto border" v-else>Loading...</h2>
+    <h2 v-else class="uk-card uk-card-default uk-padding uk-width-auto border">Loading...</h2>
 </div>
 
 <Paginator

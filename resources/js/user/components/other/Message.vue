@@ -10,6 +10,7 @@
 
 <script>
 export default {
+    name: 'MessageComponent',
     data() {
         return {
             isActive: false

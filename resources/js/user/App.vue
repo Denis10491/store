@@ -11,13 +11,12 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue';
-import Message from './components/Message.vue'
+import Header from './components/other/Header.vue'
+import Message from './components/other/Message.vue'
 
 export default {
     components: {
-        Header: defineAsyncComponent(() => import('./components/Header.vue')),
-        Message
+        Header, Message
     }
 }
 </script>

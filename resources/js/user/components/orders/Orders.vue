@@ -62,11 +62,10 @@
 </template>
 
 <script>
-import { useOrdersStore } from '../store/orders';
+import { useOrdersStore } from '../../store/orders';
 
 export default {
     name: 'AdminOrdersComponent',
-    props: [ 'data' ],
 
     data() {
         return {

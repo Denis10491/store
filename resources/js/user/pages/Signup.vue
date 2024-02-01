@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { useAuthStore } from '../store/auth';
+import { signup } from '../services/api';
 
 export default {
     name: 'SignupPage',
@@ -28,15 +28,10 @@ export default {
         }
     },
 
-    setup() {
-        const authStore = useAuthStore();
-        return { authStore }
-    },
-
     methods: {
         async send() {
             this.isFormRequestStatus = true;
-            const isCreatedStatus = await this.authStore.signup(this.name, this.email, this.password);
+            const isCreatedStatus = await signup(this.name, this.email, this.password);
             if (isCreatedStatus) window.location.href = '/login';
             else this.isFormRequestStatus = false;
         }

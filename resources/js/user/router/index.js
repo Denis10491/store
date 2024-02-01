@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { useUserStore } from '../store/user'
 import guest from '../middleware/guest';
 import auth from '../middleware/auth';
-import { useUserStore } from '../store/user'
 import middlewareController from './middlewareController';
 
 const routes = [
@@ -19,18 +19,17 @@ const router = createRouter({
     routes: routes
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach((to, from, next) => {
     const middleware = to.meta.middleware;
-    const store = useUserStore()
-    if (!store.$state.isAuth) await store.getUser();
-    const context = { from, next, store };
-
-    if (!middleware) return next();
-
-    middleware[0]({
-        ...context,
-        next: middlewareController(context, middleware)
-    })
+    const store = useUserStore();
+    store.getUserInfo().then(isAuthStatus => {
+        const context = { from, next, isAuthStatus };
+        if (!middleware) return next();
+        middleware[0]({
+            ...context,
+            next: middlewareController(context, middleware)
+        })
+    });
 })
 
 export default router

@@ -3,33 +3,17 @@
 <div class="uk-card uk-card-default uk-padding uk-width-auto border">
     <h3>Orders</h3>
     <div class="uk-margin-top">
-        <Orders :data="orders" />
+        <Orders />
     </div>
 </div>
 </template>
 
 <script>
-import Orders from '../components/Orders.vue';
-import { useOrdersStore } from '../store/orders';
+import Orders from '../components/orders/Orders.vue';
 
 export default {
     name: 'ProfilePage',
-    components: { Orders },
-
-    setup() {
-        const ordersStore = useOrdersStore();
-        return { ordersStore }
-    },
-
-    created() {
-        this.ordersStore.getPage(1);
-    },
-
-    computed: {
-        orders() {
-            return this.ordersStore.filteredList ?? [];
-        }
-    }
+    components: { Orders }
 }
 </script>
 

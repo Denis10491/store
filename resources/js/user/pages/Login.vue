@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { useAuthStore } from '../store/auth'
+import { login } from '../services/api'
 
 export default {
     name: 'LoginPage',
@@ -26,17 +26,11 @@ export default {
         }
     },
 
-    setup() {
-        const authStore = useAuthStore()
-        return { authStore }
-    },
-
     methods: {
         async send() {
             this.isFormRequestStatus = true;
-            const isAuthStatus = await this.authStore.login(this.email, this.password);
-            if (isAuthStatus) window.location.href = '/';
-            else this.isFormRequestStatus = false;
+            const isAuthStatus = await login(this.email, this.password);
+            (isAuthStatus) ? window.location.href = '/' : this.isFormRequestStatus = false;
         }
     }
 }

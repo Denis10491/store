@@ -2,7 +2,7 @@
 <div v-if="Object.keys(productsInBasket).length > 0" class="basket-cards uk-flex justify-between">
     <div class="uk-flex uk-flex-column">
         <div class="uk-grid-collapse" v-for="product in productsInBasket" :key="product.id" uk-grid>
-            <Product :data=productsStore.getProductById(product.id) />
+            <Product :id="product.id" />
         </div>
     </div>
 
@@ -26,9 +26,10 @@
 </template>
 
 <script>
+import { createOrder } from '../services/api';
 import { useProductsStore } from '../store/products';
-import { useOrdersStore } from '../store/orders'
-import Product from '../components/Product.vue';
+import Product from '../components/products/Product.vue';
+import { useUserStore } from '../store/user';
 
 export default {
     name: 'basketPage',
@@ -42,34 +43,27 @@ export default {
     },
 
     setup() {
-        const productsStore = useProductsStore()
-        const ordersStore = useOrdersStore()
-        return { productsStore, ordersStore }
+        const productsStore = useProductsStore();
+        const userStore = useUserStore();
+        return { productsStore, userStore }
     },
 
     computed: {
         products() {
-            return this.productsStore.list ?? [];
+            return this.productsStore.getList ?? [];
         },
         productsInBasket() {
-            return this.productsStore.listInBasket ?? {};
+            return this.productsStore.getListInBasket ?? {};
         },
         sum() {
-            let sumOfproductsInBasket = 0;
-            Object.keys(this.productsStore.listInBasket).map(id => {
-                this.productsStore.list.forEach(page => {
-                    page.forEach(product => {
-                        if (product.id == id) sumOfproductsInBasket += product.price * this.productsStore.listInBasket[id]["count"];
-                    });  
-                });
-            });
-            return sumOfproductsInBasket;
+            return this.productsStore.sumPriceInBasket ?? 0;
         }
     },
 
     methods: {
         async order() {
-            const response = await this.ordersStore.create(this.productsInBasket, this.address);
+            if (!this.userStore.isAuth) window.location.href = '/login';
+            const response = await createOrder(this.productsInBasket, this.address);
             if (!response) this.isFormRequestStatus = false
             else window.location.href = '/profile'
         }
