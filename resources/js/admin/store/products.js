@@ -55,7 +55,7 @@ export const useProductsStore = defineStore('products', {
             formData.append('composition', form.composition);
             formData.append('price', form.price);
         
-            return axios.post('/products/update/'+form.id, formData, {
+            return axios.put('/products/'+form.id, formData, {
                 headers: {
                     Authorization: this.token,
                     'Content-Type': 'multipart/form-data'
@@ -66,7 +66,7 @@ export const useProductsStore = defineStore('products', {
         },
 
         deleteFromDB(productId, page = null) {
-            return axios.delete('/products/destroy/'+productId, {
+            return axios.delete('/products/'+productId, {
                 headers: {
                     Authorization: this.token
                 }

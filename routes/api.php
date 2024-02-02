@@ -34,14 +34,13 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
  
 /* Admin */
 Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function() {
-    Route::get('/orders/index/{page}', [OrdersController::class, 'index']);
-    Route::post('/products/store', [ProductsController::class, 'store']);
-    Route::post('/products/update/{id}', [ProductsController::class, 'update']);
-    Route::delete('/products/destroy/{id}', [ProductsController::class, 'destroy']);
+    Route::post('/products', [ProductsController::class, 'store'])->name('products.store');
+    Route::put('/products/{id}', [ProductsController::class, 'update'])->name('products.update');
+    Route::delete('/products/{id}', [ProductsController::class, 'destroy'])->name('products.destroy');
 
     /* Statistics */
     Route::group(['prefix' => 'statistics'], function() {
-        Route::get('/orders/count', [StatisticsController::class, 'countOfOrdersByMonth']);
-        Route::get('/products/bestselling', [StatisticsController::class, 'bestSellingByMonth']);
+        Route::get('/orders/count', [StatisticsController::class, 'countOfOrdersByMonth'])->name('statistics.orders.count');
+        Route::get('/products/bestselling', [StatisticsController::class, 'bestSellingByMonth'])->name('statistics.products.bestselling');
     });
 });

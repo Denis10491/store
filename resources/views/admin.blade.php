@@ -28,6 +28,6 @@
     </div>
     @endif
 
-    @vite('resources/js/admin/app.js')
+    @vite('resources/js/admin/app.ts')
 </body>
 </html>

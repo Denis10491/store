@@ -17,6 +17,6 @@
 </head>
 <body>
     <div id="app"></div>
-    @vite('resources/js/user/app.js')
+    @vite('resources/js/user/app.ts')
 </body>
 </html>

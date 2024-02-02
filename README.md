@@ -1,7 +1,7 @@
 
 # Store (Vue 3 / Laravel 10)
 
-Frontend stack: Vue.js 3, Pinia, Chart.js, VueRouter, Axios, UIkit
+Frontend stack: Vue.js 3, TypeScript, Pinia, Chart.js, VueRouter, Axios, UIkit, Vite, Eslint
 
 Backend stack: Laravel 10, Docker, Spatie, MySQL
 

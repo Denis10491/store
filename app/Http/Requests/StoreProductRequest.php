@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Auth\Access\Gate;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreProductRequest extends FormRequest
