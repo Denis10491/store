@@ -27,7 +27,7 @@ let isFormRequestStatus = ref<boolean>(true);
 
 const send = async () => {
     isFormRequestStatus.value = true;
-    const isCreatedStatus = await signup(data.name, data.email, data.password);
+    const isCreatedStatus = await signup(data.name!, data.email, data.password);
     if (isCreatedStatus) window.location.href = '/login';
     else isFormRequestStatus.value = false;
 }

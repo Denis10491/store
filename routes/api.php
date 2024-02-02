@@ -19,8 +19,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 /* Guest */
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
 Route::get('/products/page/{page}', [ProductsController::class, 'index'])->name('products.index.paginated');
 Route::get('/products/{id}', [ProductsController::class, 'show'])->name('products.show');
 

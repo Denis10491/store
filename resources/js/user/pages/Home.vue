@@ -37,52 +37,31 @@
 />
 </template>
 
-<script>
+<script setup lang="ts">
 import { useProductsStore } from '../store/products';
 import Paginator from '../../components/Paginator.vue';
+import { computed, ref } from 'vue';
+import { Product } from '../../helpers/interfaces';
 
-export default {
-    name: 'HomePage',
-    components: { Paginator },
+const productsStore = useProductsStore();
 
-    data() {
-        return {
-            loaded: false,
-            currentPage: 1
-        }
-    },
+const loaded = ref<boolean>(false);
+const currentPage = ref<number>(1);
 
-    setup() {
-        const productsStore = useProductsStore()
-        return { productsStore }
-    },
-
-    created() {
-        this.changePage(1);
-    },
-
-    methods: {
-        changePage(num) {
-            this.loaded = false;
-            this.productsStore.getPage(num);
-            setTimeout(() => {
-                (this.productsStore.numOfMaxPage < num)
-                ? this.currentPage = this.productsStore.numOfMaxPage
-                : this.currentPage = num;
-                this.loaded = true;
-            }, 500);
-        }
-    },
-
-    computed: {
-        products() {
-            return this.productsStore.list
-        },
-        productsInBasket() {
-            return this.productsStore.listInBasket
-        }
-    }
+const changePage = (num: number) => {
+    loaded.value = false;
+    productsStore.getPage(num);
+    setTimeout(() => {
+        productsStore.numOfMaxPage < num
+        ? currentPage.value = productsStore.numOfMaxPage
+        : currentPage.value = num;
+        loaded.value = true;
+    }, 500);
 }
+changePage(1);
+
+const products = computed<Array<Product>>(()  => productsStore.getList);
+const productsInBasket = computed(() => productsStore.listInBasket);
 </script>
 
 <style scoped>

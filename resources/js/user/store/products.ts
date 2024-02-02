@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 import { Product } from "../../helpers/interfaces";
-import { pageOfProducts } from "../services/api";
+import { pageOfProducts, productById } from "../services/api";
 
 export const useProductsStore = defineStore('products', {
     state: () => ({
-        list: Array<Product>,
+        list: [] as Array<Product>,
         listInBasket: {},
         sumPriceInBasket: 0,
         maxPerPage: 0,
@@ -15,8 +15,8 @@ export const useProductsStore = defineStore('products', {
         numOfMaxPage() {
             return Math.round(this.count / this.maxPerPage) + 1;
         },
-        getList() {
-            return this.list ?? [];
+        getList(): Array<Product> {
+            return this.list;
         },
         getListInBasket() {
             if (Object.keys(this.listInBasket).length == 0) this.listInBasket = JSON.parse(localStorage.getItem('basket') ?? "{}");
@@ -43,7 +43,7 @@ export const useProductsStore = defineStore('products', {
             localStorage.setItem('basket', JSON.stringify(this.listInBasket));
         },
 
-        async getPage(num: string | number) {
+        async getPage(num: number) {
             const response = await pageOfProducts(num);
             this.maxPerPage = await response.per_page;
             this.count = await response.total;

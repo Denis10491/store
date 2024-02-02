@@ -3,7 +3,7 @@ import axios from "axios";
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api';
 axios.defaults.withCredentials = true;
 
-export async function login(email: string, password: string) {
+export async function login(email: string, password: string): Promise<boolean> {
     try {
         const response = await axios.post('/login', {
             email: email, password: password
@@ -16,7 +16,7 @@ export async function login(email: string, password: string) {
     }
 }
 
-export async function signup(name: string, email: string, password: string) {
+export async function signup(name: string, email: string, password: string): Promise<boolean> {
     try {
         const response = await axios.post('/register', {
             name: name, email: email, password: password
@@ -27,7 +27,7 @@ export async function signup(name: string, email: string, password: string) {
     }
 }
 
-export async function userInfo() {
+export async function user(): Promise<any> {
     try {
         const response = await axios.get('/user', {
             headers: {
@@ -40,7 +40,7 @@ export async function userInfo() {
     }
 }
 
-export async function logout() {
+export async function logout(): Promise<boolean> {
     try {
         await axios.get('/logout', {
             headers: {
@@ -64,7 +64,7 @@ export async function productById(id: string | number): Promise<any> {
     }
 }
 
-export async function pageOfProducts(num: string) {
+export async function pageOfProducts(num: number): Promise<any> {
     try {
         const response = await axios.get('/products/page/'+num);
         return await response.data.data;
@@ -73,7 +73,7 @@ export async function pageOfProducts(num: string) {
     }
 }
 
-export async function createOrder(products: object, address: string) {
+export async function createOrder(products: object, address: string): Promise<any> {
     try {
         const response = await axios.post('/orders', {
             products: JSON.stringify(products), address: address
@@ -89,7 +89,7 @@ export async function createOrder(products: object, address: string) {
     }
 }
 
-export async function pageOfOrders(num: string) {
+export async function pageOfOrders(num: string): Promise<any> {
     try {
         const response = await axios.get('/orders/page/'+num, {
             headers: {
