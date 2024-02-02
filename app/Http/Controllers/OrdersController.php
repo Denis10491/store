@@ -16,12 +16,27 @@ class OrdersController extends Controller
      */
     public function index(string $page)
     {
-        $orders = Order::select('id', 'address', 'created_at')->orderBy('id', 'DESC')->paginate(30, '*', 'page', $page);
-        foreach ($orders as $key => $order) {
-            $orders[$key]["products"] = ProductsInOrders::join('products', 'products_in_orders.product_id', '=', 'products.id')
-                ->where('products_in_orders.order_id', $order["id"])
-                ->select('products.name', 'products.price', 'products_in_orders.count', 'products_in_orders.product_id')
-                ->get();
+        $user = Auth::user();
+        if ($user->hasRole('admin')) {
+            $orders = Order::select('id', 'address', 'created_at')->orderBy('id', 'DESC')->paginate(30, '*', 'page', $page);
+            foreach ($orders as $key => $order) {
+                $orders[$key]["products"] = ProductsInOrders::join('products', 'products_in_orders.product_id', '=', 'products.id')
+                    ->where('products_in_orders.order_id', $order["id"])
+                    ->select('products.name', 'products.price', 'products_in_orders.count', 'products_in_orders.product_id')
+                    ->get();
+            }
+        } else if ($user) {
+            $orders = Order::where('user_id', $user->id)->select('id', 'address', 'created_at')->orderBy('id', 'DESC')->paginate(30, '*', 'page', $page);
+            foreach($orders as $key => $order) {
+                $orders[$key]["products"] = DB::table('products_in_orders')
+                    ->join('orders', 'products_in_orders.order_id', '=', 'orders.id')
+                    ->join('products', 'products_in_orders.product_id', '=', 'products.id')
+                    ->where('products_in_orders.order_id', $order["id"])
+                    ->select('products.id as id', 'products.name as name', 'products.price as price', 'products_in_orders.count')
+                    ->get();
+            }
+        } else {
+            return response(['status' => false, 'Unathorizated' => false], 401);
         }
 
         return response([
@@ -51,23 +66,5 @@ class OrdersController extends Controller
         }
 
         return response(['status' => true]);
-    }
-
-    public function show(string $page)
-    {
-        $user = Auth::user();
-        if (!$user) return response(['status' => false, 'Unathorizated' => false], 401);
-
-        $orders = Order::where('user_id', $user->id)->select('id', 'address', 'created_at')->orderBy('id', 'DESC')->paginate(30, '*', 'page', $page);
-        foreach($orders as $key => $order) {
-            $orders[$key]["products"] = DB::table('products_in_orders')
-                ->join('orders', 'products_in_orders.order_id', '=', 'orders.id')
-                ->join('products', 'products_in_orders.product_id', '=', 'products.id')
-                ->where('products_in_orders.order_id', $order["id"])
-                ->select('products.id as id', 'products.name as name', 'products.price as price', 'products_in_orders.count')
-                ->get();
-        }
-        
-        return response(['status' => true, 'data' => $orders], 200);
     }
 }

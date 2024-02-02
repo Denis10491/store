@@ -26,10 +26,10 @@ Route::get('/products/{id}', [ProductsController::class, 'show'])->name('product
 
 /* Auth */
 Route::group(['middleware' => ['auth:sanctum']], function() {
-    Route::get('/user/show', [UserController::class, 'show']);
+    Route::get('/user', [UserController::class, 'show'])->name('user.show');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::post('/orders/store', [OrdersController::class, 'store']);
-    Route::get('/orders/show/{page}', [OrdersController::class, 'show']);
+    Route::post('/orders', [OrdersController::class, 'store'])->name('orders.store');
+    Route::get('/orders/page/{page}', [OrdersController::class, 'index'])->name('orders.index.paginated');
 });
  
 /* Admin */

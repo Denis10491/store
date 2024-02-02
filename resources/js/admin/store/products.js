@@ -30,7 +30,7 @@ export const useProductsStore = defineStore('products', {
             formData.append('composition', form.composition);
             formData.append('price', form.price);
         
-            return axios.post('/products/store', formData, {
+            return axios.post('/products', formData, {
                 headers: {
                     Authorization: this.token,
                     'Content-Type': 'multipart/form-data'
@@ -79,7 +79,7 @@ export const useProductsStore = defineStore('products', {
         },
 
         async getPage(num) {
-            const response = await axios.get('/products/index/'+num);
+            const response = await axios.get('/products/page/'+num);
             if(!response) return false;
             this.list[num] = await response.data.data.data;
             this.maxPerPage = await response.data.data.per_page;

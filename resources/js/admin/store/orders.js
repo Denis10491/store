@@ -19,7 +19,7 @@ export const useOrdersStore = defineStore('orders', {
 
     actions: {
         async getPage(num) {
-            const response = await axios.get('/orders/index/'+num, {
+            const response = await axios.get('/orders/page/'+num, {
                 headers: {
                     Authorization: this.token
                 }

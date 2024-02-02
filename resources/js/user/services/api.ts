@@ -3,7 +3,7 @@ import axios from "axios";
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api';
 axios.defaults.withCredentials = true;
 
-export async function login(email, password) {
+export async function login(email: string, password: string) {
     try {
         const response = await axios.post('/login', {
             email: email, password: password
@@ -16,7 +16,7 @@ export async function login(email, password) {
     }
 }
 
-export async function signup(name, email, password) {
+export async function signup(name: string, email: string, password: string) {
     try {
         const response = await axios.post('/register', {
             name: name, email: email, password: password
@@ -29,7 +29,7 @@ export async function signup(name, email, password) {
 
 export async function userInfo() {
     try {
-        const response = await axios.get('/user/show', {
+        const response = await axios.get('/user', {
             headers: {
                 Authorization: 'Bearer ' + sessionStorage.getItem('token')
             }
@@ -64,7 +64,7 @@ export async function productById(id: string | number): Promise<any> {
     }
 }
 
-export async function pageOfProducts(num) {
+export async function pageOfProducts(num: string) {
     try {
         const response = await axios.get('/products/page/'+num);
         return await response.data.data;
@@ -73,9 +73,9 @@ export async function pageOfProducts(num) {
     }
 }
 
-export async function createOrder(products, address) {
+export async function createOrder(products: object, address: string) {
     try {
-        const response = await axios.post('/orders/store', {
+        const response = await axios.post('/orders', {
             products: JSON.stringify(products), address: address
         }, {
             headers: {
@@ -89,9 +89,9 @@ export async function createOrder(products, address) {
     }
 }
 
-export async function pageOfOrders(num) {
+export async function pageOfOrders(num: string) {
     try {
-        const response = await axios.get('/orders/show/'+num, {
+        const response = await axios.get('/orders/page/'+num, {
             headers: {
                 Authorization: 'Bearer ' + sessionStorage.getItem('token')
             }
