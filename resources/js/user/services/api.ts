@@ -57,7 +57,7 @@ export async function logout() {
 
 export async function productById(id: string | number): Promise<any> {
     try {
-        const response = await axios.get('/products/show/'+id);
+        const response = await axios.get('/products/'+id);
         return response.data.data;
     } catch {
         return false;
@@ -66,7 +66,7 @@ export async function productById(id: string | number): Promise<any> {
 
 export async function pageOfProducts(num) {
     try {
-        const response = await axios.get('/products/index/'+num);
+        const response = await axios.get('/products/page/'+num);
         return await response.data.data;
     } catch {
         return false;

@@ -19,10 +19,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 /* Guest */
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::get('/products/index/{page}', [ProductsController::class, 'index']);
-Route::get('/products/show/{id}', [ProductsController::class, 'show']);
+Route::get('/products/page/{page}', [ProductsController::class, 'index'])->name('products.index.paginated');
+Route::get('/products/{id}', [ProductsController::class, 'show'])->name('products.show');
 
 /* Auth */
 Route::group(['middleware' => ['auth:sanctum']], function() {
