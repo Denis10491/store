@@ -16,7 +16,6 @@ class Product extends Model
         'name',
         'description',
         'imgPath',
-        'categories_ids',
         'nutritional_id',
         'composition',
         'price'

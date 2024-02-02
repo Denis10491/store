@@ -53,18 +53,21 @@ class OrdersController extends Controller
         $credentials = $request->validated();
         $user = Auth::user();
 
-        $order = Order::create([
-            'user_id' => $user->id,
-            'address' => $credentials['address']
-        ]);
-        foreach(json_decode($credentials["products"], true) as $product) {
-            if (Product::where('id', '=', $product["id"])->first()) ProductsInOrders::create([
-                'order_id' => $order->id,
-                'product_id' => $product["id"],
-                'count' => $product["count"]
+        $order_id = DB::transaction(function() use ($credentials, $user): Int {
+            $order = Order::create([
+                'user_id' => $user->id,
+                'address' => $credentials['address']
             ]);
-        }
+            foreach(json_decode($credentials["products"], true) as $product) {
+                if (Product::where('id', '=', $product["id"])->first()) ProductsInOrders::create([
+                    'order_id' => $order->id,
+                    'product_id' => $product["id"],
+                    'count' => $product["count"]
+                ]);
+            }
+            return $order->id;
+        }, 2);
 
-        return response(['status' => true]);
+        return response(['status' => true, 'order_id' => $order_id]);
     }
 }
