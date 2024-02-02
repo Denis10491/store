@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Nutritional;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -21,18 +23,9 @@ class ProductsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $credentials = $request->validate([
-            'name' => ['required'],
-            'description' => ['required', 'max:1000'],
-            'image' => ['required'],
-            'proteins' => ['required'],
-            'fats' => ['required'],
-            'carbohydrates' => ['required'],
-            'composition' => ['required', 'max:1000'],
-            'price' => ['required']
-        ]);
+        $credentials = $request->validated();
 
         $path = $request->file('image')->store('', 'public');
         Storage::disk('public')->url($path);
@@ -66,17 +59,9 @@ class ProductsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateProductRequest $request, string $id)
     {
-        $credentials = $request->validate([
-            'name' => ['string'],
-            'description' => ['string', 'max:1000'],
-            'proteins' => ['string'],
-            'fats' => ['string'],
-            'carbohydrates' => ['string'],
-            'composition' => ['string', 'max:1000'],
-            'price' => ['string']
-        ]);
+        $credentials = $request->validated();
 
         if ($request->file('image')) {
             $path = $request->file('image')->store('', 'public');
