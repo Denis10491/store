@@ -53,6 +53,11 @@ Run docker compose
   docker compose up
 ```
 
+Run docker compose
+```bash
+  docker compose exec app php artisan key:generate
+```
+
 Run migrations and seeds
 ```bash
   docker compose exec app php artisan migrate:fresh --seed
