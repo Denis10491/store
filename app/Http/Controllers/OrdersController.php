@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductsInOrders;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -33,12 +33,9 @@ class OrdersController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreOrderRequest $request)
     {
-        $credentials = $request->validate([
-            'products' => ['required'],
-            'address' => ['required', 'string']
-        ]);
+        $credentials = $request->validated();
         $user = Auth::user();
 
         $order = Order::create([

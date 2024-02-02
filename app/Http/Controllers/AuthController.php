@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,14 +11,14 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {    
     
-    public function register(Request $request) {
+    public function register(RegisterRequest $request) {
         $credentials = $request->validated();
         $user = User::create($credentials);
         $user->assignRole('user');
         return response(['status' => true, 'data' => $user]);
     }
 
-    public function login(Request $request) {
+    public function login(LoginRequest $request) {
         $credentials = $request->validated();
 
         if (Auth::guard()->attempt($credentials)) {

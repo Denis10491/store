@@ -6,7 +6,6 @@ use App\Models\Order;
 use App\Models\ProductsInOrders;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class StatisticsController extends Controller
 {
