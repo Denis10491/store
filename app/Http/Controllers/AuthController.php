@@ -10,21 +10,14 @@ class AuthController extends Controller
 {    
     
     public function register(Request $request) {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'name' => ['required'],
-            'password' => ['required'],
-        ]);
+        $credentials = $request->validated();
         $user = User::create($credentials);
         $user->assignRole('user');
         return response(['status' => true, 'data' => $user]);
     }
 
     public function login(Request $request) {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+        $credentials = $request->validated();
 
         if (Auth::guard()->attempt($credentials)) {
             $user = Auth::user();
