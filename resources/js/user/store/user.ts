@@ -1,11 +1,10 @@
 import { defineStore } from "pinia";
-import { userInfo } from "../services/api";
+import { user } from "../services/api";
 
 export const useUserStore = defineStore('user', {
     state: () => ({
         isAuth: false,
-        isAdmin: false,
-        id: null,
+        id: NaN,
         name: "",
         email: ""
     }),
@@ -17,16 +16,17 @@ export const useUserStore = defineStore('user', {
     },
 
     actions: {
-        getUserInfo() {
-            return userInfo().then(response => {
+        async getUserInfo() {
+            try {
+                const response = await user();
                 const data = response.data;
                 this.isAuth = data.status;
-                this.isAdmin = data.data.isAdmin;
                 this.name = data.data.name;
                 this.email = data.data.email;
                 return true;
-            })
-            .catch(() => false);
+            } catch {
+                return false;
+            }
         }
     }
 })
