@@ -4,59 +4,41 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Http\Resources\ProductsCollection;
 use App\Http\Resources\ProductsResource;
-use App\Models\Nutritional;
 use App\Models\Product;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Response;
+use App\Services\ProductsService;
 
 class ProductsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(string $page)
+    public function index(string $page): Response
     {
-        $data = Product::with('nutritional')->orderBy('id', 'DESC')->paginate(30, '*', 'page', $page);
-        return response(['status' => true, 'data' => $data]);
+        $products = Product::with('nutritional')->orderBy('id', 'DESC')->paginate(30, '*', 'page', $page);
+        return response([
+            'status' => true,
+            'data' => new ProductsCollection($products)
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductRequest $request)
+    public function store(StoreProductRequest $request, ProductsService $productsService): Response
     {
-        $credentials = $request->validated();
-
-        $product = DB::transaction(function () use ($credentials, $request) {
-            $path = $request->file('image')->store('', 'public');
-            Storage::disk('public')->url($path);
-
-            $nutritional = Nutritional::create([
-                "proteins" => $credentials["proteins"], 
-                "fats" => $credentials["fats"], 
-                "carbohydrates" => $credentials["carbohydrates"]
-            ]);
-
-            $product = Product::create([
-                "name" => $credentials["name"], 
-                "description" => $credentials["description"],
-                "imgPath" => 'storage/'.$path, 
-                "nutritional_id" => $nutritional->id, 
-                "composition" => $credentials["composition"], 
-                "price" => $credentials["price"]
-            ]);
-
-            return $product;
-        });
-
-        return response(['status' => true, 'data' => $product]);
+        return response([
+            'status' => true, 
+            'data' => $productsService->create($request->validated(), $request)
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): Response
     {
         $product = Product::with('nutritional')->find($id);
         return response([
@@ -68,47 +50,18 @@ class ProductsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, string $id)
+    public function update(UpdateProductRequest $request, ProductsService $productsService, string $id): Response
     {
-        $credentials = $request->validated();
-
-        $product = DB::transaction(function () use ($credentials, $request, $id) : Product { 
-            if ($request->file('image')) {
-                $path = $request->file('image')->store('', 'public');
-                Storage::disk('public')->url($path);
-                Product::where('id', $id)->update(["imgPath" => 'storage/'.$path]);
-            }
-
-            Product::where('id', $id)->update([
-                "name" => $credentials["name"], 
-                "description" => $credentials["description"],
-                "composition" => $credentials["composition"], 
-                "price" => $credentials["price"]
-            ]);
-            $product = Product::find($id);
-
-            Nutritional::where('id', $product["nutritional_id"])->update([
-                'proteins' => $credentials["proteins"],
-                'fats' => $credentials["fats"],
-                'carbohydrates' => $credentials["carbohydrates"],
-            ]);
-
-            $nutritional = Nutritional::find($product["nutritional_id"]);
-            $product["nutritional"] = $nutritional;
-
-            return $product;
-        }, 2);
-
         return response([
             'status' => true, 
-            'data' => new ProductsResource($product)
+            'data' => $productsService->update($request->validated(), $request, $id)
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id): Response
     {
         return response(['status' => Product::destroy($id)]);
     }
