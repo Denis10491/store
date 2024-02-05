@@ -12,16 +12,13 @@ class AuthController extends Controller
 {    
     
     public function register(RegisterRequest $request) {
-        $credentials = $request->validated();
-        $user = User::create($credentials);
+        $user = User::create($request->validated());
         $user->assignRole('user');
         return response(['status' => true, 'data' => $user]);
     }
 
     public function login(LoginRequest $request) {
-        $credentials = $request->validated();
-
-        if (Auth::guard()->attempt($credentials)) {
+        if (Auth::guard()->attempt($request->validated())) {
             $user = Auth::user();
             $token = $user->createToken('auth_token')->plainTextToken;
 
