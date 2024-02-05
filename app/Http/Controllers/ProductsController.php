@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\ProductsServiceContract;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductsCollection;
 use App\Http\Resources\ProductsResource;
 use App\Models\Product;
 use Illuminate\Http\Response;
-use App\Services\ProductsService;
 
 class ProductsController extends Controller
 {
@@ -27,11 +27,11 @@ class ProductsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductRequest $request, ProductsService $productsService): Response
+    public function store(StoreProductRequest $request, ProductsServiceContract $service): Response
     {
         return response([
             'status' => true, 
-            'data' => $productsService->create($request->validated(), $request)
+            'data' => $service->create($request->validated(), $request)
         ]);
     }
 
@@ -50,11 +50,11 @@ class ProductsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, ProductsService $productsService, string $id): Response
+    public function update(UpdateProductRequest $request, ProductsServiceContract $service, string $id): Response
     {
         return response([
             'status' => true, 
-            'data' => $productsService->update($request->validated(), $request, $id)
+            'data' => $service->update($request->validated(), $request, $id)
         ]);
     }
 

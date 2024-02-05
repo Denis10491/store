@@ -2,72 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\OrdersServiceContract;
 use App\Http\Requests\StoreOrderRequest;
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\ProductsInOrders;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(string $page)
+    public function index(OrdersServiceContract $service, string $page): Response
     {
         $user = Auth::user();
-        if ($user->hasRole('admin')) {
-            $orders = Order::select('id', 'address', 'created_at')->orderBy('id', 'DESC')->paginate(30, '*', 'page', $page);
-            foreach ($orders as $key => $order) {
-                $orders[$key]["products"] = ProductsInOrders::join('products', 'products_in_orders.product_id', '=', 'products.id')
-                    ->where('products_in_orders.order_id', $order["id"])
-                    ->select('products.name', 'products.price', 'products_in_orders.count', 'products_in_orders.product_id')
-                    ->get();
-            }
-        } else if ($user) {
-            $orders = Order::where('user_id', $user->id)->select('id', 'address', 'created_at')->orderBy('id', 'DESC')->paginate(30, '*', 'page', $page);
-            foreach($orders as $key => $order) {
-                $orders[$key]["products"] = DB::table('products_in_orders')
-                    ->join('orders', 'products_in_orders.order_id', '=', 'orders.id')
-                    ->join('products', 'products_in_orders.product_id', '=', 'products.id')
-                    ->where('products_in_orders.order_id', $order["id"])
-                    ->select('products.id as id', 'products.name as name', 'products.price as price', 'products_in_orders.count')
-                    ->get();
-            }
-        } else {
-            return response(['status' => false, 'Unathorizated' => false], 401);
-        }
+        if (!$user) return response([
+            'status' => false,
+            'Unathorizated' => false
+        ], 401);
 
         return response([
-            'status' => true, 
-            'data' => $orders
+            'status' => true,
+            'user_id' => $user->id,
+            'data' => $service->getPage($user, $page)
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreOrderRequest $request)
+    public function store(StoreOrderRequest $request, OrdersServiceContract $service): Response
     {
-        $credentials = $request->validated();
-        $user = Auth::user();
-
-        $order_id = DB::transaction(function() use ($credentials, $user): Int {
-            $order = Order::create([
-                'user_id' => $user->id,
-                'address' => $credentials['address']
-            ]);
-            foreach(json_decode($credentials["products"], true) as $product) {
-                if (Product::where('id', '=', $product["id"])->first()) ProductsInOrders::create([
-                    'order_id' => $order->id,
-                    'product_id' => $product["id"],
-                    'count' => $product["count"]
-                ]);
-            }
-            return $order->id;
-        }, 2);
-
-        return response(['status' => true, 'order_id' => $order_id]);
+        return response([
+            'status' => $service->create(Auth::user(), $request->validated()) ? true : false
+        ]);
     }
 }
