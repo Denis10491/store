@@ -32,7 +32,7 @@
 <Paginator
     :currentPage="currentPage"
     :changePage="changePage"
-    :numOfMaxPage="productsStore.numOfMaxPage"
+    :numOfMaxPage="productsStore.getLastPage"
     class="uk-margin-top"
 />
 </template>
@@ -52,8 +52,8 @@ const changePage = (num: number) => {
     loaded.value = false;
     productsStore.getPage(num);
     setTimeout(() => {
-        productsStore.numOfMaxPage < num
-        ? currentPage.value = productsStore.numOfMaxPage
+        productsStore.getLastPage < num
+        ? currentPage.value = productsStore.getLastPage
         : currentPage.value = num;
         loaded.value = true;
     }, 500);
