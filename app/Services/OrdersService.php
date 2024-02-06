@@ -20,8 +20,8 @@ class OrdersService implements OrdersServiceContract
                 ->orderBy('id', 'DESC')
                 ->paginate(30, ['*'], 'page', (int) $page);
             foreach ($orders as $key => $order) {
-                $orders[$key]["products"] = ProductsInOrders::join('products', 'products_in_orders.product_id', '=', 'products.id')
-                    ->where('products_in_orders.order_id', $order["id"])
+                $orders[$key]['products'] = ProductsInOrders::join('products', 'products_in_orders.product_id', '=', 'products.id')
+                    ->where('products_in_orders.order_id', $order['id'])
                     ->select('products.name', 'products.price', 'products_in_orders.count', 'products_in_orders.product_id')
                     ->get();
             }
@@ -32,10 +32,10 @@ class OrdersService implements OrdersServiceContract
                 ->orderBy('id', 'DESC')
                 ->paginate(30, ['*'], 'page', (int) $page);
             foreach($orders as $key => $order) {
-                $orders[$key]["products"] = DB::table('products_in_orders')
+                $orders[$key]['products'] = DB::table('products_in_orders')
                     ->join('orders', 'products_in_orders.order_id', '=', 'orders.id')
                     ->join('products', 'products_in_orders.product_id', '=', 'products.id')
-                    ->where('products_in_orders.order_id', $order["id"])
+                    ->where('products_in_orders.order_id', $order['id'])
                     ->select('products.id as id', 'products.name as name', 'products.price as price', 'products_in_orders.count')
                     ->get();
             }
@@ -50,11 +50,11 @@ class OrdersService implements OrdersServiceContract
                 'user_id' => $user->id,
                 'address' => $data['address']
             ]);
-            foreach(json_decode($data["products"], true) as $product) {
-                if (Product::where('id', '=', $product["id"])->first()) ProductsInOrders::create([
+            foreach(json_decode($data['products'], true) as $product) {
+                if (Product::where('id', '=', $product['id'])->first()) ProductsInOrders::create([
                     'order_id' => $order->id,
-                    'product_id' => $product["id"],
-                    'count' => $product["count"]
+                    'product_id' => $product['id'],
+                    'count' => $product['count']
                 ]);
             }
             return $order->id ? true : false;

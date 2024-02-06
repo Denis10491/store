@@ -22,8 +22,8 @@ class AuthController extends Controller
             $user = Auth::user();
             $token = $user->createToken('auth_token')->plainTextToken;
             return response([
-                "status" => true,
-                "token" => $token
+                'status' => true,
+                'token' => $token
             ], 200);
         }
         abort(401);

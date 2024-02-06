@@ -18,25 +18,20 @@ class ProductsService implements ProductsServiceContract
         $createdProduct = DB::transaction(function () use ($data, $request) {
             $path = $request->file('image')->store('', 'public');
             Storage::disk('public')->url($path);
-
             $nutritional = Nutritional::create([
-                "proteins" => $data["proteins"], 
-                "fats" => $data["fats"], 
-                "carbohydrates" => $data["carbohydrates"]
+                'proteins' => $data['proteins'], 
+                'fats' => $data['fats'], 
+                'carbohydrates' => $data['carbohydrates']
             ]);
-
-            $product = Product::create([
-                "name" => $data["name"], 
-                "description" => $data["description"],
-                "imgPath" => 'storage/'.$path, 
-                "nutritional_id" => $nutritional->id, 
-                "composition" => $data["composition"], 
-                "price" => $data["price"]
+            return Product::create([
+                'name' => $data['name'], 
+                'description' => $data['description'],
+                'imgPath' => 'storage/'.$path, 
+                'nutritional_id' => $nutritional->id, 
+                'composition' => $data['composition'], 
+                'price' => $data['price']
             ]);
-
-            return $product;
         });
-
         return new ProductsResource($createdProduct);
     }
 
@@ -46,29 +41,24 @@ class ProductsService implements ProductsServiceContract
             if ($request->file('image')) {
                 $path = $request->file('image')->store('', 'public');
                 Storage::disk('public')->url($path);
-                Product::where('id', $id)->update(["imgPath" => 'storage/'.$path]);
+                Product::where('id', $id)->update(['imgPath' => 'storage/'.$path]);
             }
-
             Product::where('id', $id)->update([
-                "name" => $data["name"], 
-                "description" => $data["description"],
-                "composition" => $data["composition"], 
-                "price" => $data["price"]
+                'name' => $data['name'], 
+                'description' => $data['description'],
+                'composition' => $data['composition'], 
+                'price' => $data['price']
             ]);
             $product = Product::find($id);
-
-            Nutritional::where('id', $product["nutritional_id"])->update([
-                'proteins' => $data["proteins"],
-                'fats' => $data["fats"],
-                'carbohydrates' => $data["carbohydrates"],
+            Nutritional::where('id', $product['nutritional_id'])->update([
+                'proteins' => $data['proteins'],
+                'fats' => $data['fats'],
+                'carbohydrates' => $data['carbohydrates'],
             ]);
-
-            $nutritional = Nutritional::find($product["nutritional_id"]);
-            $product["nutritional"] = $nutritional;
-
+            $nutritional = Nutritional::find($product['nutritional_id']);
+            $product['nutritional'] = $nutritional;
             return $product;
         }, 2);
-        
         return new ProductsResource($updatedProduct);
     }
 }

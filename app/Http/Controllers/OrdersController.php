@@ -14,7 +14,8 @@ class OrdersController extends Controller
      */
     public function index(OrdersServiceContract $service, string $page): Response
     {
-        if (!$user = Auth::user()) abort(401, 'Unathorizated');
+        $user = Auth::user();
+        if (!$user) abort(401, 'Unathorizated');
         return response([
             'status' => true,
             'user_id' => $user->id,
