@@ -18,7 +18,7 @@ class Nutritional extends Model
         'carbohydrates'
     ];
 
-    public function product() {
+    public function product(): hasOne {
         return $this->hasOne(Product::class);
     }
 }

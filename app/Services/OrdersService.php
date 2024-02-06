@@ -18,7 +18,7 @@ class OrdersService implements OrdersServiceContract
         if ($user->hasRole('admin')) {
             $orders = Order::select('id', 'address', 'created_at')
                 ->orderBy('id', 'DESC')
-                ->paginate(30, '*', 'page', $page);
+                ->paginate(30, ['*'], 'page', (int) $page);
             foreach ($orders as $key => $order) {
                 $orders[$key]["products"] = ProductsInOrders::join('products', 'products_in_orders.product_id', '=', 'products.id')
                     ->where('products_in_orders.order_id', $order["id"])
@@ -30,7 +30,7 @@ class OrdersService implements OrdersServiceContract
             $orders = Order::where('user_id', $user->id)
                 ->select('id', 'address', 'created_at')
                 ->orderBy('id', 'DESC')
-                ->paginate(30, '*', 'page', $page);
+                ->paginate(30, ['*'], 'page', (int) $page);
             foreach($orders as $key => $order) {
                 $orders[$key]["products"] = DB::table('products_in_orders')
                     ->join('orders', 'products_in_orders.order_id', '=', 'orders.id')
@@ -57,7 +57,7 @@ class OrdersService implements OrdersServiceContract
                     'count' => $product["count"]
                 ]);
             }
-            return $order ? true : false;
+            return $order->id ? true : false;
         }, 2);
     }
 }
