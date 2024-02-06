@@ -17,3 +17,15 @@ export interface UserData {
     email: string,
     password: string
 }
+
+export interface Order {
+    id: number,
+    address: string,
+    products: Array<{
+        product_id: number,
+        name: string,
+        count: number,
+        price: number
+    }>
+    created_at: string
+}

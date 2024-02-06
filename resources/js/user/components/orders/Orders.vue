@@ -3,23 +3,23 @@
         <div>
             <label class="uk-form-label" for="form-stacked-text">Date Start</label>
             <div class="uk-form-controls">
-                <input type="date" class="uk-input" v-model="filter.dateStart">
+                <input type="date" class="uk-input" v-model="filter['dateStart']">
             </div>
         </div>
         <div class="uk-margin-small-left">
             <label class="uk-form-label" for="form-stacked-text">Date End</label>
             <div class="uk-form-controls">
-                <input type="date" class="uk-input" v-model="filter.dateEnd">
+                <input type="date" class="uk-input" v-model="filter['dateEnd']">
             </div>
         </div>
         <div class="uk-margin-small-left">
             <label class="uk-form-label" for="form-stacked-text">Product Name</label>
             <div class="uk-form-controls">
-                <input type="text" class="uk-input" v-model="filter.productName" placeholder="Type here...">
+                <input type="text" class="uk-input" v-model="filter['productName']" placeholder="Type here...">
             </div>
         </div>
         <button class="uk-button uk-button-primary uk-height-1-1 uk-margin-small-left"
-            @click="ordersStore.filter(filter.dateStart, filter.dateEnd, filter.productName)"
+            @click="ordersStore.filter(filter['dateStart'], filter['dateEnd'], filter['productName'])"
         >Accept</button>
         <button class="uk-button uk-button-default uk-height-1-1 uk-margin-small-left"
             @click="clearFilter()"
@@ -37,14 +37,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="order in orders[currentPage]" :key="order.id">
-                <td>{{ order.id }}</td>
-                <td>{{ order.address }}</td>
+            <tr v-for="order in orders[currentPage]" :key="order['id']">
+                <td>{{ order['id'] }}</td>
+                <td>{{ order['address'] }}</td>
                 <td>
-                    <p v-for="product in order.products" :key="product.id">{{ product.name + ' x'+product.count+' ('+product.price+')' }}</p>
+                    <p v-for="product in order['products']" :key="product['id']">{{ product.name + ' x'+product.count+' ('+product.price+')' }}</p>
                 </td>
-                <td>{{ priceOfOrder(order.products) }}</td>
-                <td>{{ order.created_at.slice(0, 10).replaceAll('-', '.') }}</td>
+                <td>{{ priceOfOrder(order['products']) }}</td>
+                <td>{{ order['created_at'].slice(0, 10).replaceAll('-', '.') }}</td>
             </tr>
         </tbody>
     </table>
@@ -53,7 +53,7 @@
         v-if="loaded"
         :currentPage="currentPage"
         :changePage="changePage"
-        :numOfMaxPage="ordersStore.numOfMaxPage"
+        :numOfMaxPage="ordersStore.getLastPage"
     />
 
     <div v-if="!loaded" class="uk-padding-small">
@@ -61,69 +61,54 @@
     </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, onMounted, reactive, ref } from 'vue';
+import { Order, Product } from '../../../helpers/interfaces';
 import { useOrdersStore } from '../../store/orders';
 
-export default {
-    name: 'AdminOrdersComponent',
+const loaded = ref<boolean>(false);
+const currentPage = ref<number>(1)
+let filter = reactive<object>({
+    dateStart: "",
+    dateEnd: "",
+    productName: ""
+});
 
-    data() {
-        return {
-            loaded: false,
-            currentPage: 1,
-            filter: {
-                dateStart: null,
-                dateEnd: null,
-                productName: ""
-            }
-        }
-    },
+const ordersStore = useOrdersStore();
 
-    setup() {
-        const ordersStore = useOrdersStore();
-        return { ordersStore }
-    },
-
-    methods: {
-        changePage(num) {
-            this.loaded = false;
-            this.ordersStore.getPage(num);
-            setTimeout(() => {
-                (this.ordersStore.numOfMaxPage < num)
-                ? this.currentPage = this.ordersStore.numOfMaxPage
-                : this.currentPage = num;
-                this.loaded = true;
-            }, 500);
-        },
-
-        priceOfOrder(products) {
-            let price = 0;
-            products.map(product => {
-                price += product.price
-            })
-            return price;
-        },
-
-        clearFilter() {
-            this.filter = {
-                dateStart: null,
-                dateEnd: null,
-                productName: ""
-            }
-            this.ordersStore.filter();
-        }
-    },
-
-    computed: {
-        orders() {
-            return this.ordersStore.filteredList ?? [];
-        }
-    },
-
-    async mounted() {
-        this.loaded = await this.ordersStore.getPage(1);
-    }
+const changePage = async (num: number) => {
+    loaded.value = false;
+    await ordersStore.getPage(num);
+    setTimeout(() => {
+        (ordersStore.lastPage < num)
+        ? currentPage.value = ordersStore.lastPage
+        : currentPage.value = num;
+        loaded.value = true;
+    }, 500);
 }
+
+const priceOfOrder = (products: Product[]): number => {
+    let price = 0;
+    products.map(product => {
+        price += product.price
+    })
+    return price;
+}
+
+const clearFilter = () => {
+    filter = {
+        dateStart: null,
+        dateEnd: null,
+        productName: ""
+    }
+    ordersStore.filter();
+}
+
+const orders = computed((): Array<Order> => ordersStore.filteredList);
+
+onMounted(async () => {
+    loaded.value = await ordersStore.getPage(1);
+})
 </script>
 
 <style>

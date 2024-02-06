@@ -1,13 +1,23 @@
 import { defineStore } from "pinia";
 import { pageOfOrders } from "../services/api";
+import { Order } from "../../helpers/interfaces";
 
 export const useOrdersStore = defineStore('orders', {
     state: () => ({
         list: [],
         filteredList: [],
         maxPerPage: 0,
-        count: 0
+        lastPage: 0
     }),
+
+    getters: {
+        getList(): Array<Order> {
+            return this.list;
+        },
+        getLastPage() {
+            return this.lastPage;
+        }
+    },
 
     actions: {
         filter(dateStart = null, dateEnd = null, productName = null) {
@@ -53,12 +63,12 @@ export const useOrdersStore = defineStore('orders', {
             }
         },
 
-        async getPage(num) {
+        async getPage(num: number) {
             const response = await pageOfOrders(num);
-            this.list[num] = await response.data;
-            this.filteredList[num] = await response.data;
+            this.list[num] = await response.orders;
+            this.filteredList[num] = await response.orders;
             this.maxPerPage = await response.per_page;
-            this.count = await response.total;
+            this.lastPage = await response.lastPage;
             return true;
         },
 

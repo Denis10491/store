@@ -89,7 +89,7 @@ export async function createOrder(products: object, address: string): Promise<an
     }
 }
 
-export async function pageOfOrders(num: string): Promise<any> {
+export async function pageOfOrders(num: number): Promise<any> {
     try {
         const response = await axios.get('/orders/page/'+num, {
             headers: {
