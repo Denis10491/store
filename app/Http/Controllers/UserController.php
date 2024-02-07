@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-
     public function show(): Response {
         return response([
             'status' => Auth::check(), 

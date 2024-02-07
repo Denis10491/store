@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\OrdersStatisticsController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\UserController;
@@ -40,7 +41,7 @@ Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function() {
 
     /* Statistics */
     Route::group(['prefix' => 'statistics'], function() {
-        Route::get('/orders/count', [StatisticsController::class, 'countOfOrdersByMonth'])->name('statistics.orders.count');
+        Route::get('/orders/monthlyamountbyday', [OrdersStatisticsController::class, 'monthlyAmountByDay'])->name('statistics.orders.monthlyamountbyday');
         Route::get('/products/bestselling', [StatisticsController::class, 'bestSellingByMonth'])->name('statistics.products.bestselling');
     });
 });
