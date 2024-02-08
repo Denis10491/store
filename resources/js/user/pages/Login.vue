@@ -1,14 +1,12 @@
 <template>
     <div class="uk-flex uk-flex-center container">
-        <form class="uk-card uk-card-default uk-padding border" @submit.prevent="send()">
+        <Card>
             <h3>Login to your account</h3>
-            <input type="email" class="uk-input" placeholder="Email" v-model="data.email">
-            <input type="password" class="uk-input" placeholder="Password" v-model="data.password">
-            <button class="uk-button uk-background-primary uk-light">LogIn</button>
-            <div v-if="!isFormRequestStatus" class="uk-alert-danger uk-padding-small">
-                <p>Error. Incorrect data entered</p>
-            </div>
-        </form>
+            <Input type="email" placeholder="Email" v-model="data.email" />
+            <Input type="password" placeholder="Password" v-model="data.password" />
+            <Button @click="send()">LogIn</Button>
+            <Error v-if="!isFormRequestStatus">Error. Incorrect data entered</Error>
+        </Card>
     </div>
 </template>
 
@@ -16,6 +14,10 @@
 import { login } from '../services/api'
 import { reactive, ref } from 'vue';
 import { UserData } from '../../helpers/interfaces';
+import Card from '../../components/Card.vue';
+import Input from '../../components/Input.vue';
+import Button from '../../components/Button.vue';
+import Error from '../../components/Error.vue';
 
 let data = reactive<UserData>({
   email: '',
@@ -31,12 +33,6 @@ const send = async () => {
 </script>
 
 <style scoped>
-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
 input, button {
     width: 320px;
     margin: 8px 0;

@@ -1,15 +1,13 @@
 <template>
     <div class="uk-flex uk-flex-center container">
-        <form class="uk-card uk-card-default uk-padding border" @submit.prevent="send()">
+        <Card>
             <h3>Create new account</h3>
-            <input type="text" class="uk-input" placeholder="Name" v-model="data.name">
-            <input type="email" class="uk-input" placeholder="Email" v-model="data.email">
-            <input type="password" class="uk-input" placeholder="Password" v-model="data.password">
-            <button class="uk-button uk-background-primary uk-light">SignUp</button>
-            <div v-if="!isFormRequestStatus" class="uk-alert-danger uk-padding-small">
-                <p>We cannot register you. Try again</p>
-            </div>
-        </form>
+            <Input type="text" placeholder="Name" v-model="data.name" />
+            <Input type="email" placeholder="Email" v-model="data.email" />
+            <Input type="password" placeholder="Password" v-model="data.password" />
+            <Button @click="send()">SignUp</Button>
+            <Error v-if="!isFormRequestStatus">We cannot register you. Try again</Error>
+        </Card>
     </div>
 </template>
 
@@ -17,6 +15,10 @@
 import { reactive, ref } from 'vue';
 import { UserData } from '../../helpers/interfaces';
 import { signup } from '../services/api';
+import Card from '../../components/Card.vue';
+import Input from '../../components/Input.vue';
+import Button from '../../components/Button.vue';
+import Error from '../../components/Error.vue';
 
 let data = reactive<UserData>({
     name: '',
@@ -34,12 +36,6 @@ const send = async () => {
 </script>
 
 <style scoped>
-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
 input, button {
     width: 320px;
     margin: 8px 0;
