@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\belongsTo;
 
 class Product extends Model
 {
@@ -19,8 +19,8 @@ class Product extends Model
         'price'
     ];
 
-    public function nutritional(): hasMany
+    public function nutritional(): belongsTo
     {
-        return $this->hasMany(Nutritional::class);
+        return $this->belongsTo(Nutritional::class);
     }
 }
