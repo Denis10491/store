@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\OrdersStatisticsCountByMonthPerDayRequest;
-use App\Services\OrdersService;
+use App\Contracts\OrdersServiceContract;
+use App\Http\Requests\OrdersStatisticsMonthlyAmountByDayRequest;
 use Illuminate\Http\Response;
 
 class OrdersStatisticsController extends Controller
 {
-    public function monthlyAmountByDay(OrdersStatisticsCountByMonthPerDayRequest $request, OrdersService $service): Response
+    public function monthlyAmountByDay(OrdersStatisticsMonthlyAmountByDayRequest $request, OrdersServiceContract $service): Response
     {
         $credentials = $request->validated();
         $data = $service->monthlyAmountByDay($credentials['year'], $credentials['month']);
