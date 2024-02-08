@@ -10,8 +10,6 @@ class Nutritional extends Model
 {
     use HasFactory;
 
-    protected $table = 'nutritional';
-
     protected $fillable = [
         'proteins',
         'fats',
