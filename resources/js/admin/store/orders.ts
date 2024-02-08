@@ -1,91 +1,75 @@
 import { defineStore } from "pinia";
-import axios from 'axios'
+import { Order } from "../../helpers/interfaces";
+import { pageOfOrders } from "../services/api";
 
 export const useOrdersStore = defineStore('orders', {
     state: () => ({
-        list: [],
+        list: [] as Array<Order>,
         filteredList: [],
-        token: 'Bearer ' + sessionStorage.getItem('token') ?? "",
         maxPerPage: 0,
-        count: 0,
-        countForFilteredList: 0
+        lastPage: 0
     }),
 
     getters: {
-        numOfMaxPage() {
-            return Math.round(this.countForFilteredList / this.maxPerPage) + 1;
+        getList(): Array<Order> {
+            return this.list;
+        },
+        getLastPage() {
+            return this.lastPage;
         }
     },
 
     actions: {
-        async getPage(num) {
-            const response = await axios.get('/orders/page/'+num, {
-                headers: {
-                    Authorization: this.token
-                }
-            });
-            if (response) {
-                this.list[num] = await response.data.data.data;
-                this.filteredList[num] = await response.data.data.data;
-                this.maxPerPage = await response.data.data.per_page;
-                this.count = await response.data.data.total;
-                this.countForFilteredList = await response.data.data.total;
-                return true;
-            }
-            return false;
-        },
-
-
         filter(dateStart = null, dateEnd = null, productName = null) {
-            let stashListOrders = [];
+            this.filteredList = this.list;
 
             // Date Start
             if (dateStart) {
                 let filterDateStart = new Date(dateStart);
-                this.list.map(page => {
-                    page.map(order => {
+                this.filteredList = this.filteredList.map(page => {
+                    return page.filter(order => {
                         let currentDate = new Date(order.created_at);
-                        if (
+                        return (
                             currentDate.getFullYear() >= filterDateStart.getFullYear() &&
                             this.getMonth(currentDate) >= filterDateStart.getMonth() &&
                             currentDate.getDate() >= filterDateStart.getDate()
-                        ) stashListOrders.push(order)
-                    })
+                        ) ? true : false;
+                    });
                 });
             }
 
             // Date End
             if (dateEnd) {
                 let filterDateEnd = new Date(dateEnd);
-                this.list.map(page => {
-                    page.map(order => {
+                this.filteredList = this.filteredList.map(page => {
+                    return page.filter(order => {
                         let currentDate = new Date(order.created_at);
-                        if (
+                        return (
                             currentDate.getFullYear() <= filterDateEnd.getFullYear() &&
                             this.getMonth(currentDate) <= filterDateEnd.getMonth() &&
                             currentDate.getDate() <= filterDateEnd.getDate()
-                        ) stashListOrders.push(order);
+                        ) ? true : false;
                     });
                 });
             }
 
             // Products
             if (productName) {
-                this.list.map(page => {
-                    page.map(order => {
-                        if (order.products.find(product => product.name.includes(productName))) stashListOrders.push(order);
+                this.filteredList = this.filteredList.map(page => {
+                    return page.filter(order => {
+                        return (order.products.find(product => product.name.includes(productName))) ? true : false;
                     });
                 });
             }
+        },
 
-            if (stashListOrders.length == 0) this.filteredList = this.list;
-            else {
-                this.filteredList = [];
-                for (let i = 1; i < stashListOrders.length; i += this.maxPerPage) {
-                    this.filteredList[i] = stashListOrders.slice(i, i + this.maxPerPage);
-                }
-                this.countForFilteredList = this.filteredList.length
-            }
+        async getPage(num: number) {
+            const response = await pageOfOrders(num);
+            this.list[num] = await response.orders;
+            this.filteredList[num] = await response.orders;
+            this.maxPerPage = await response.per_page;
+            this.lastPage = await response.lastPage;
+            return true;
         },
 
         getMonth(date) {
