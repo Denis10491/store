@@ -16,8 +16,7 @@ return new class extends Migration
             $table->string("name")->unique();
             $table->string("description");
             $table->string("imgPath");
-            $table->unsignedBigInteger("nutritional_id");
-            $table->foreign("nutritional_id")->references("id")->on("nutritional")->onDelete("cascade");
+            $table->foreignId("nutritional_id")->constrained("nutritionals")->onDelete("cascade");
             $table->string("composition");
             $table->integer("price");
             $table->timestamps();

@@ -22,7 +22,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->text(20),
+            'name' => fake()->unique()->text(30),
             'description' => fake()->text(255),
             'imgPath' => fake()->imageUrl(640, 640, 'eat'),
             'nutritional_id' => Nutritional::factory()->create(),
