@@ -1,63 +1,57 @@
 <template>
-    <div class="uk-card uk-card-default uk-padding border">
-        <div>
-            <ul uk-tab>
-                <li :class="{'uk-active': menu.cards}"><a @click="changeTab('en')" href="#">en</a></li>
-                <li :class="{'uk-active': menu.table}"><a @click="changeTab('ru')" href="#">ru</a></li>
-                <li :class="{'uk-active': menu.create}"><a @click="changeTab('stack')" href="#">stack</a></li>
-                <li :class="{'uk-active': menu.features}"><a @click="changeTab('features')" href="#">features</a></li>
-            </ul>
-        </div>
-
+    <Card>
+        <ul uk-tab>
+            <li v-for="(isActive, name) in menu"
+                :key="name" 
+                :class="{'uk-active': isActive}">
+                <a href="#" @click="changeTab(name)">{{ name }}</a>
+            </li>
+        </ul>
         <keep-alive>
             <component :is="activeTab" />
         </keep-alive>
-    </div>
+    </Card>
 </template>
 
-<script>
+<script setup lang="ts">
 import English from '../components/about/English.vue';
 import Russian from '../components/about/Russian.vue';
 import Stack from '../components/about/Stack.vue';
 import Features from '../components/about/Features.vue';
+import { computed, reactive } from 'vue';
+import Card from '../../components/Card.vue';
 
-export default {
-    name: 'AboutPage',
-    components: { English, Russian, Stack, Features },
-
-    data() {
-        return {
-            menu: {
-                en: true,
-                ru: false,
-                stack: false,
-                features: false
-            }
-        }
-    },
-    
-    methods: {
-        changeTab(name) {
-            Object.keys(this.menu).map(key => {
-                this.menu[key] = false
-                if (key == name) this.menu[key] = true;
-            });
-        }
-    },
-
-    computed: {
-        activeTab() {
-            switch(true) {
-                case this.menu.en:
-                    return English;
-                case this.menu.ru:
-                    return Russian;
-                case this.menu.stack:
-                    return Stack;
-                case this.menu.features:
-                    return Features;
-            }
-        }
-    }
+type Menu = {
+    en: boolean;
+    ru: boolean;
+    stack: boolean;
+    features: boolean;
 }
+
+const menu = reactive<Menu>({
+    en: true,
+    ru: false,
+    stack: false,
+    features: false
+});
+
+const changeTab = (name: keyof Menu): void => {
+    Object.keys(menu).map((key: keyof Menu) => {
+        menu[key] = false;
+        if (key == name) menu[key] = true;
+    });
+}
+
+const activeTab = computed(() => {
+    switch(true) {
+        case menu.en:
+            return English;
+        case menu.ru:
+            return Russian;
+        case menu.stack:
+            return Stack;
+        case menu.features:
+            return Features;
+    }
+})
 </script>

@@ -1,24 +1,12 @@
 <template>
-<h1 class="title">Profile</h1>
-<div class="uk-card uk-card-default uk-padding uk-width-auto border">
-    <h3>Orders</h3>
-    <div class="uk-margin-top">
+    <h1 class="title">Profile</h1>
+    <Card>
+        <h3>Orders</h3>
         <Orders />
-    </div>
-</div>
+    </Card>
 </template>
 
-<script>
+<script setup lang="ts">
+import Card from '../../components/Card.vue';
 import Orders from '../components/orders/Orders.vue';
-
-export default {
-    name: 'ProfilePage',
-    components: { Orders }
-}
 </script>
-
-<style scoped>
-.profile__title h1, h3 {
-    margin: 0;
-}
-</style>
