@@ -1,5 +1,5 @@
 <template>
-    <div class="uk-flex uk-flex-center container">
+    <div class="uk-flex uk-flex-center">
         <Card>
             <h3>Create new account</h3>
             <Input type="text" placeholder="Name" v-model="data.name" />
@@ -34,10 +34,3 @@ const send = async () => {
     else isFormRequestStatus.value = false;
 }
 </script>
-
-<style scoped>
-input, button {
-    width: 320px;
-    margin: 8px 0;
-}
-</style>

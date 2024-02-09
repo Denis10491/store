@@ -1,5 +1,5 @@
 <template>
-    <div class="uk-card uk-card-default uk-padding border uk-flex uk-flex-column uk-flex-middle uk-flex-center">
+    <div class="uk-card uk-card-default uk-padding border uk-child-width-1-1">
         <slot></slot>
     </div>
 </template>

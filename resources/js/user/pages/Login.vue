@@ -1,5 +1,5 @@
 <template>
-    <div class="uk-flex uk-flex-center container">
+    <div class="uk-flex uk-flex-center">
         <Card>
             <h3>Login to your account</h3>
             <Input type="email" placeholder="Email" v-model="data.email" />
@@ -31,10 +31,3 @@ const send = async () => {
     (isAuthStatus) ? window.location.href = '/' : isFormRequestStatus.value = false;
 }
 </script>
-
-<style scoped>
-input, button {
-    width: 320px;
-    margin: 8px 0;
-}
-</style>

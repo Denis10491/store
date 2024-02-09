@@ -1,5 +1,5 @@
 <template>
-    <input :type="props.type" class="uk-input" :placeholder="props.placeholder" v-model="value">
+    <input :type="props.type" class="uk-input uk-margin-small-bottom" :placeholder="props.placeholder" v-model="value">
 </template>
 
 <script setup lang="ts">
