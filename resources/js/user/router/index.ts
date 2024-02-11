@@ -3,6 +3,7 @@ import { useUserStore } from '../store/user'
 import guest from '../middleware/guest';
 import auth from '../middleware/auth';
 import middlewareController from './middlewareController';
+import { setAuthorizationToken } from '../services/auth';
 
 const routes = [
     { path: '/', component: () => import('../pages/Home.vue') },
@@ -21,6 +22,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const middleware = to.meta.middleware;
+
+    setAuthorizationToken('Bearer ' + sessionStorage.getItem('token') ?? '');
+
     const store = useUserStore();
     store.getUserInfo().then(isAuthStatus => {
         const context = { from, next, isAuthStatus };
