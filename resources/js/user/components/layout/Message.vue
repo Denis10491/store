@@ -8,19 +8,10 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: 'MessageComponent',
-    data() {
-        return {
-            isActive: false
-        }
-    },
-
-    mounted() {
-        setTimeout(() => this.isActive = true, 2000);
-    }
-}
+<script setup lang="ts">
+import { onMounted, ref } from "vue";
+const isActive = ref<boolean>(false);
+onMounted(() => setTimeout(() => isActive.value = true, 2000));
 </script>
 
 <style scoped>

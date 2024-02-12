@@ -4,8 +4,4 @@
     Backend: Laravel 10, Docker, Spatie, MySQL
 </template>
 
-<script>
-export default {
-    name: 'AboutStackComponent'
-}
-</script>
+<script setup lang="ts"></script>

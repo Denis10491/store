@@ -21,30 +21,19 @@
     </header>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
 import { logout } from '../../services/api';
 import { useUserStore } from '../../store/user';
 
-export default {
-    name: 'HeaderComponent',
-    setup() {
-        const userStore = useUserStore();
-        return { userStore }
-    },
+const userStore = useUserStore();
 
-    methods: {
-        async exit() {
-            const isLogoutStatus = await logout();
-            if (isLogoutStatus) window.location.href = '/';
-        }
-    },
-
-    computed: {
-        isAuth() {
-            return this.userStore.isAuthStatus ?? false;
-        }
-    }
+const exit = async (): Promise<void> => {
+    const isLogoutStatus = await logout();
+    if (isLogoutStatus) window.location.href = '/';
 }
+
+const isAuth = computed<boolean>(() => userStore.isAuthStatus);
 </script>
 
 <style scoped>
@@ -56,5 +45,8 @@ header a {
     letter-spacing: 1.2px;
     font-size: 13px;
     margin: 0 0 0 15px;
+}
+.header__nav-item {
+    cursor: pointer;
 }
 </style>

@@ -10,8 +10,4 @@
     </ul>
 </template>
 
-<script>
-export default {
-    name: 'AboutFeaturesComponent'
-}
-</script>
+<script setup lang="ts"></script>

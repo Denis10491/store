@@ -8,8 +8,4 @@
     Thank you for your understanding.
 </template>
 
-<script>
-export default {
-    name: 'AboutEnglishComponent'
-}
-</script>
+<script setup lang="ts"></script>
