@@ -1,5 +1,5 @@
 <template>
-    <button :class="'uk-button uk-margin-small-bottom uk-button-'+type">
+    <button :class="'uk-button uk-margin-small-bottom uk-width-auto uk-button-'+type">
         <slot></slot>
     </button>
 </template>

@@ -1,12 +1,11 @@
 import { defineStore } from "pinia";
-import { Product } from "../../helpers/interfaces";
+import { Product, ArrayProduct } from "../../helpers/interfaces";
 import { pageOfProducts, productById } from "../services/api";
 
 export const useProductsStore = defineStore('products', {
     state: () => ({
-        list: [] as Array<Product>,
-        listInBasket: {},
-        sumPriceInBasket: 0,
+        list: [] as ArrayProduct,
+        listInBasket: [] as Array<Product>,
         maxPerPage: 0,
         lastPage: 0
     }),
@@ -15,57 +14,87 @@ export const useProductsStore = defineStore('products', {
         getLastPage(): number {
             return this.lastPage;
         },
-        getList(): Array<Product> {
+        getList(): ArrayProduct {
             return this.list;
         },
-        getListInBasket(): object {
-            if (Object.keys(this.listInBasket).length == 0) this.listInBasket = JSON.parse(localStorage.getItem('basket') ?? "{}");
-            return this.listInBasket ?? {};
+        getListInBasket(): Array<Product> {
+            if (Object.keys(this.listInBasket).length === 0) {
+                this.listInBasket = JSON.parse(localStorage.getItem('basket') ?? '[]');
+            }
+            return this.listInBasket;
         },
         getSumPriceInBasket(): number {
-            return this.sumPriceInBasket ?? 0;
+            let sum = 0;
+            this.listInBasket.forEach(item => sum += item.price * item.count! ?? 1)
+            return sum;
         }
     },
 
     actions: {
-        addToBasket(id: string | number, type: string, price = 0): void {
-            this.listInBasket = JSON.parse(localStorage.getItem('basket') ?? "{}");
-            if (!this.listInBasket[id]) this.listInBasket[id] = { id: id, count: 0 }
-            if (type == '+') {
-                this.listInBasket[id]["count"]++;
-                this.sumPriceInBasket += price
-            }
-            else if (type == '-') {
-                this.listInBasket[id]["count"]--;
-                this.sumPriceInBasket -= price
-            }
-            if (this.listInBasket[id]["count"] == 0) delete this.listInBasket[id];
-            localStorage.setItem('basket', JSON.stringify(this.listInBasket));
-        },
-
-        async getPage(num: number) {
-            const response = await pageOfProducts(num);
+        async getPage(page: number): Promise<void> {
+            const response = await pageOfProducts(page);
             this.maxPerPage = await response.per_page;
             this.lastPage = await response.last_page;
-            this.list[num] = await response.products.map((item: { [x: string]: number; }) => {
-                item["count"] = 0; return item;
+            this.list[page] = await response.products;
+        },
+
+        getProductById(id: number): Product | null {
+            let product: Product | null = null;
+            this.list.forEach(page => {
+                let stashProduct = page.find((item: Product) => item.id === id);
+                if (stashProduct) product = stashProduct;
             });
+            return product;
         },
 
-        async getProductById(id: string | number): Promise<any> {
-            const product = await productById(id);
-            return await product;
+        getProductInBasketById(id: number): Product {
+            const index = this.getIndexProductInBasketById(id);
+            return this.listInBasket[index];
         },
 
-        getProductInBasketById(id: string | number): object {
-            if (Object.keys(this.listInBasket).length == 0) this.listInBasket = JSON.parse(localStorage.getItem('basket') ?? "{}");
-            return this.listInBasket[id];
+        getIndexProductInBasketById(id: number): number {
+            if (Object.keys(this.listInBasket).length === 0) {
+                this.listInBasket = JSON.parse(localStorage.getItem('basket') ?? '[]');
+            }
+            return this.listInBasket.findIndex(item => item.id == id);
         },
 
-        removeById(id: string | number, price = 0): void {
-            this.sumPriceInBasket -= this.listInBasket[id]["count"] * price;
-            delete this.listInBasket[id];
+        plus(id: number): void {
+            this.listInBasket = JSON.parse(localStorage.getItem('basket') ?? '[]');
+            const index = this.getIndexProductInBasketById(id);
+            if (index === -1) {
+                productById(id).then((product: Product) => {
+                    product.count = 1;
+                    this.listInBasket.push(product);
+                    localStorage.setItem('basket', JSON.stringify(this.listInBasket));
+                });
+            }
+            else this.listInBasket[index].count! += 1;
             localStorage.setItem('basket', JSON.stringify(this.listInBasket));
+        },
+
+        minus(id: number): void {
+            this.listInBasket = JSON.parse(localStorage.getItem('basket') ?? '[]');
+            const index = this.getIndexProductInBasketById(id);
+            if (index === -1) {
+                let product = this.getProductById(id)!;
+                product.count = 1;
+                this.listInBasket.push(product);
+            }
+            else {
+                if (this.listInBasket[index].count! === 1) this.listInBasket.splice(index, 1);
+                else this.listInBasket[index].count! -= 1;
+            }
+            localStorage.setItem('basket', JSON.stringify(this.listInBasket));
+        },
+
+        removeById(id: number): void {
+            this.listInBasket = JSON.parse(localStorage.getItem('basket') ?? '[]');
+            const index = this.getIndexProductInBasketById(id);
+            if (index != -1) {
+                this.listInBasket.splice(index, 1);
+                localStorage.setItem('basket', JSON.stringify(this.listInBasket));
+            }
         }
     }
 });

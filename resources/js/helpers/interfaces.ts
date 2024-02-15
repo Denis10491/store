@@ -4,12 +4,19 @@ export interface Product {
     name: string,
     description: string,
     composition: string,
-    nutritional: {
-        fats: number,
-        proteins: number,
-        carbohydrates: number
-    },
-    price: number
+    nutritional: Nutritional,
+    price: number,
+    count?: number
+}
+
+export interface ArrayProduct extends Array<any> {
+    [page: number]: Array<Product>
+}
+
+export interface Nutritional {
+    fats: number,
+    proteins: number,
+    carbohydrates: number
 }
 
 export interface UserData {
@@ -27,5 +34,5 @@ export interface Order {
         count: number,
         price: number
     }>
-    created_at: string
+    created_at: Date | string
 }
