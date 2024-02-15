@@ -22,7 +22,7 @@ class StoreOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'products' => ['required'],
+            'products' => ['required', 'json'],
             'address' => ['required', 'string']
         ];
     }
