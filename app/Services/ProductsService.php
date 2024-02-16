@@ -7,7 +7,10 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductsResource;
 use App\Models\Nutritional;
+use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\Product;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -60,5 +63,30 @@ class ProductsService implements ProductsServiceContract
             return $product;
         }, 2);
         return new ProductsResource($updatedProduct);
+    }
+
+    public function monthlyBestSelling(int $year, int $month): array
+    {
+        $ordersId = Order::whereBetween('created_at', [
+            $year.'-'.$month.'-01 00:00:00', $year.'-'.$month.'-31 00:00:00'
+        ])->latest()->pluck('id');
+        $stashProducts = [];
+        $data = [];
+        foreach($ordersId as $orderId) {
+            $products = OrderProduct::with('product:id,name')
+                ->where('order_id', $orderId)
+                ->get();
+            foreach($products as $product) {
+                if (isset($stashProducts[$product->id])) $stashProducts[$product->id]['count'] + $product->count;
+                else $stashProducts[$product->id]['count'] = $product->count;
+                $stashProducts[$product->id]['id'] = $product->product->id;
+                $stashProducts[$product->id]['name'] = $product->product->name;
+            }
+        }
+        uasort($stashProducts, function($a, $b) {
+            return $b['count'] - $a['count'];
+        });
+        foreach($stashProducts as $item) $data[] = $item;
+        return $stashProducts;
     }
 }

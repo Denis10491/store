@@ -52,7 +52,9 @@ class OrdersService implements OrdersServiceContract
 
     public function monthlyAmountByDay(int $year, int $month): Collection
     {
-        return Order::whereBetween('created_at', [$year.'-'.$month.'-01 00:00:00', $year.'-'.$month.'-31 00:00:00'])
+        return Order::whereBetween('created_at', [
+                $year.'-'.$month.'-01 00:00:00', $year.'-'.$month.'-31 00:00:00'
+            ])
             ->get()
             ->groupBy(function($data) {
                 return Carbon::parse($data->created_at)->format('d');
