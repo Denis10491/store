@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "strict": true,
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "paths": {
+            "@assets/*": ["resources/assets/*"],
+            "@middleware/*": ["resources/js/user/middleware/*"],
+            "@components/*": ["resources/js/components/*"],
+            "@user/components/*": ["resources/js/user/components/*"],
+            "@user/services/*": ["resources/js/user/services/*"],
+            "@user/store/*": ["resources/js/user/store/*"],
+            "@helpers/*": ["resources/js/helpers/*"]
+        }
+    }
+}
