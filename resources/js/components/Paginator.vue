@@ -37,7 +37,6 @@ import { computed, ref } from 'vue';
 
 const props = defineProps<{
     currentPage: number,
-    changePage: number,
     numOfMaxPage: number
 }>()
 const emit = defineEmits<{

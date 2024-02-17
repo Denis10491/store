@@ -17,19 +17,19 @@
     <h2 v-else>Loading...</h2>
 
     <Paginator
-        :currentPage="currentPage"
-        :changePage="changePage"
-        :numOfMaxPage="productsStore.getLastPage"
         class="uk-margin-top"
+        :currentPage="currentPage"
+        :numOfMaxPage="productsStore.getLastPage"
+        @changePage="changePage"
     />
 </template>
 
 <script setup lang="ts">
-import { useProductsStore } from '../store/products';
 import { computed, ref } from 'vue';
-import { ArrayProduct } from '../../helpers/interfaces';
-import ProductCard from '../components/products/ProductCard.vue';
-import Paginator from '../../components/Paginator.vue';
+import { useProductsStore } from '@user/store/products';
+import { ArrayProduct } from '@helpers/interfaces';
+import ProductCard from '@user/components/products/ProductCard.vue';
+import Paginator from '@components/Paginator.vue';
 
 const productsStore = useProductsStore();
 
