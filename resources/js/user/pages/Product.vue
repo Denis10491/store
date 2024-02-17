@@ -28,12 +28,12 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { Product } from '../../helpers/interfaces';
-import { productById } from '../services/api';
-import { useProductsStore } from '../store/products';
-import Card from '../../components/Card.vue';
-import Button from '../../components/Button.vue';
-import Counter from '../../components/Counter.vue';
+import { useProductsStore } from '@user/store/products';
+import { Product } from '@helpers/interfaces';
+import { productById } from '@user/services/api';
+import Card from '@components/Card.vue';
+import Button from '@components/Button.vue';
+import Counter from '@components/Counter.vue';
 
 const productsStore = useProductsStore();
 

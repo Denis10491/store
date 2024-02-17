@@ -5,7 +5,6 @@
                 <ProductItem :id="product.id" />
             </div>
         </div>
-
         <Card class="uk-flex-column uk-margin-small-left uk-width-1-2 uk-height-1-1">
             <h3>Оформление заказа</h3>
             <input type="text" class="uk-input uk-margin-small-bottom" placeholder="Address" v-model="address">
@@ -20,15 +19,15 @@
 </template>
 
 <script setup lang="ts">
-import { createOrder } from '../services/api';
-import { useProductsStore } from '../store/products';
-import { useUserStore } from '../store/user';
-import { Product } from '../../helpers/interfaces';
 import { computed, ref } from 'vue';
-import Button from '../../components/Button.vue';
-import Card from '../../components/Card.vue';
-import Error from '../../components/Error.vue';
-import ProductItem from '../components/products/ProductItem.vue';
+import { useUserStore } from '@user/store/user';
+import { useProductsStore } from '@user/store/products';
+import { Product } from '@helpers/interfaces';
+import { createOrder } from '@user/services/api';
+import Card from '@components/Card.vue';
+import ProductItem from '@user/components/products/ProductItem.vue';
+import Button from '@components/Button.vue';
+import Error from '@components/Error.vue';
 
 const productsStore = useProductsStore();
 const userStore = useUserStore();
@@ -36,10 +35,7 @@ const userStore = useUserStore();
 const address = ref<string>('');
 const isFormRequestStatus = ref<boolean>(true);
 
-const productsInBasket = computed<Array<Product>>(() => {
-    console.log(productsStore.getListInBasket)
-    return productsStore.listInBasket
-});
+const productsInBasket = computed<Array<Product>>(() => productsStore.getListInBasket);
 const sum = computed<number>(() => productsStore.getSumPriceInBasket);
 
 const send = async (): Promise<void> => {

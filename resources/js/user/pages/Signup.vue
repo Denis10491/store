@@ -5,7 +5,7 @@
             <Input type="text" placeholder="Name" v-model="data.name" />
             <Input type="email" placeholder="Email" v-model="data.email" />
             <Input type="password" placeholder="Password" v-model="data.password" />
-            <Button @click="send()">SignUp</Button>
+            <Button type="primary" @click="send()">SignUp</Button>
             <Error v-if="!isFormRequestStatus">We cannot register you. Try again</Error>
         </Card>
     </div>
@@ -13,12 +13,12 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import { UserData } from '../../helpers/interfaces';
-import { signup } from '../services/api';
-import Card from '../../components/Card.vue';
-import Input from '../../components/Input.vue';
-import Button from '../../components/Button.vue';
-import Error from '../../components/Error.vue';
+import { UserData } from '@helpers/interfaces';
+import { signup } from '@user/services/api';
+import Card from '@components/Card.vue';
+import Input from '@components/Input.vue';
+import Button from '@components/Button.vue';
+import Error from '@components/Error.vue';
 
 let data = reactive<UserData>({
     name: '',

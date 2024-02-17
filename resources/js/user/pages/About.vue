@@ -14,12 +14,12 @@
 </template>
 
 <script setup lang="ts">
-import English from '../components/about/English.vue';
-import Russian from '../components/about/Russian.vue';
-import Stack from '../components/about/Stack.vue';
-import Features from '../components/about/Features.vue';
 import { computed, reactive } from 'vue';
-import Card from '../../components/Card.vue';
+import English from '@user/components/about/English.vue';
+import Russian from '@user/components/about/Russian.vue';
+import Stack from '@user/components/about/Stack.vue';
+import Features from '@user/components/about/Features.vue';
+import Card from '@components/Card.vue';
 
 type Menu = {
     en: boolean;
@@ -38,7 +38,7 @@ const menu = reactive<Menu>({
 const changeTab = (name: keyof Menu): void => {
     Object.keys(menu).map((key: keyof Menu) => {
         menu[key] = false;
-        if (key == name) menu[key] = true;
+        if (key === name) menu[key] = true;
     });
 }
 

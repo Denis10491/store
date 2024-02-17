@@ -7,6 +7,6 @@
 </template>
 
 <script setup lang="ts">
-import Card from '../../components/Card.vue';
-import Orders from '../components/orders/Orders.vue';
+import Card from '@components/Card.vue';
+import Orders from '@user/components/orders/Orders.vue';
 </script>
