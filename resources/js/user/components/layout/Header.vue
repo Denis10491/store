@@ -23,8 +23,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { logout } from '../../services/api';
-import { useUserStore } from '../../store/user';
+import { useUserStore } from '@user/store/user';
+import { logout } from '@user/services/api';
 
 const userStore = useUserStore();
 

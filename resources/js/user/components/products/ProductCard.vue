@@ -23,11 +23,11 @@
 </template>
 
 <script setup lang="ts">
-import Card from '../../../components/Card.vue';
-import Button from '../../../components/Button.vue';
-import Counter from '../../../components/Counter.vue';
-import { useProductsStore } from '../../store/products';
 import { computed } from 'vue';
+import { useProductsStore } from '@user/store/products';
+import Card from '@components/Card.vue';
+import Button from '@components/Button.vue';
+import Counter from '@components/Counter.vue';
 
 const props = defineProps<{
     id: number,

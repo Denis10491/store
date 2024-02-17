@@ -21,10 +21,10 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { useProductsStore } from '../../store/products';
-import Card from '../../../components/Card.vue';
-import Counter from '../../../components/Counter.vue';
-import { productById } from '../../services/api';
+import { useProductsStore } from '@user/store/products';
+import { productById } from '@user/services/api';
+import Card from '@components/Card.vue';
+import Counter from '@components/Counter.vue';
 
 const props = defineProps<{
     id: number
@@ -45,7 +45,6 @@ const loadProduct = (): void => {
         name.value = product.name;
         description.value = product.description;
         price.value = product.price;
-        productsStore.sumPriceInBasket += product.price * productInBasket.count ?? 1;
         loaded.value = true;
     });
 }

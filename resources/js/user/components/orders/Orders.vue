@@ -3,23 +3,23 @@
         <div>
             <label class="uk-form-label" for="form-stacked-text">Date Start</label>
             <div class="uk-form-controls">
-                <input type="date" class="uk-input" v-model="filter['dateStart']">
+                <input type="date" class="uk-input" v-model="dateStart">
             </div>
         </div>
         <div class="uk-margin-small-left">
             <label class="uk-form-label" for="form-stacked-text">Date End</label>
             <div class="uk-form-controls">
-                <input type="date" class="uk-input" v-model="filter['dateEnd']">
+                <input type="date" class="uk-input" v-model="dateEnd">
             </div>
         </div>
         <div class="uk-margin-small-left">
             <label class="uk-form-label" for="form-stacked-text">Product Name</label>
             <div class="uk-form-controls">
-                <input type="text" class="uk-input" v-model="filter['productName']" placeholder="Type here...">
+                <input type="text" class="uk-input" v-model="productName" placeholder="Type here...">
             </div>
         </div>
         <button class="uk-button uk-button-primary uk-height-1-1 uk-margin-small-left"
-            @click="ordersStore.filter(filter['dateStart'], filter['dateEnd'], filter['productName'])"
+            @click="ordersStore.filter(dateStart, dateEnd, productName)"
         >Accept</button>
         <button class="uk-button uk-button-default uk-height-1-1 uk-margin-small-left"
             @click="clearFilter()"
@@ -62,17 +62,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue';
-import { Order, Product } from '../../../helpers/interfaces';
-import { useOrdersStore } from '../../store/orders';
+import { computed, onMounted, ref } from 'vue';
+import { useOrdersStore } from '@user/store/orders';
+import { Order, Product } from '@helpers/interfaces';
 
 const loaded = ref<boolean>(false);
-const currentPage = ref<number>(1)
-let filter = reactive<object>({
-    dateStart: "",
-    dateEnd: "",
-    productName: ""
-});
+const currentPage = ref<number>(1);
+let dateStart = ref('');
+let dateEnd = ref('');
+let productName = ref('');
 
 const ordersStore = useOrdersStore();
 
@@ -96,11 +94,9 @@ const priceOfOrder = (products: Product[]): number => {
 }
 
 const clearFilter = () => {
-    filter = {
-        dateStart: null,
-        dateEnd: null,
-        productName: ""
-    }
+    dateStart.value = '';
+    dateEnd.value = '';
+    productName.value = '';
     ordersStore.filter();
 }
 
