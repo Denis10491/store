@@ -21,7 +21,10 @@ export default defineConfig({
             '@user/components': path.resolve(__dirname, 'resources/js/user/components'),
             "@user/services": path.resolve(__dirname, 'resources/js/user/services'),
             "@user/store": path.resolve(__dirname, './resources/js/user/store'),
-            '@interfaces': path.resolve(__dirname, './resources/js/helpers/interfaces')
+            '@admin/components': path.resolve(__dirname, 'resources/js/admin/components'),
+            "@admin/services": path.resolve(__dirname, 'resources/js/admin/services'),
+            "@admin/store": path.resolve(__dirname, './resources/js/admin/store'),
+            '@helpers': path.resolve(__dirname, './resources/js/helpers')
         },
     }
 });

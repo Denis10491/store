@@ -12,6 +12,9 @@
             "@user/components/*": ["resources/js/user/components/*"],
             "@user/services/*": ["resources/js/user/services/*"],
             "@user/store/*": ["resources/js/user/store/*"],
+            "@admin/components": ["resources/js/admin/components/*"],
+            "@admin/services/*": ["resources/js/admin/services/*"],
+            "@admin/store/*": ["resources/js/admin/store/*"],
             "@helpers/*": ["resources/js/helpers/*"]
         }
     }

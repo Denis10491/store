@@ -77,8 +77,12 @@ class ProductsService implements ProductsServiceContract
                 ->where('order_id', $orderId)
                 ->get();
             foreach($products as $product) {
-                if (isset($stashProducts[$product->id])) $stashProducts[$product->id]['count'] + $product->count;
-                else $stashProducts[$product->id]['count'] = $product->count;
+                if (isset($stashProducts[$product->id])) {
+                    $stashProducts[$product->id]['count'] + $product->count;
+                }
+                else {
+                    $stashProducts[$product->id]['count'] = $product->count;
+                }
                 $stashProducts[$product->id]['id'] = $product->product->id;
                 $stashProducts[$product->id]['name'] = $product->product->name;
             }
