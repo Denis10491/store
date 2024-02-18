@@ -24,11 +24,11 @@ class UpdateProductRequest extends FormRequest
         return [
             'name' => ['string'],
             'description' => ['string', 'max:1000'],
-            'proteins' => ['string'],
-            'fats' => ['string'],
-            'carbohydrates' => ['string'],
+            'proteins' => ['integer'],
+            'fats' => ['integer'],
+            'carbohydrates' => ['integer'],
             'composition' => ['string', 'max:1000'],
-            'price' => ['string']
+            'price' => ['integer']
         ];
     }
 }

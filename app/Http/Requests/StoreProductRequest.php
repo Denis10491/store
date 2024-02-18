@@ -24,12 +24,12 @@ class StoreProductRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'description' => ['required', 'string', 'max:1000'],
-            'image' => ['required'],
-            'proteins' => ['required'],
-            'fats' => ['required'],
-            'carbohydrates' => ['required', 'string'],
+            'image' => ['required', 'file'],
+            'proteins' => ['required', 'integer'],
+            'fats' => ['required', 'integer'],
+            'carbohydrates' => ['required', 'integer'],
             'composition' => ['required', 'string', 'max:1000'],
-            'price' => ['required']
+            'price' => ['required', 'integer']
         ];
     }
 }

@@ -16,13 +16,13 @@ class OrdersService implements OrdersServiceContract
 {
     public function getPage(User $user, int $page): OrdersCollection
     {
-        if ($user->hasRole('admin')) {
-            $orders = Order::latest()->paginate(30, ['id', 'address', 'created_at'], 'page', $page);
-        }
-        else {
+        if ($user->hasRole('user')) {
             $orders = Order::where('user_id', $user->id)
                 ->latest()
                 ->paginate(30, ['id', 'address', 'created_at'], 'page', $page);
+        }
+        else {
+            $orders = Order::latest()->paginate(30, ['id', 'address', 'created_at'], 'page', $page);
         }
         foreach($orders as $key => $order) {
             $orders[$key]['products'] = OrderProduct::with('product')->where('order_id', $order['id']);
@@ -37,7 +37,7 @@ class OrdersService implements OrdersServiceContract
                 'user_id' => $user->id,
                 'address' => $data['address']
             ]);
-            foreach(json_decode($data['products'], true) as $product) {
+            foreach($data['products'] as $product) {
                 if (Product::where('id', $product['id'])->first()) {
                     OrderProduct::create([
                         'order_id' => $order['id'],
