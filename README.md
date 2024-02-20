@@ -1,5 +1,5 @@
 
-# Store (Vue 3 / Laravel 10)
+# FakeStore (Vue 3 / Laravel 10)
 
 Frontend stack: Vue.js 3, TypeScript, Pinia, Chart.js, VueRouter, Axios, UIkit, Vite, Eslint
 
@@ -36,37 +36,44 @@ Database
 
 Clone the project
 ```bash
-  git clone https://github.com/Divrun/Store-Laravel-Vue
+  git clone https://github.com/Denis10491/store
 ```
 
 Go to the project directory
 ```bash
-  cd Store-Laravel-Vue
+  cd store
+```
+
+First create `.env` and configure the configurations described above
+
+Connect image storage
+```bash
+  php artisan storage:link
 ```
 
 Run docker build an application image
 ```bash
-  docker build -t vuelaravel .
+  docker build -t app .
 ```
 
 Run docker compose
 ```bash
-  docker compose up
+  docker-compose up
 ```
 
 Run docker compose
 ```bash
-  docker compose exec app php artisan key:generate
+  docker-compose exec app php artisan key:generate
 ```
 
 Run migrations and seeds
 ```bash
-  docker compose exec app php artisan migrate:fresh --seed
+  docker-compose exec app php artisan migrate:fresh --seed
 ```
 
-Connect image storage
+Run a local server for the client side
 ```bash
-  docker compose exec app php artisan storage:link
+  npm run dev
 ```
 
 Open project: http://127.0.0.1:8000

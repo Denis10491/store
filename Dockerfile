@@ -15,7 +15,7 @@ COPY . /var/www/html/
 COPY --from=build /usr/bin/composer /usr/bin/composer
 RUN composer install --prefer-dist --no-interaction
 
-COPY docker/app/apache-config.conf /etc/apache2/sites-available/000-default.conf
+COPY docker/apache/apache-config.conf /etc/apache2/sites-available/000-default.conf
 COPY .env /var/www/html/.env
 
 RUN php artisan config:cache && \
