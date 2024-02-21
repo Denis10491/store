@@ -6,7 +6,7 @@ use App\Contracts\ProductsServiceContract;
 use App\Http\Requests\ProductsStatisticsMonthlyBestSellingRequest;
 use Illuminate\Http\Response;
 
-class ProductsStatisticsController extends Controller
+class ProductStatisticsController extends Controller
 {
     public function monthlyBestSelling(ProductsStatisticsMonthlyBestSellingRequest $request, ProductsServiceContract $service): Response
     {

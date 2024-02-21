@@ -6,7 +6,7 @@ use App\Contracts\OrdersServiceContract;
 use App\Http\Requests\OrdersStatisticsMonthlyAmountByDayRequest;
 use Illuminate\Http\Response;
 
-class OrdersStatisticsController extends Controller
+class OrderStatisticsController extends Controller
 {
     public function monthlyAmountByDay(OrdersStatisticsMonthlyAmountByDayRequest $request, OrdersServiceContract $service): Response
     {
