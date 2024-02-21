@@ -25,14 +25,18 @@ export interface UserData {
     password: string
 }
 
+export interface ArrayOrder extends Array<any>  {
+    [page: number]: Array< Order>
+}
+
 export interface Order {
     id: number,
     address: string,
-    products: Array<{
+    products: [{
         product_id: number,
         name: string,
         count: number,
         price: number
-    }>
+    }]
     created_at: Date | string
 }
