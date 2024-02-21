@@ -7,12 +7,8 @@
     </main>
 </template>
 
-<script>
-import Header from './components/other/Header.vue';
-
-export default {
-    components: { Header }
-}
+<script setup lang="ts">
+import Header from '@admin/components/layout/Header.vue';
 </script>
 
 <style>

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Store Laravel/Vue</title>
+    <title>FakeStore</title>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 

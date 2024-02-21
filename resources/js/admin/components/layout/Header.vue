@@ -5,13 +5,13 @@
             <li>
                 <router-link to="/admin"><span uk-icon="icon: home; ratio: 1"></span> Home</router-link>
             </li>
-            <li :class="{'uk-active': path == '/admin/products'}">
+            <li>
                 <router-link to="/admin/products"><span uk-icon="icon: bag; ratio: 1"></span> Products</router-link>
             </li>
-            <li :class="{'uk-active': path == '/admin/orders'}">
+            <li>
                 <router-link to="/admin/orders"><span uk-icon="icon: table; ratio: 1"></span> Orders</router-link>
             </li>
-            <li :class="{'uk-active': path == '/admin/statistics'}">
+            <li>
                 <router-link to="/admin/statistics"><span uk-icon="icon: info; ratio: 1"></span> Statistics</router-link>
             </li>
         </ul>
@@ -24,26 +24,8 @@
     </header>
 </template>
 
-<script>
-import axios from 'axios';
-
-export default {
-    name: 'HeaderComponent',
-
-    methods: {
-        logout() {
-            axios.get('/logout', {
-                headers: {
-                    Authorization: 'Bearer ' + sessionStorage.getItem('token')
-                }
-            })
-            .then(() => {
-                sessionStorage.removeItem('token');
-                window.location.href = '/';
-            })
-        }
-    }
-}
+<script setup lang="ts">
+import { logout } from '@admin/services/api';
 </script>
 
 <style scoped>
