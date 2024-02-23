@@ -21,13 +21,12 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const middleware = to.meta.middleware;
-
     setAuthorizationToken('Bearer ' + sessionStorage.getItem('token') ?? '');
-
-    const store = useUserStore();
-    store.getUserInfo().then(isAuthStatus => {
-        const context = { from, next, isAuthStatus };
+    const userStore = useUserStore();
+    userStore.getUserInfo().then(status => {
+        const middleware = to.meta.middleware;
+        const context = { from, next, status };
+    
         if (!middleware) return next();
         middleware[0]({
             ...context,

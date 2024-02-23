@@ -1,3 +1,3 @@
-export default async function auth(context) {
-    (!context.isAuthStatus) ? context.next() : context.next({ path: "/" })
+export default function guest(context) {
+    (context.status === false) ? context.next() : context.next({ path: "/" });
 }
