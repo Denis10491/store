@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { Product, ArrayProduct } from "../../helpers/interfaces";
-import { pageOfProducts, productById } from "../services/api";
+import { Product, ArrayProduct } from "@helpers/interfaces";
+import { pageOfProducts, productById } from "@user/services/api";
 
 export const useProductsStore = defineStore('products', {
     state: () => ({

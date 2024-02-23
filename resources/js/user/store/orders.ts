@@ -1,37 +1,38 @@
 import { defineStore } from "pinia";
-import { pageOfOrders } from "../services/api";
-import { Order } from "../../helpers/interfaces";
+import { pageOfOrders } from "@user/services/api";
+import { ArrayOrder } from "@helpers/interfaces";
+import { getMonth } from "@helpers/functions";
 
 export const useOrdersStore = defineStore('orders', {
     state: () => ({
-        list: [],
-        filteredList: [],
+        list: [] as ArrayOrder,
+        filteredList: [] as ArrayOrder,
         maxPerPage: 0,
         lastPage: 0
     }),
 
     getters: {
-        getList(): Array<Order> {
+        getList(): ArrayOrder {
             return this.list;
         },
-        getLastPage() {
+        getLastPage(): number {
             return this.lastPage;
         }
     },
 
     actions: {
-        filter(dateStart = null, dateEnd = null, productName = null) {
+        filter(dateStart: string | null = null, dateEnd: string | null = null, productName: string | null = null) {
             this.filteredList = this.list;
 
             // Date Start
             if (dateStart) {
                 let filterDateStart = new Date(dateStart);
                 this.filteredList = this.filteredList.map(page => {
-                    return page.filter(order => {
+                    return page.filter((order: { created_at: string | Date; }) => {
                         let currentDate = new Date(order.created_at);
                         return (
                             currentDate.getFullYear() >= filterDateStart.getFullYear() &&
-                            this.getMonth(currentDate) >= filterDateStart.getMonth() &&
+                            getMonth(currentDate) >= filterDateStart.getMonth() &&
                             currentDate.getDate() >= filterDateStart.getDate()
                         ) ? true : false;
                     });
@@ -41,12 +42,12 @@ export const useOrdersStore = defineStore('orders', {
             // Date End
             if (dateEnd) {
                 let filterDateEnd = new Date(dateEnd);
-                this.filteredList = this.filteredList.map(page => {
-                    return page.filter(order => {
+                this.filteredList = this.filteredList.map((page: any[]) => {
+                    return page.filter((order: { created_at: string | Date; }) => {
                         let currentDate = new Date(order.created_at);
                         return (
                             currentDate.getFullYear() <= filterDateEnd.getFullYear() &&
-                            this.getMonth(currentDate) <= filterDateEnd.getMonth() &&
+                            getMonth(currentDate) <= filterDateEnd.getMonth() &&
                             currentDate.getDate() <= filterDateEnd.getDate()
                         ) ? true : false;
                     });
@@ -55,9 +56,9 @@ export const useOrdersStore = defineStore('orders', {
 
             // Products
             if (productName) {
-                this.filteredList = this.filteredList.map(page => {
-                    return page.filter(order => {
-                        return (order.products.find(product => product.name.includes(productName))) ? true : false;
+                this.filteredList = this.filteredList.map((page: any[]) => {
+                    return page.filter((order: { products: any[]; }) => {
+                        return (order.products.find((product: { name: string }) => product.name.includes(productName))) ? true : false;
                     });
                 });
             }
@@ -70,38 +71,6 @@ export const useOrdersStore = defineStore('orders', {
             this.maxPerPage = await response.per_page;
             this.lastPage = await response.lastPage;
             return true;
-        },
-
-        getMonth(date) {
-            let dateString = date.toDateString()
-            switch(dateString.substring(4).substring(3, dateString.length)) {
-                case 'Jan':
-                    return 0
-                case 'Feb':
-                    return 1
-                case 'Mar':
-                    return 2
-                case 'Apr':
-                    return 3
-                case 'May':
-                    return 4
-                case 'Jun':
-                    return 5
-                case 'Jul':
-                    return 6
-                case 'Aug':
-                    return 7
-                case 'Sen':
-                    return 8
-                case 'Oct':
-                    return 9
-                case 'Nov':
-                    return 10
-                case 'Dec':
-                    return 11
-                default:
-                    return 0
-            }
         }
     }
 })
