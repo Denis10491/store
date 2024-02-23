@@ -12,11 +12,11 @@
             <li><router-link to="/basket" class="header__nav-item">Basket</router-link></li>
         </ul>
 
-        <a href="https://github.com/Divrun/Store-Laravel-Vue" target="_blanc" class="uk-icon-button" uk-icon="github"></a>
+        <a :href="GITHUB_REPOSITORY" target="_blanc" class="uk-icon-button" uk-icon="github"></a>
         <a v-if="isAuth" href="#" class="uk-icon-button" uk-icon="sign-out" @click="exit()"></a>
         <nav v-else class="uk-flex uk-flex-middle">
             <router-link to="/login" class="header__nav-item">Login</router-link>
-            <router-link to="/signup" class="header__nav-item uk-button uk-button-primary border">Singup</router-link>
+            <router-link to="/signup" class="header__nav-item"><Button type="primary">Singup</Button></router-link>
         </nav>
     </header>
 </template>
@@ -25,15 +25,19 @@
 import { computed } from 'vue';
 import { useUserStore } from '@user/store/user';
 import { logout } from '@user/services/api';
-
-const userStore = useUserStore();
+import { GITHUB_REPOSITORY } from '@helpers/constants';
+import Button from '@components/Button.vue';
 
 const exit = async (): Promise<void> => {
     const isLogoutStatus = await logout();
     if (isLogoutStatus) window.location.href = '/';
 }
 
-const isAuth = computed<boolean>(() => userStore.isAuthStatus);
+const userStore = useUserStore();
+const isAuth = computed<boolean>(() => {
+    console.log(userStore.getIsAuthStatus)
+    return userStore.getIsAuthStatus
+});
 </script>
 
 <style scoped>
@@ -48,5 +52,8 @@ header a {
 }
 .header__nav-item {
     cursor: pointer;
+}
+header button {
+    margin: 0 !important;
 }
 </style>

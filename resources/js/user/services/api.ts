@@ -1,7 +1,8 @@
+import { BASE_API_URL } from '@helpers/constants';
 import { getAuthorizationToken } from './auth'
 import axios from "axios";
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000/api';
+axios.defaults.baseURL = BASE_API_URL;
 axios.defaults.withCredentials = true;
 
 export async function login(email: string, password: string): Promise<boolean> {
