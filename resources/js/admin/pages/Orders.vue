@@ -1,29 +1,29 @@
 <template>
-    <nav v-if="orders.length > 0" class="filter uk-flex uk-flex-bottom uk-margin-small-top uk-margin-small-bottom">
+    <nav class="filter uk-flex uk-flex-bottom uk-margin-small-top uk-margin-small-bottom">
         <div>
-            <label class="uk-form-label" for="form-stacked-text">Date Start</label>
+            <label class="uk-form-label" >Date Start</label>
             <div class="uk-form-controls">
-                <input type="date" class="uk-input" v-model="filter.dateStart">
+                <input type="date" class="uk-input" v-model="dateStart">
             </div>
         </div>
         <div class="uk-margin-small-left">
-            <label class="uk-form-label" for="form-stacked-text">Date End</label>
+            <label class="uk-form-label">Date End</label>
             <div class="uk-form-controls">
-                <input type="date" class="uk-input" v-model="filter.dateEnd">
+                <input type="date" class="uk-input" v-model="dateEnd">
             </div>
         </div>
         <div class="uk-margin-small-left">
-            <label class="uk-form-label" for="form-stacked-text">Product Name</label>
+            <label class="uk-form-label">Product Name</label>
             <div class="uk-form-controls">
-                <input type="text" class="uk-input" v-model="filter.productName" placeholder="Type here...">
+                <input type="text" class="uk-input" v-model="productName" placeholder="Type here...">
             </div>
         </div>
-        <button class="uk-button uk-button-primary uk-height-1-1 uk-margin-small-left"
-            @click="acceptFilter()"
-        >Accept</button>
-        <button class="uk-button uk-button-default uk-height-1-1 uk-margin-small-left"
+        <Button type="primary" class="uk-margin-small-left"
+            @click="ordersStore.filter(dateStart, dateEnd, productName)"
+        >Accept</Button>
+        <Button type="default" class="uk-margin-small-left"
             @click="clearFilter()"
-        >Clear</button>
+        >Clear</Button>
     </nav>
 
     <table v-if="loaded" class="uk-table uk-table-divider uk-table-middle uk-table-striped">
@@ -37,14 +37,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="order in orders[currentPage]" :key="order.id">
-                <td>{{ order.id }}</td>
-                <td>{{ order.address }}</td>
+            <tr v-for="order in orders[currentPage]" :key="order['id']">
+                <td>{{ order['id'] }}</td>
+                <td>{{ order['address'] }}</td>
                 <td>
-                    <p v-for="product in order.products" :key="product.id">{{ product.name + ' x'+product.count+' ('+product.price+')' }}</p>
+                    <p v-for="product in order['products']" :key="product['product_id']">{{ product.name + ' x'+product.count+' ('+product.price+')' }}</p>
                 </td>
-                <td>{{ priceOfOrder(order.products) }}</td>
-                <td>{{ order.created_at.slice(0, 10).replaceAll('-', '.') }}</td>
+                <td>{{ priceOfOrder(order['products']) }}</td>
+                <td>{{ order['created_at'].toString().slice(0, 10).split('-').join('.') }}</td>
             </tr>
         </tbody>
     </table>
@@ -53,94 +53,68 @@
         v-if="loaded"
         :currentPage="currentPage"
         :changePage="changePage"
-        :numOfMaxPage="ordersStore.numOfMaxPage"
+        :numOfMaxPage="ordersStore.getLastPage"
     />
 
-    <div v-else class="uk-padding-small">
-        <p>Loading...</p>
-    </div>
+    <h2 v-if="!loaded">Loading...</h2>
 </template>
 
-<script>
-import Paginator from '../../components/Paginator.vue';
-import { useOrdersStore } from '../store/orders';
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
+import { useOrdersStore } from '@user/store/orders';
+import { ArrayOrder } from '@helpers/interfaces';
+import Button from '@components/Button.vue';
+import Paginator from '@components/Paginator.vue';
 
-export default {
-    name: 'AdminOrdersComponent',
-    components: { Paginator },
+const loaded = ref<boolean>(false);
+const currentPage = ref<number>(1);
+let dateStart = ref('');
+let dateEnd = ref('');
+let productName = ref('');
 
-    data() {
-        return {
-            currentPage: 1,
-            loaded: false,
-            filter: {
-                dateStart: null,
-                dateEnd: null,
-                productName: ""
-            }
-        }
-    },
+const ordersStore = useOrdersStore();
 
-    setup() {
-        const ordersStore = useOrdersStore();
-        return { ordersStore }
-    },
-    
-    methods: {
-        acceptFilter() {
-            this.ordersStore.filter(this.filter.dateStart, this.filter.dateEnd, this.filter.productName);
-            this.currentPage = 1;
-        },
-
-        changePage(num) {
-            this.loaded = false;
-            this.ordersStore.getPage(num);
-            setTimeout(() => {
-                (this.ordersStore.numOfMaxPage < num)
-                ? this.currentPage = this.ordersStore.numOfMaxPage
-                : this.currentPage = num;
-                this.loaded = true;
-            }, 500);
-        },
-
-        priceOfOrder(products) {
-            let price = 0;
-            products.map(product => {
-                price += product.price
-            })
-            return price;
-        },
-
-        clearFilter() {
-            this.filter = {
-                dateStart: null,
-                dateEnd: null,
-                productName: ""
-            }
-            this.ordersStore.filter();
-        }
-    },
-
-    computed: {
-        orders() {
-            return this.ordersStore.filteredList;
-        }
-    },
-
-    async mounted() {
-        this.loaded = await this.ordersStore.getPage(1);
-    }
+const changePage = async (num: number) => {
+    loaded.value = false;
+    await ordersStore.getPage(num);
+    setTimeout(() => {
+        (ordersStore.lastPage < num)
+        ? currentPage.value = ordersStore.lastPage
+        : currentPage.value = num;
+        loaded.value = true;
+    }, 500);
 }
+
+const priceOfOrder = (products: any[]): number => {
+    let price = 0;
+    products.map((product: { price: number; }) => {
+        price += product.price
+    })
+    return price;
+}
+
+const clearFilter = () => {
+    dateStart.value = '';
+    dateEnd.value = '';
+    productName.value = '';
+    ordersStore.filter();
+}
+
+const orders = computed((): ArrayOrder => ordersStore.filteredList);
+
+onMounted(async () => {
+    loaded.value = await ordersStore.getPage(1);
+})
 </script>
 
 <style>
-.uk-table th {
-    text-align: start;
-}
 .filter input {
     width: 160px;
     display: flex;
     align-items: center;
+}
+.filter button {
+    margin: 0 !important;
 }
 .order-card h3, div, p {
     margin: 0;
@@ -148,5 +122,8 @@ export default {
 }
 .order-title > * {
     margin: 0 10px 0 0;
+}
+.uk-table th {
+    text-align: start;
 }
 </style>

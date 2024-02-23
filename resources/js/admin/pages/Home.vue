@@ -5,11 +5,7 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: 'AdminHomePage'
-}
-</script>
+<script setup lang="ts"></script>
 
 <style scoped>
 p {

@@ -1,6 +1,8 @@
+import { getAuthorizationToken } from "@user/services/auth";
+import { BASE_API_URL } from '@helpers/constants';
 import axios from "axios";
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000/api';
+axios.defaults.baseURL = BASE_API_URL;
 axios.defaults.withCredentials = true;
 
 export async function pageOfProducts(num: number): Promise<any> {
@@ -27,7 +29,7 @@ export async function createProduct(form: { name: string | Blob; description: st
     try {
         await axios.post('/products', formData, {
             headers: {
-                Authorization: 'Bearer ' + sessionStorage.getItem('token'),
+                Authorization: getAuthorizationToken(),
                 'Content-Type': 'multipart/form-data'
             }
         });
@@ -50,7 +52,7 @@ export async function updateProduct(form: { img: string | Blob; name: string | B
     try {
         await axios.put('/products/' + form.id, formData, {
             headers: {
-                Authorization: 'Bearer ' + sessionStorage.getItem('token'),
+                Authorization: getAuthorizationToken(),
                 'Content-Type': 'multipart/form-data'
             }
         });
@@ -64,7 +66,7 @@ export async function deleteProduct(productId: string) {
     try {
         await axios.delete('/products/' + productId, {
             headers: {
-                Authorization: 'Bearer ' + sessionStorage.getItem('token')
+                Authorization: getAuthorizationToken()
             }
         });
         return true;
@@ -77,7 +79,7 @@ export async function pageOfOrders(num: number): Promise<any> {
     try {
         const response = await axios.get('/orders/page/'+num, {
             headers: {
-                Authorization: 'Bearer ' + sessionStorage.getItem('token')
+                Authorization: getAuthorizationToken()
             }
         });
         return await response.data.data;
@@ -89,7 +91,7 @@ export async function pageOfOrders(num: number): Promise<any> {
 export async function getCountOfOrders(year: string | number, month: string | number) {
     const response = await axios.get('/statistics/orders/monthlyamountbyday?year='+year+'&month='+month, {
         headers: {
-            Authorization: 'Bearer ' + sessionStorage.getItem('token')
+            Authorization: getAuthorizationToken()
         }
     });
     return await response.data.data;
@@ -98,8 +100,23 @@ export async function getCountOfOrders(year: string | number, month: string | nu
 export async function getBestSellingProducts(year: string | number, month: string | number) {
     const response = await axios.get('/statistics/products/monthlybestselling?year='+year+'&month='+month, {
         headers: {
-            Authorization: 'Bearer ' + sessionStorage.getItem('token')
+            Authorization: getAuthorizationToken()
         }
     });
     return await response.data.data;
+}
+
+export async function logout(): Promise<boolean> {
+    try {
+        await axios.get('/logout', {
+            headers: {
+                Authorization: getAuthorizationToken()
+            }
+        })
+        sessionStorage.removeItem('token');
+        window.location.href = '/';
+        return true;
+    } catch {
+        return false;
+    }
 }
