@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Contracts\OrdersServiceContract;
-use App\Contracts\ProductsServiceContract;
-use App\Services\OrdersService;
-use App\Services\ProductsService;
+use App\Contracts\OrderServiceContract;
+use App\Contracts\ProductServiceContract;
+use App\Services\Order\OrderService;
+use App\Services\Product\ProductService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

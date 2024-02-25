@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Product;
 
-use App\Contracts\ProductsServiceContract;
+use App\Contracts\ProductServiceContract;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductsCollection;
@@ -21,10 +22,10 @@ class ProductController extends Controller
         ]);
     }
 
-    public function store(StoreProductRequest $request, ProductsServiceContract $service): Response
+    public function store(StoreProductRequest $request, ProductServiceContract $service): Response
     {
         return response([
-            'status' => true, 
+            'status' => true,
             'data' => $service->create($request->validated(), $request)
         ]);
     }
@@ -33,15 +34,15 @@ class ProductController extends Controller
     {
         $product = Product::with('nutritional')->find($id);
         return response([
-            'status' => $product ? true : false, 
+            'status' => $product ? true : false,
             'data' => new ProductsResource($product)
         ]);
     }
 
-    public function update(UpdateProductRequest $request, ProductsServiceContract $service, string $id): Response
+    public function update(UpdateProductRequest $request, ProductServiceContract $service, string $id): Response
     {
         return response([
-            'status' => true, 
+            'status' => true,
             'data' => $service->update($request->validated(), $request, $id)
         ]);
     }

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
@@ -10,7 +11,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
-{    
+{
     public function register(RegisterRequest $request): Response {
         $user = User::create($request->validated());
         return response(['status' => true, 'data' => $user]);
@@ -27,7 +28,7 @@ class AuthController extends Controller
         }
         abort(401);
     }
-    
+
     public function logout(Request $request): Response {
         Auth::user()->tokens()->delete();
         $request->session()->invalidate();

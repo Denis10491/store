@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Product;
 
-use App\Contracts\ProductsServiceContract;
+use App\Contracts\ProductServiceContract;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductsResource;
@@ -10,11 +10,10 @@ use App\Models\Nutritional;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-class ProductsService implements ProductsServiceContract
+class ProductService implements ProductServiceContract
 {
     public function create(array $data, StoreProductRequest $request): ProductsResource
     {
@@ -22,16 +21,16 @@ class ProductsService implements ProductsServiceContract
             $path = $request->file('image')->store('', 'public');
             Storage::disk('public')->url($path);
             $nutritional = Nutritional::create([
-                'proteins' => $data['proteins'], 
-                'fats' => $data['fats'], 
+                'proteins' => $data['proteins'],
+                'fats' => $data['fats'],
                 'carbohydrates' => $data['carbohydrates']
             ]);
             return Product::create([
-                'name' => $data['name'], 
+                'name' => $data['name'],
                 'description' => $data['description'],
-                'imgPath' => 'storage/'.$path, 
-                'nutritional_id' => $nutritional->id, 
-                'composition' => $data['composition'], 
+                'imgPath' => 'storage/'.$path,
+                'nutritional_id' => $nutritional->id,
+                'composition' => $data['composition'],
                 'price' => $data['price']
             ]);
         });
@@ -40,16 +39,16 @@ class ProductsService implements ProductsServiceContract
 
     public function update(array $data, UpdateProductRequest $request, string $id): ProductsResource
     {
-        $updatedProduct = DB::transaction(function () use ($data, $request, $id) : Product { 
+        $updatedProduct = DB::transaction(function () use ($data, $request, $id): Product {
             if ($request->file('image')) {
                 $path = $request->file('image')->store('', 'public');
                 Storage::disk('public')->url($path);
                 Product::where('id', $id)->update(['imgPath' => 'storage/'.$path]);
             }
             Product::where('id', $id)->update([
-                'name' => $data['name'], 
+                'name' => $data['name'],
                 'description' => $data['description'],
-                'composition' => $data['composition'], 
+                'composition' => $data['composition'],
                 'price' => $data['price']
             ]);
             $product = Product::find($id);

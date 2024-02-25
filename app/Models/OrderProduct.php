@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class OrderProduct extends Model
 {
@@ -16,13 +17,13 @@ class OrderProduct extends Model
         'count'
     ];
 
-    public function order(): BelongsTo
+    public function orders(): HasOne
     {
-        return $this->belongsTo(Order::class);
+        return $this->HasOne(Order::class);
     }
 
-    public function product(): BelongsTo
+    public function products(): HasMany
     {
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(Product::class, 'id');
     }
 }

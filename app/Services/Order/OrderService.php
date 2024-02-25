@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Order;
 
-use App\Contracts\OrdersServiceContract;
+use App\Contracts\OrderServiceContract;
 use App\Http\Resources\OrdersCollection;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-class OrdersService implements OrdersServiceContract
+class OrderService implements OrderServiceContract
 {
     public function getPage(User $user, int $page): OrdersCollection
     {
@@ -22,7 +22,9 @@ class OrdersService implements OrdersServiceContract
                 ->paginate(30, ['id', 'address', 'created_at'], 'page', $page);
         }
         else {
-            $orders = Order::latest()->paginate(30, ['id', 'address', 'created_at'], 'page', $page);
+            $orders = OrderProduct::latest()
+                ->with('products')
+                ->paginate(30, ['*'], 'page', $page);
         }
         foreach($orders as $key => $order) {
             $orders[$key]['products'] = OrderProduct::with('product')->where('order_id', $order['id']);
@@ -30,7 +32,7 @@ class OrdersService implements OrdersServiceContract
         return new OrdersCollection($orders);
     }
 
-    public function create(User $user, array $data): bool 
+    public function create(User $user, array $data): bool
     {
         return DB::transaction(function() use ($data, $user): bool {
             $order = Order::create([

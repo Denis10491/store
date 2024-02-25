@@ -1,14 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Product;
 
-use App\Contracts\ProductsServiceContract;
+use App\Contracts\ProductServiceContract;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductsStatisticsMonthlyBestSellingRequest;
 use Illuminate\Http\Response;
 
 class ProductStatisticsController extends Controller
 {
-    public function monthlyBestSelling(ProductsStatisticsMonthlyBestSellingRequest $request, ProductsServiceContract $service): Response
+    public function monthlyBestSelling(
+        ProductsStatisticsMonthlyBestSellingRequest $request,
+        ProductServiceContract $service
+    ): Response
     {
         $credentials = $request->validated();
         return response([

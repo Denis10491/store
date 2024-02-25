@@ -1,14 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Order;
 
-use App\Contracts\OrdersServiceContract;
+use App\Contracts\OrderServiceContract;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\OrdersStatisticsMonthlyAmountByDayRequest;
 use Illuminate\Http\Response;
 
 class OrderStatisticsController extends Controller
 {
-    public function monthlyAmountByDay(OrdersStatisticsMonthlyAmountByDayRequest $request, OrdersServiceContract $service): Response
+    public function monthlyAmountByDay(
+        OrdersStatisticsMonthlyAmountByDayRequest $request,
+        OrderServiceContract $service
+    ): Response
     {
         $credentials = $request->validated();
         return response([
