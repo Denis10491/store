@@ -5,34 +5,26 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\User\UserResource;
+use App\Services\Auth\AuthService;
+use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
-    public function register(RegisterRequest $request): Response {
-        $user = User::create($request->validated());
-        return response(['status' => true, 'data' => $user]);
+    public function register(RegisterRequest $request, AuthService $service): JsonResponse
+    {
+        $createdUser = $service->store($request);
+        return response()->json(new UserResource($createdUser), 201);
     }
 
-    public function login(LoginRequest $request): Response {
-        if (Auth::guard()->attempt($request->validated())) {
-            $user = Auth::user();
-            $token = $user->createToken('auth_token')->plainTextToken;
-            return response([
-                'status' => true,
-                'token' => $token
-            ], 200);
-        }
-        abort(401);
+    public function login(LoginRequest $request, AuthService $service): JsonResponse
+    {
+        return response()->json($service->login($request));
     }
 
-    public function logout(Request $request): Response {
-        Auth::user()->tokens()->delete();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return response('', 201);
+    public function logout(): JsonResponse
+    {
+        auth()->user()->tokens()->delete();
+        return response()->json(['message' => 'Success']);
     }
 }
