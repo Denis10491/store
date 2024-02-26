@@ -44,7 +44,15 @@ Go to the project directory
   cd store
 ```
 
-First create `.env` and configure the configurations described above
+Install dependencies
+```bash
+  composer install
+```
+```bash
+  npm install
+```
+
+Copy from `.env.example` to `.env` and configure the configurations described above
 
 Connect image storage
 ```bash
@@ -58,7 +66,7 @@ Run docker build an application image
 
 Run docker compose
 ```bash
-  docker-compose up
+  docker-compose up -d
 ```
 
 Run docker compose
