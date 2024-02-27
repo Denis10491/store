@@ -6,49 +6,41 @@ use App\Contracts\ProductServiceContract;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Http\Resources\ProductsCollection;
-use App\Http\Resources\ProductsResource;
+use App\Http\Resources\Product\ProductResource;
 use App\Models\Product;
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller
 {
-    public function index(string $page): Response
+    public function index(): JsonResponse
     {
-        $products = Product::with('nutritional')->orderBy('id', 'DESC')->paginate(30, ['*'], 'page', (int) $page);
-        return response([
-            'status' => true,
-            'data' => new ProductsCollection($products)
-        ]);
+        $products = Product::query()->latest()->get();
+        return response()->json(ProductResource::collection($products));
     }
 
-    public function store(StoreProductRequest $request, ProductServiceContract $service): Response
+    public function show(Product $product): JsonResponse
     {
-        return response([
-            'status' => true,
-            'data' => $service->create($request->validated(), $request)
-        ]);
+        return response()->json(new ProductResource($product));
     }
 
-    public function show(string $id): Response
+    public function store(StoreProductRequest $request, ProductServiceContract $service): JsonResponse
     {
-        $product = Product::with('nutritional')->find($id);
-        return response([
-            'status' => $product ? true : false,
-            'data' => new ProductsResource($product)
-        ]);
+        $createdProduct = $service->store($request);
+        return response()->json(new ProductResource($createdProduct), 201);
     }
 
-    public function update(UpdateProductRequest $request, ProductServiceContract $service, string $id): Response
-    {
-        return response([
-            'status' => true,
-            'data' => $service->update($request->validated(), $request, $id)
-        ]);
+    public function update(
+        UpdateProductRequest $request,
+        ProductServiceContract $service,
+        Product $product
+    ): JsonResponse {
+        $updatedProduct = $service->setProduct($product)->update($request);
+        return response()->json(new ProductResource($updatedProduct));
     }
 
-    public function destroy(string $id): Response
+    public function destroy(Product $product): JsonResponse
     {
-        return response(['status' => Product::destroy($id)]);
+        $product->delete();
+        return response()->json(['message' => 'Success']);
     }
 }

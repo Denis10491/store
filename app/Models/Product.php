@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
-use Illuminate\Database\Eloquent\Relations\hasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
@@ -25,8 +25,8 @@ class Product extends Model
         return $this->belongsTo(Nutritional::class);
     }
 
-    public function order_product(): hasOne
+    public function orderProducts(): belongsToMany
     {
-        return $this->hasOne(OrderProduct::class);
+        return $this->belongsToMany(OrderProduct::class);
     }
 }

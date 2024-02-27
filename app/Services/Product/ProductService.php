@@ -3,93 +3,124 @@
 namespace App\Services\Product;
 
 use App\Contracts\ProductServiceContract;
+use App\Http\Requests\ProductStatisticsMonthlyBestSellingRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Http\Resources\ProductsResource;
 use App\Models\Nutritional;
-use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ProductService implements ProductServiceContract
 {
-    public function create(array $data, StoreProductRequest $request): ProductsResource
+    protected Product $product;
+
+    public function store(StoreProductRequest $request): Product
     {
-        $createdProduct = DB::transaction(function () use ($data, $request) {
-            $path = $request->file('image')->store('', 'public');
+        return DB::transaction(static function () use ($request): Product {
+            $path = $request->file('image')->storePublicly('images', 'public');
             Storage::disk('public')->url($path);
-            $nutritional = Nutritional::create([
-                'proteins' => $data['proteins'],
-                'fats' => $data['fats'],
-                'carbohydrates' => $data['carbohydrates']
+
+            $nutritional = Nutritional::query()->create([
+                'proteins' => $request->integer('proteins'),
+                'fats' => $request->integer('fats'),
+                'carbohydrates' => $request->integer('carbohydrates')
             ]);
-            return Product::create([
-                'name' => $data['name'],
-                'description' => $data['description'],
-                'imgPath' => 'storage/'.$path,
+
+            return Product::query()->create([
+                'name' => $request->str('name'),
+                'description' => $request->str('description'),
+                'imgPath' => config('app.url').Storage::url($path),
                 'nutritional_id' => $nutritional->id,
-                'composition' => $data['composition'],
-                'price' => $data['price']
+                'composition' => $request->str('composition'),
+                'price' => $request->str('price')
             ]);
         });
-        return new ProductsResource($createdProduct);
     }
 
-    public function update(array $data, UpdateProductRequest $request, string $id): ProductsResource
+    public function update(UpdateProductRequest $request): Product
     {
-        $updatedProduct = DB::transaction(function () use ($data, $request, $id): Product {
+        return DB::transaction(function () use ($request): Product {
             if ($request->file('image')) {
-                $path = $request->file('image')->store('', 'public');
+                $path = $request->file('image')->storePublicly('images', 'public');
                 Storage::disk('public')->url($path);
-                Product::where('id', $id)->update(['imgPath' => 'storage/'.$path]);
+                $this->product->update(['imgPath' => 'storage/'.$path]);
             }
-            Product::where('id', $id)->update([
-                'name' => $data['name'],
-                'description' => $data['description'],
-                'composition' => $data['composition'],
-                'price' => $data['price']
-            ]);
-            $product = Product::find($id);
-            Nutritional::where('id', $product['nutritional_id'])->update([
-                'proteins' => $data['proteins'],
-                'fats' => $data['fats'],
-                'carbohydrates' => $data['carbohydrates'],
-            ]);
-            $nutritional = Nutritional::find($product['nutritional_id']);
-            $product['nutritional'] = $nutritional;
-            return $product;
-        }, 2);
-        return new ProductsResource($updatedProduct);
+
+            if ($request->method() === 'PUT') {
+                $this->product->update([
+                    'name' => $request->str('name'),
+                    'description' => $request->str('description'),
+                    'composition' => $request->str('composition'),
+                    'price' => $request->integer('price'),
+                ]);
+
+                $this->product->nutritional()->update([
+                    'proteins' => $request->integer('proteins'),
+                    'fats' => $request->integer('fats'),
+                    'carbohydrates' => $request->integer('carbohydrates'),
+                ]);
+            } else {
+                $data = [];
+
+                if ($request->has('name')) {
+                    $data['name'] = $request->str('name');
+                }
+
+                if ($request->has('description')) {
+                    $data['description'] = $request->str('description');
+                }
+
+                if ($request->has('composition')) {
+                    $data['composition'] = $request->str('composition');
+                }
+
+                if ($request->has('price')) {
+                    $data['price'] = $request->integer('price');
+                }
+
+                $this->product->update($data);
+
+                $data = [];
+
+                if ($request->has('proteins')) {
+                    $data['proteins'] = $request->integer('proteins');
+                }
+
+                if ($request->has('fats')) {
+                    $data['fats'] = $request->integer('fats');
+                }
+
+                if ($request->has('carbohydrates')) {
+                    $data['carbohydrates'] = $request->integer('carbohydrates');
+                }
+
+                $this->product->nutritional()->update($data);
+            }
+
+            return $this->product;
+        });
     }
 
-    public function monthlyBestSelling(int $year, int $month): array
+    public function monthlyBestSelling(ProductStatisticsMonthlyBestSellingRequest $request
+    ): Collection {
+        $date = $request->integer('year').'-'.$request->integer('month');
+        return OrderProduct::query()->whereBetween('created_at',
+            [
+                Carbon::parse($date)->startOfMonth(),
+                Carbon::parse($date)->endOfMonth()
+            ])
+            ->selectRaw('product_id, SUM(count) as total_count')
+            ->groupBy('product_id')->get();
+    }
+
+    public function setProduct(Product $product): static
     {
-        $ordersId = Order::whereBetween('created_at', [
-            $year.'-'.$month.'-01 00:00:00', $year.'-'.$month.'-31 00:00:00'
-        ])->latest()->pluck('id');
-        $stashProducts = [];
-        $data = [];
-        foreach($ordersId as $orderId) {
-            $products = OrderProduct::with('product:id,name')
-                ->where('order_id', $orderId)
-                ->get();
-            foreach($products as $product) {
-                if (isset($stashProducts[$product->id])) {
-                    $stashProducts[$product->id]['count'] + $product->count;
-                }
-                else {
-                    $stashProducts[$product->id]['count'] = $product->count;
-                }
-                $stashProducts[$product->id]['id'] = $product->product->id;
-                $stashProducts[$product->id]['name'] = $product->product->name;
-            }
-        }
-        uasort($stashProducts, function($a, $b) {
-            return $b['count'] - $a['count'];
-        });
-        foreach($stashProducts as $item) $data[] = $item;
-        return $stashProducts;
+        $this->product = $product;
+
+        return $this;
     }
 }
