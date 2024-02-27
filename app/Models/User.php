@@ -16,7 +16,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role' => UserRole::class
+        'role'
     ];
 
     protected $hidden = [

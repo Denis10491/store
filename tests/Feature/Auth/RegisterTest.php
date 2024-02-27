@@ -40,7 +40,7 @@ class RegisterTest extends TestCase
             'password' => fake()->password
         ];
 
-        $response = $this->post(route('auth.register', $data));
+        $response = $this->post(route('auth.register'), $data);
 
         $response->assertCreated();
         $response->assertJsonStructure([
