@@ -2,13 +2,16 @@
 
 namespace App\Contracts;
 
-use App\Http\Resources\OrdersCollection;
-use App\Models\User;
+use App\Http\Requests\OrdersStatisticsMonthlyAmountByDayRequest;
+use App\Http\Requests\StoreOrderRequest;
+use App\Models\Order;
 use Illuminate\Support\Collection;
 
-interface OrdersServiceContract
+interface OrderServiceContract
 {
-    public function getPage(User $user, int $page): OrdersCollection;
-    public function create(User $user, array $data): bool;
-    public function monthlyAmountByDay(int $year, int $month): Collection;
+    public function index(): Collection;
+
+    public function store(StoreOrderRequest $request): Order;
+
+    public function monthlyAmountByDay(OrdersStatisticsMonthlyAmountByDayRequest $request): Collection;
 }

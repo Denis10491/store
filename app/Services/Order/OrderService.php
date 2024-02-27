@@ -3,63 +3,53 @@
 namespace App\Services\Order;
 
 use App\Contracts\OrderServiceContract;
-use App\Http\Resources\OrdersCollection;
+use App\Http\Requests\OrdersStatisticsMonthlyAmountByDayRequest;
+use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
-use App\Models\OrderProduct;
 use App\Models\Product;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class OrderService implements OrderServiceContract
 {
-    public function getPage(User $user, int $page): OrdersCollection
+    public function index(): Collection
     {
-        if ($user->hasRole('user')) {
-            $orders = Order::where('user_id', $user->id)
-                ->latest()
-                ->paginate(30, ['id', 'address', 'created_at'], 'page', $page);
+        if (auth()->user()->isUser()) {
+            return Order::query()->where('user_id', auth()->user()->id)->latest()->get();
         }
-        else {
-            $orders = OrderProduct::latest()
-                ->with('products')
-                ->paginate(30, ['*'], 'page', $page);
-        }
-        foreach($orders as $key => $order) {
-            $orders[$key]['products'] = OrderProduct::with('product')->where('order_id', $order['id']);
-        }
-        return new OrdersCollection($orders);
+        return Order::query()->latest()->get();
     }
 
-    public function create(User $user, array $data): bool
+    public function store(StoreOrderRequest $request): Order
     {
-        return DB::transaction(function() use ($data, $user): bool {
-            $order = Order::create([
-                'user_id' => $user->id,
-                'address' => $data['address']
+        return DB::transaction(static function () use ($request): Order {
+            $order = Order::query()->create([
+                'user_id' => auth()->user()->id,
+                'address' => $request->str('address')
             ]);
-            foreach($data['products'] as $product) {
-                if (Product::where('id', $product['id'])->first()) {
-                    OrderProduct::create([
-                        'order_id' => $order['id'],
-                        'product_id' => $product['id'],
-                        'count' => $product['count']
-                    ]);
+
+            foreach ($request->input('products') as $productInRequest) {
+                $product = Product::query()->find($productInRequest['id']);
+                if ($product) {
+                    $order->products()->attach($product);
                 }
             }
-            return $order->id ? true : false;
-        }, 2);
+
+            return $order;
+        });
     }
 
-    public function monthlyAmountByDay(int $year, int $month): Collection
+    public function monthlyAmountByDay(OrdersStatisticsMonthlyAmountByDayRequest $request): Collection
     {
-        return Order::whereBetween('created_at', [$year.'-'.$month.'-01 00:00:00', $year.'-'.$month.'-31 00:00:00'])
-            ->get()
-            ->groupBy(function($data) {
+        $date = $request->str('year').'-'.$request->str('month');
+        return Order::query()->whereBetween('created_at', [
+            Carbon::parse($date)->startOfMonth(),
+            Carbon::parse($date)->endOfMonth()
+        ])->get()
+            ->groupBy(function ($data) {
                 return Carbon::parse($data->created_at)->format('d');
-            })
-            ->map(function($orders) {
+            })->map(function ($orders) {
                 return $orders->count();
             });
     }
