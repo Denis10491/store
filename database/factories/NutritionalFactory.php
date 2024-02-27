@@ -6,13 +6,10 @@ use App\Models\Nutritional;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Nutritional>
+ * @extends Factory<Nutritional>
  */
 class NutritionalFactory extends Factory
 {
-
-    protected $model = Nutritional::class;
-
     /**
      * Define the model's default state.
      *

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 Route::apiResource('products', ProductController::class);
 
 Route::controller(ProductStatisticsController::class)
-    ->middleware(['auth:sanctum', 'role:admin'])
+    ->middleware(['auth:sanctum', 'role.admin'])
     ->prefix('products/statistics')
     ->as('products.statistics.')
     ->group(function () {
