@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Enums\UserRole;
 use App\Models\Order;
-use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -22,7 +21,7 @@ class DatabaseSeeder extends Seeder
         Product::factory(250)->create();
 
         Order::factory(200)
-            ->has(OrderProduct::factory(10))
+            ->has(Product::factory(10))
             ->create();
     }
 }

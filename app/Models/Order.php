@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Order extends Model
 {
@@ -15,8 +15,8 @@ class Order extends Model
         'address'
     ];
 
-    public function OrderProduct(): HasOne
+    public function products(): belongsToMany
     {
-        return $this->hasOne(OrderProduct::class);
+        return $this->belongsToMany(Product::class, 'order_products');
     }
 }

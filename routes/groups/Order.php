@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::apiResource('orders', OrderController::class)->middleware(['auth:sanctum'])->only('index', 'store');
 
 Route::controller(OrderStatisticsController::class)
-    ->middleware(['auth:sanctum', 'role:admin'])
+    ->middleware(['auth:sanctum', 'role.admin'])
     ->prefix('orders/statistics')
     ->as('orders.statistics.')
     ->group(function () {

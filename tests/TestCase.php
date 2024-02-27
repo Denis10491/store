@@ -13,7 +13,7 @@ abstract class TestCase extends BaseTestCase
 
     public function login(): void
     {
-        $this->user = User::factory()->makeOne();
+        $this->user = User::factory()->createOne();
         $this->actingAs($this->user, 'sanctum');
     }
 

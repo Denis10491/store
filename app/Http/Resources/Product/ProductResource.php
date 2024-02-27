@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Product;
 
-use App\Models\Nutritional;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +19,7 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'imgPath' => $this->imgPath,
-            'nutritional' => new NutritionalResource(Nutritional::find($this->nutritional_id)),
+            'nutritional' => new NutritionalResource($this->nutritional),
             'composition' => $this->composition,
             'price' => $this->price
         ];
