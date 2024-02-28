@@ -74,5 +74,35 @@ class CreateOrderTest extends TestCase
         $response = $this->post(route('orders.store'), $data);
 
         $response->assertCreated();
+        $response->assertJsonStructure([
+            'id', 'address',
+            'products' => [
+                '*' => [
+                    'id',
+                    'name',
+                    'description',
+                    'imgPath',
+                    'nutritional' => [
+                        'proteins', 'fats', 'carbohydrates'
+                    ],
+                    'composition',
+                    'price',
+                    'count'
+                ]
+            ]
+        ]);
+        $response->assertJson([
+            'address' => $data['address'],
+            'products' => [
+                [
+                    'id' => $data['products'][0]['id'],
+                    'count' => $data['products'][0]['count']
+                ],
+                [
+                    'id' => $data['products'][1]['id'],
+                    'count' => $data['products'][1]['count']
+                ]
+            ]
+        ]);
     }
 }

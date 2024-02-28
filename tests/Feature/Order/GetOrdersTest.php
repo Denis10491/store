@@ -56,6 +56,7 @@ class GetOrdersTest extends TestCase
                     ],
                     'composition',
                     'price',
+                    'count'
                 ]
             ]
         ]);
