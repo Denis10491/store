@@ -32,7 +32,7 @@ class OrderService implements OrderServiceContract
             foreach ($request->input('products') as $productInRequest) {
                 $product = Product::query()->find($productInRequest['id']);
                 if ($product) {
-                    $order->products()->attach($product);
+                    $order->products()->attach($product, ['count' => $productInRequest['count']]);
                 }
             }
 

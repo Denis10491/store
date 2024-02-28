@@ -21,7 +21,8 @@ class ProductResource extends JsonResource
             'imgPath' => $this->imgPath,
             'nutritional' => new NutritionalResource($this->nutritional),
             'composition' => $this->composition,
-            'price' => $this->price
+            'price' => $this->price,
+            'count' => $this->pivot->count
         ];
     }
 }
