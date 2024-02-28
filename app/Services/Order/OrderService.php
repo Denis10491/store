@@ -24,8 +24,7 @@ class OrderService implements OrderServiceContract
     public function store(StoreOrderRequest $request): Order
     {
         return DB::transaction(static function () use ($request): Order {
-            $order = Order::query()->create([
-                'user_id' => auth()->user()->id,
+            $order = auth()->user()->orders()->create([
                 'address' => $request->str('address')
             ]);
 
