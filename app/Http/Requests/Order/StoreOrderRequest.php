@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Order;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrdersStatisticsMonthlyAmountByDayRequest extends FormRequest
+class StoreOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,13 +18,13 @@ class OrdersStatisticsMonthlyAmountByDayRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'year' => ['required', 'string', 'max:2100'],
-            'month' => ['required', 'int', 'max:12']
+            'products' => ['required', 'array'],
+            'address' => ['required', 'string']
         ];
     }
 }

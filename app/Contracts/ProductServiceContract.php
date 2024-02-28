@@ -2,9 +2,9 @@
 
 namespace App\Contracts;
 
-use App\Http\Requests\ProductStatisticsMonthlyBestSellingRequest;
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\Product\ProductStatisticsMonthlyBestSellingRequest;
+use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Product;
 use Illuminate\Support\Collection;
 

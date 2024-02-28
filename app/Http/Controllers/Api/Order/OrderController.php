@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Order;
 
 use App\Contracts\OrderServiceContract;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\Order\StoreOrderRequest;
 use App\Http\Resources\Order\OrderResource;
 use Illuminate\Http\JsonResponse;
 

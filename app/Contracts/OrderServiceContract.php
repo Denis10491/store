@@ -2,8 +2,8 @@
 
 namespace App\Contracts;
 
-use App\Http\Requests\OrdersStatisticsMonthlyAmountByDayRequest;
-use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\Order\OrderStatisticsMonthlyAmountByDayRequest;
+use App\Http\Requests\Order\StoreOrderRequest;
 use App\Models\Order;
 use Illuminate\Support\Collection;
 
@@ -13,5 +13,5 @@ interface OrderServiceContract
 
     public function store(StoreOrderRequest $request): Order;
 
-    public function monthlyAmountByDay(OrdersStatisticsMonthlyAmountByDayRequest $request): Collection;
+    public function monthlyAmountByDay(OrderStatisticsMonthlyAmountByDayRequest $request): Collection;
 }

@@ -3,8 +3,8 @@
 namespace App\Services\Order;
 
 use App\Contracts\OrderServiceContract;
-use App\Http\Requests\OrdersStatisticsMonthlyAmountByDayRequest;
-use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\Order\OrderStatisticsMonthlyAmountByDayRequest;
+use App\Http\Requests\Order\StoreOrderRequest;
 use App\Models\Order;
 use App\Models\Product;
 use Carbon\Carbon;
@@ -40,7 +40,7 @@ class OrderService implements OrderServiceContract
         });
     }
 
-    public function monthlyAmountByDay(OrdersStatisticsMonthlyAmountByDayRequest $request): Collection
+    public function monthlyAmountByDay(OrderStatisticsMonthlyAmountByDayRequest $request): Collection
     {
         $date = $request->str('year').'-'.$request->str('month');
         return Order::query()->whereBetween('created_at', [

@@ -3,11 +3,11 @@
 namespace App\Services\Product;
 
 use App\Contracts\ProductServiceContract;
-use App\Http\Requests\ProductStatisticsMonthlyBestSellingRequest;
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\Product\ProductStatisticsMonthlyBestSellingRequest;
+use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Nutritional;
-use App\Models\OrderProduct;
+use App\Models\Order;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
