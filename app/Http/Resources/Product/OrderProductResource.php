@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Order;
+namespace App\Http\Resources\Product;
 
-use App\Http\Resources\Product\OrderProductResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrderResource extends JsonResource
+class OrderProductResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,9 +16,9 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'address' => $this->address,
-            'products' => OrderProductResource::collection($this->products)->additional(['count']),
-            'created_at' => $this->created_at
+            'name' => $this->name,
+            'price' => $this->price,
+            'count' => $this->pivot->count
         ];
     }
 }
