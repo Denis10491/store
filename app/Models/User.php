@@ -37,13 +37,8 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function isAdmin(): bool
+    public function reviews(): HasMany
     {
-        return $this->role === UserRole::Admin;
-    }
-
-    public function isUser(): bool
-    {
-        return $this->role === UserRole::User;
+        return $this->hasMany(Review::class);
     }
 }
