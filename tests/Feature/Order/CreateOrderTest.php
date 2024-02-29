@@ -80,12 +80,6 @@ class CreateOrderTest extends TestCase
                 '*' => [
                     'id',
                     'name',
-                    'description',
-                    'imgPath',
-                    'nutritional' => [
-                        'proteins', 'fats', 'carbohydrates'
-                    ],
-                    'composition',
                     'price',
                     'count'
                 ]

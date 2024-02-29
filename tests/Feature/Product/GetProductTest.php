@@ -36,7 +36,7 @@ class GetProductTest extends TestCase
             'id',
             'name',
             'description',
-            'imgPath',
+            'img_path',
             'nutritional' => [
                 'proteins', 'fats', 'carbohydrates'
             ],
@@ -47,7 +47,7 @@ class GetProductTest extends TestCase
             'id' => $product->id,
             'name' => $data['name'],
             'description' => $data['description'],
-            'imgPath' => $data['imgPath'],
+            'img_path' => $data['imgPath'],
             'nutritional' => [
                 'proteins' => $data['proteins'],
                 'fats' => $data['proteins'],

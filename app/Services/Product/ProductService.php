@@ -114,8 +114,8 @@ class ProductService implements ProductServiceContract
                 Carbon::parse($date)->endOfMonth()
             ])
             ->with('products')
-            ->selectRaw('order_products.product_id, SUM(order_products.count) as total_count')
-            ->groupBy('order_products.product_id')->get();
+            ->selectRaw('order_product.product_id, SUM(order_product.count) as total_count')
+            ->groupBy('order_product.product_id')->get();
     }
 
     public function setProduct(Product $product): static

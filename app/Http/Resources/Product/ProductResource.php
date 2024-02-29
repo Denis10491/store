@@ -18,11 +18,11 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'imgPath' => $this->imgPath,
+            'img_path' => $this->imgPath,
             'nutritional' => new NutritionalResource($this->nutritional),
             'composition' => $this->composition,
             'price' => $this->price,
-            'count' => $this->pivot->count
+            'reviews' => ReviewResource::collection($this->reviews)
         ];
     }
 }

@@ -59,7 +59,7 @@ class StoreProductTest extends TestCase
             'id',
             'name',
             'description',
-            'imgPath',
+            'img_path',
             'nutritional' => [
                 'proteins', 'fats', 'carbohydrates'
             ],

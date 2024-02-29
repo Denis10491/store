@@ -29,7 +29,7 @@ class UpdateProductTest extends TestCase
             'id',
             'name',
             'description',
-            'imgPath',
+            'img_path',
             'nutritional' => [
                 'proteins',
                 'fats',
@@ -66,7 +66,7 @@ class UpdateProductTest extends TestCase
             'id',
             'name',
             'description',
-            'imgPath',
+            'img_path',
             'nutritional' => [
                 'proteins',
                 'fats',

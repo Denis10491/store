@@ -6,6 +6,7 @@ use App\Contracts\ProductServiceContract;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
+use App\Http\Resources\Product\MinifiedProductResource;
 use App\Http\Resources\Product\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
@@ -15,7 +16,7 @@ class ProductController extends Controller
     public function index(): JsonResponse
     {
         $products = Product::query()->latest()->get();
-        return response()->json(ProductResource::collection($products));
+        return response()->json(MinifiedProductResource::collection($products));
     }
 
     public function show(Product $product): JsonResponse

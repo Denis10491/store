@@ -23,12 +23,7 @@ class GetProductsTest extends TestCase
             '*' => [
                 'id',
                 'name',
-                'description',
-                'imgPath',
-                'nutritional' => [
-                    'proteins', 'fats', 'carbohydrates'
-                ],
-                'composition',
+                'img_path',
                 'price'
             ]
         ]);
