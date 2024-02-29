@@ -19,7 +19,7 @@ class UpdateProductTest extends TestCase
     public function test_success_put(): void
     {
         $data = [
-            'name' => base64_encode(fake()->sentence)
+            'name' => fake()->sentence
         ];
 
         $response = $this->put(route('products.update', $this->product->id), $data);
@@ -36,7 +36,8 @@ class UpdateProductTest extends TestCase
                 'carbohydrates'
             ],
             'composition',
-            'price'
+            'price',
+            'reviews'
         ]);
         $response->assertJson([
             'name' => $data['name'],

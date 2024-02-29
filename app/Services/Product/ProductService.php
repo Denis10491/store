@@ -26,34 +26,23 @@ class ProductService implements ProductServiceContract
             $path = $request->file('image')->storePublicly('images', 'public');
             Storage::disk('public')->url($path);
 
-            $nutritional = Nutritional::query()->create([
-                'proteins' => $request->integer('proteins'),
-                'fats' => $request->integer('fats'),
-                'carbohydrates' => $request->integer('carbohydrates')
-            ]);
+            $nutritional = Nutritional::query()->create($request->only('proteins', 'fats', 'carbohydrates'));
 
             return Product::query()->create([
-                'name' => $request->str('name'),
-                'description' => $request->str('description'),
+                ...$request->only('name', 'description', 'composition', 'price'),
                 'imgPath' => config('app.url').Storage::url($path),
                 'nutritional_id' => $nutritional->id,
-                'composition' => $request->str('composition'),
-                'price' => $request->str('price')
             ]);
         });
     }
 
     public function storeReview(StoreReviewRequest $request): Review
     {
-        return DB::transaction(function () use ($request): Review {
-            return auth()->user()->reviews()->create([
-                'body' => $request->str('body'),
-                'rating' => $request->integer('rating'),
-                'product_id' => $this->product->id
-            ]);
-        });
+        return auth()->user()->reviews()->create([
+            ...$request->only('body', 'rating'),
+            'product_id' => $this->product->id
+        ]);
     }
-
 
     public function update(UpdateProductRequest $request): Product
     {
@@ -71,48 +60,14 @@ class ProductService implements ProductServiceContract
                     'composition' => $request->str('composition'),
                     'price' => $request->integer('price'),
                 ]);
-
                 $this->product->nutritional()->update([
                     'proteins' => $request->integer('proteins'),
                     'fats' => $request->integer('fats'),
                     'carbohydrates' => $request->integer('carbohydrates'),
                 ]);
             } else {
-                $data = [];
-
-                if ($request->has('name')) {
-                    $data['name'] = $request->str('name');
-                }
-
-                if ($request->has('description')) {
-                    $data['description'] = $request->str('description');
-                }
-
-                if ($request->has('composition')) {
-                    $data['composition'] = $request->str('composition');
-                }
-
-                if ($request->has('price')) {
-                    $data['price'] = $request->integer('price');
-                }
-
-                $this->product->update($data);
-
-                $data = [];
-
-                if ($request->has('proteins')) {
-                    $data['proteins'] = $request->integer('proteins');
-                }
-
-                if ($request->has('fats')) {
-                    $data['fats'] = $request->integer('fats');
-                }
-
-                if ($request->has('carbohydrates')) {
-                    $data['carbohydrates'] = $request->integer('carbohydrates');
-                }
-
-                $this->product->nutritional()->update($data);
+                $this->product->update($request->only('name', 'description', 'composition', 'price'));
+                $this->product->nutritional()->update($request->only('proteins', 'fats', 'carbohydrates'));
             }
 
             return $this->product;
@@ -135,6 +90,8 @@ class ProductService implements ProductServiceContract
     public function setProduct(Product $product): static
     {
         $this->product = $product;
+        return $this;
+    }
 
         return $this;
     }
