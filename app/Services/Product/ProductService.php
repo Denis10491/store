@@ -5,10 +5,12 @@ namespace App\Services\Product;
 use App\Contracts\ProductServiceContract;
 use App\Http\Requests\Product\ProductStatisticsMonthlyBestSellingRequest;
 use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\StoreReviewRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Nutritional;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Review;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -40,6 +42,18 @@ class ProductService implements ProductServiceContract
             ]);
         });
     }
+
+    public function storeReview(StoreReviewRequest $request): Review
+    {
+        return DB::transaction(function () use ($request): Review {
+            return auth()->user()->reviews()->create([
+                'body' => $request->str('body'),
+                'rating' => $request->integer('rating'),
+                'product_id' => $this->product->id
+            ]);
+        });
+    }
+
 
     public function update(UpdateProductRequest $request): Product
     {

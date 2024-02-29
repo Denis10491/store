@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AccessReview;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\EncryptCookies;
@@ -79,6 +80,7 @@ class Kernel extends HttpKernel
      */
     protected $middlewareAliases = [
         'role.admin' => AdminMiddleware::class,
+        'access.review' => AccessReview::class,
         'auth' => Authenticate::class,
         'auth.basic' => AuthenticateWithBasicAuth::class,
         'auth.session' => AuthenticateSession::class,
