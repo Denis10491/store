@@ -56,8 +56,8 @@ class UpdateProductTest extends TestCase
     {
         $data = [
             'name' => fake()->sentence,
-            'fats' => random_int(1, 50),
-            'price' => random_int(100, 10000)
+            'fats' => fake()->numberBetween(5, 50),
+            'price' => fake()->numberBetween(100, 5000)
         ];
 
         $response = $this->patch(route('products.update', $this->product->id), $data);
