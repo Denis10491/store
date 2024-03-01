@@ -7,6 +7,7 @@ use App\Http\Requests\Product\ProductStatisticsMonthlyBestSellingRequest;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\StoreReviewRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
+use App\Http\Requests\Product\UpdateReviewRequest;
 use App\Models\Nutritional;
 use App\Models\Order;
 use App\Models\Product;
@@ -19,6 +20,8 @@ use Illuminate\Support\Facades\Storage;
 class ProductService implements ProductServiceContract
 {
     protected Product $product;
+
+    protected Review $review;
 
     public function store(StoreProductRequest $request): Product
     {
@@ -74,6 +77,20 @@ class ProductService implements ProductServiceContract
         });
     }
 
+    public function updateReview(UpdateReviewRequest $request): Review
+    {
+        if ($request->method() === 'PUT') {
+            $this->review->update([
+                'body' => $request->str('body'),
+                'rating' => $request->integer('rating')
+            ]);
+        } else {
+            $this->review->update($request->only('body', 'rating'));
+        }
+        
+        return $this->review;
+    }
+
     public function monthlyBestSelling(ProductStatisticsMonthlyBestSellingRequest $request
     ): Collection {
         $date = $request->integer('year').'-'.$request->integer('month');
@@ -93,6 +110,9 @@ class ProductService implements ProductServiceContract
         return $this;
     }
 
+    public function setReview(Review $review): static
+    {
+        $this->review = $review;
         return $this;
     }
 }

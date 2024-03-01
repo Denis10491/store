@@ -17,10 +17,14 @@ class AccessReview
     {
         $review = $request->route('review');
 
-        if (!auth()->user()->isAdmin() && auth()->user()->id !== $review->user_id) {
-            return response()->json(['message' => 'Forbidden'], 403);
+        if (auth()->user()->isAdmin()) {
+            return $next($request);
         }
 
-        return $next($request);
+        if (auth()->user()->id === $review->user_id) {
+            return $next($request);
+        }
+
+        return response()->json(['message' => 'Forbidden'], 403);
     }
 }
