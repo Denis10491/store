@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
@@ -11,9 +12,11 @@ abstract class TestCase extends BaseTestCase
 
     protected User $user;
 
-    public function login(): void
+    public function login(bool $isAdmin = false): void
     {
-        $this->user = User::factory()->createOne();
+        $this->user = User::factory()->createOne([
+            'role' => ($isAdmin) ? UserRole::Admin : UserRole::User
+        ]);
         $this->actingAs($this->user, 'sanctum');
     }
 

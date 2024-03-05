@@ -13,7 +13,7 @@ class DeleteProductTest extends TestCase
     {
         parent::setUp();
 
-        $this->login();
+        $this->login(true);
 
         $this->product = Product::factory()->createOne();
     }

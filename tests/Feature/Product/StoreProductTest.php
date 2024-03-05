@@ -14,7 +14,7 @@ class StoreProductTest extends TestCase
     {
         parent::setUp();
 
-        $this->login();
+        $this->login(true);
     }
 
     public function test_error_validation(): void

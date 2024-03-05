@@ -13,6 +13,8 @@ class UpdateProductTest extends TestCase
     {
         parent::setUp();
 
+        $this->login(true);
+
         $this->product = Product::factory()->createOne();
     }
 
