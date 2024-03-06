@@ -13,6 +13,11 @@ use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum', 'role.admin'])->only('store', 'update', 'destroy');
+    }
+
     public function index(): JsonResponse
     {
         $products = Product::query()->latest()->get();

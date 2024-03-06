@@ -14,19 +14,17 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory(10)->create();
-        
+
         User::factory()->create([
             'email' => 'admin@admin',
             'password' => 'admin',
             'role' => UserRole::Admin
         ]);
 
-        Product::factory(250)
-            ->has(Review::factory(random_int(0, 5)))
-            ->create();
-
-        Order::factory(200)
-            ->has(Product::factory(10))
-            ->create();
+        Order::factory(30)
+            ->has(
+                Product::factory(fake()->numberBetween(1, 10))
+                    ->has(Review::factory(fake()->numberBetween(0, 5)))
+            )->create();
     }
 }

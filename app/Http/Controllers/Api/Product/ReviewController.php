@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Product;
 
-use App\Contracts\ProductServiceContract;
+use App\Contracts\ReviewServiceContract;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\StoreReviewRequest;
 use App\Http\Requests\Product\UpdateReviewRequest;
@@ -19,15 +19,15 @@ class ReviewController extends Controller
         $this->middleware('access.review')->only('update', 'destroy');
     }
 
-    public function store(StoreReviewRequest $request, ProductServiceContract $service, Product $product): JsonResponse
+    public function store(StoreReviewRequest $request, ReviewServiceContract $service, Product $product): JsonResponse
     {
-        $createdReview = $service->setProduct($product)->storeReview($request);
+        $createdReview = $service->setProduct($product)->store($request);
         return response()->json(new ReviewResource($createdReview), 201);
     }
 
-    public function update(UpdateReviewRequest $request, ProductServiceContract $service, Review $review): JsonResponse
+    public function update(UpdateReviewRequest $request, ReviewServiceContract $service, Review $review): JsonResponse
     {
-        $updatedReview = $service->setReview($review)->updateReview($request);
+        $updatedReview = $service->setReview($review)->update($request);
         return response()->json(new ReviewResource($updatedReview));
     }
 
