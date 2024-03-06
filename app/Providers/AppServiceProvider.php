@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Contracts\AuthServiceContract;
 use App\Contracts\OrderServiceContract;
 use App\Contracts\ProductServiceContract;
 use App\Services\Order\OrderService;
@@ -18,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(ProductServiceContract::class, ProductService::class);
         $this->app->bind(OrderServiceContract::class, OrderService::class);
+        $this->app->bind(AuthServiceContract::class, AuthService::class);
     }
 
     /**
