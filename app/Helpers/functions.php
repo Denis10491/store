@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,4 +12,9 @@ function uploadImage(Request $request): ?string
         return $path;
     }
     return null;
+}
+
+function responseOk(): JsonResponse
+{
+    return response()->json(['message' => 'Success']);
 }

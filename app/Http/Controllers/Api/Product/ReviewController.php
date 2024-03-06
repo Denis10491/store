@@ -34,6 +34,6 @@ class ReviewController extends Controller
     public function destroy(Review $review): JsonResponse
     {
         $review->delete();
-        return response()->json(['message' => 'Success']);
+        return responseOk();
     }
 }
