@@ -1,21 +1,39 @@
 {
+    "extends": "@vue/tsconfig/tsconfig.web.json",
+    "include": [
+        "env.d.ts",
+        "resources/**/*.vue",
+        "resources/**/*.*",
+        "vite.config.*"
+    ],
     "compilerOptions": {
-        "target": "es5",
-        "strict": true,
-        "module": "ESNext",
-        "moduleResolution": "node",
-        "baseUrl": ".",
+        "composite": true,
+        "types": [
+            "node"
+        ],
+        "lib": [
+            "esnext",
+            "dom"
+        ],
         "paths": {
-            "@assets/*": ["resources/assets/*"],
-            "@middleware/*": ["resources/js/user/middleware/*"],
-            "@components/*": ["resources/js/components/*"],
-            "@user/components/*": ["resources/js/user/components/*"],
-            "@user/services/*": ["resources/js/user/services/*"],
-            "@user/store/*": ["resources/js/user/store/*"],
-            "@admin/components": ["resources/js/admin/components/*"],
-            "@admin/services/*": ["resources/js/admin/services/*"],
-            "@admin/store/*": ["resources/js/admin/store/*"],
-            "@helpers/*": ["resources/js/helpers/*"]
+            "@assets/*": [
+                "./resources/assets/*"
+            ],
+            "@helpers/*": [
+                "./resources/js/helpers/*"
+            ],
+            "@components/*": [
+                "./resources/js/components/*"
+            ],
+            "@ui/*": [
+                "./resources/js/ui/*"
+            ],
+            "@user/*": [
+                "./resources/js/user/*"
+            ],
+            "@admin/*": [
+                "./resources/js/admin/*"
+            ]
         }
     }
 }
