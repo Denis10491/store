@@ -5,34 +5,6 @@ import axios from "axios";
 axios.defaults.baseURL = BASE_API_URL;
 axios.defaults.withCredentials = true;
 
-export async function user(): Promise<any> {
-    try {
-        const response = await axios.get('/user', {
-            headers: {
-                Authorization: getAuthorizationToken()
-            }
-        });
-        return response;
-    } catch {
-        return false;
-    }
-}
-
-export async function logout(): Promise<boolean> {
-    try {
-        await axios.get('/logout', {
-            headers: {
-                Authorization: getAuthorizationToken()
-            }
-        })
-        sessionStorage.removeItem('token');
-        window.location.href = '/';
-        return true;
-    } catch {
-        return false;
-    }
-}
-
 export async function productById(id: string | number): Promise<any> {
     try {
         const response = await axios.get('/products/' + id);

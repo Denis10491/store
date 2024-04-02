@@ -1,10 +1,29 @@
-export function getPriceOfProducts (products: any[]): number {
+export function getPriceOfProducts(products: Array<any>): number {
     return products.reduce((sum: number, product: { price: number; }) => sum + product.price, 0);
 }
 
-export function getMonth(date: Date) {
+export function getHeaders(): object {
+    return {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+    }
+}
+
+export function getAuthHeaders(token: string): object {
+    return {
+        headers: {
+            'Authorization': token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+    }
+}
+
+export function getMonth(date: Date): number {
     let dateString = date.toDateString()
-    switch(dateString.substring(4).substring(3, dateString.length)) {
+    switch (dateString.substring(4).substring(3, dateString.length)) {
         case 'Jan':
             return 0
         case 'Feb':

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {computed} from 'vue';
-import {useUserStore} from '@user/store/user';
 import {GITHUB_REPOSITORY} from '@helpers/constants';
 import Button from '@ui/Button.vue';
 import {Auth} from "@user/modules/auth/services/auth";
+import {useUserStore} from "@user/modules/user/store/user";
 
 const exit = async (): Promise<void> => {
     await Auth.logout();
@@ -11,14 +11,14 @@ const exit = async (): Promise<void> => {
 }
 
 const userStore = useUserStore();
-const isAuth = computed<boolean>(() => userStore.getIsAuthStatus);
+const isAuth = computed<boolean>(() => userStore.getIsAuth);
 </script>
 
 <template>
     <header
         class="uk-card uk-card-default uk-flex uk-flex-between uk-flex-middle uk-flex-center uk-background-default uk-width-1-1 uk-padding-small border">
         <ul v-if="isAuth" class="uk-nav uk-nav-default uk-width-1-1 uk-flex uk-flex-middle">
-            <a href="/public" class="header__logo">Store</a>
+            <a href="/" class="header__logo">Store</a>
             <li>
                 <router-link to="/basket" class="header__nav-item">Basket</router-link>
             </li>
@@ -30,7 +30,7 @@ const isAuth = computed<boolean>(() => userStore.getIsAuthStatus);
             </li>
         </ul>
         <ul v-else class="uk-nav uk-nav-default uk-width-1-1 uk-flex uk-flex-middle">
-            <a href="/public" class="header__logo">Store</a>
+            <a href="/" class="header__logo">Store</a>
             <li>
                 <router-link to="/about" class="header__nav-item">About</router-link>
             </li>

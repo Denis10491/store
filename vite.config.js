@@ -20,6 +20,7 @@ export default defineConfig({
             "@assets": path.resolve(__dirname, "./resources/assets"),
             "@helpers": path.resolve(__dirname, "./resources/js/helpers"),
             "@ui": path.resolve(__dirname, "./resources/js/ui"),
+            "@components": path.resolve(__dirname, "./resources/js/components"),
             "@user": path.resolve(__dirname, "./resources/js/user"),
             "@admin": path.resolve(__dirname, "./resources/js/admin"),
         },

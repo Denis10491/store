@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import {computed, ref} from 'vue';
-import {useUserStore} from '@user/store/user';
+import {useUserStore} from '@user/modules/user/store/user';
 import {useProductsStore} from '@user/store/products';
 import {Product} from '@helpers/interfaces';
 import {createOrder} from '@user/services/api';

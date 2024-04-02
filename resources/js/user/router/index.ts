@@ -1,18 +1,41 @@
 import {createRouter, createWebHistory} from 'vue-router';
-import {useUserStore} from '../store/user'
-import guest from '../middleware/guest';
-import auth from '../middleware/auth';
-import middlewareController from './middlewareController';
-import {setAuthorizationToken} from '../services/auth';
+import guest from '@user/router/middleware/guest';
+import auth from '@user/router/middleware/auth';
+import middlewareController from '@user/router/middlewareController';
 
 const routes = [
-    {path: '/', component: () => import('../pages/Home.vue')},
-    {path: '/product/:id', component: () => import('../pages/Product.vue'), props: true},
-    {path: '/basket', component: () => import('../pages/Basket.vue')},
-    {path: '/profile', component: () => import('../pages/Profile.vue'), meta: {middleware: [auth]}},
-    {path: '/about', component: () => import('../pages/About.vue')},
-    {path: '/login', component: () => import('../pages/auth/Login.vue'), meta: {middleware: [guest]}},
-    {path: '/signup', component: () => import('../pages/auth/Signup.vue'), meta: {middleware: [guest]}}
+    {
+        path: '/',
+        component: () => import('@user/pages/Home.vue')
+    },
+    {
+        path: '/product/:id',
+        component: () => import('@user/pages/Product.vue'),
+        props: true
+    },
+    {
+        path: '/basket',
+        component: () => import('@user/pages/Basket.vue')
+    },
+    {
+        path: '/profile',
+        component: () => import('@user/pages/Profile.vue'),
+        meta: {middleware: [auth]}
+    },
+    {
+        path: '/about',
+        component: () => import('@user/pages/About.vue')
+    },
+    {
+        path: '/login',
+        component: () => import('@user/pages/auth/Login.vue'),
+        meta: {middleware: [guest]}
+    },
+    {
+        path: '/signup',
+        component: () => import('@user/pages/auth/Signup.vue'),
+        meta: {middleware: [guest]}
+    }
 ]
 
 const router = createRouter({
@@ -21,18 +44,17 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    setAuthorizationToken('Bearer ' + sessionStorage.getItem('token') ?? '');
-    const userStore = useUserStore();
-    userStore.getUserInfo().then(status => {
-        const middleware = to.meta.middleware;
-        const context = {from, next, status};
+    const middleware = to.meta.middleware;
+    const context = {from, next};
 
-        if (!middleware) return next();
-        middleware[0]({
-            ...context,
-            next: middlewareController(context, middleware)
-        })
-    });
+    if (!middleware) {
+        return next();
+    }
+
+    middleware[0]({
+        ...context,
+        next: middlewareController(context, middleware)
+    })
 })
 
 export default router

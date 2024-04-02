@@ -1,3 +1,18 @@
+<script setup lang="ts">
+import Button from '@ui/Button.vue';
+
+const emit = defineEmits<{
+    (e: 'plus', id: number): Promise<void>,
+    (e: 'minus', id: number): Promise<void>,
+    (e: 'remove', id: number): Promise<void>,
+}>()
+
+const props = defineProps<{
+    id: number,
+    count: number
+}>()
+</script>
+
 <template>
     <div>
         <div class="uk-flex uk-flex-center uk-flex-middle">
@@ -17,18 +32,3 @@
         </Button>
     </div>
 </template>
-
-<script setup lang="ts">
-import Button from '@ui/Button.vue';
-
-const emit = defineEmits<{
-    (e: 'plus', id: number): Promise<void>,
-    (e: 'minus', id: number): Promise<void>,
-    (e: 'remove', id: number): Promise<void>,
-}>()
-
-const props = defineProps<{
-    id: number,
-    count: number
-}>()
-</script>
