@@ -1,5 +1,5 @@
 export interface Product {
-    id: number, 
+    id: number,
     imgPath: string,
     name: string,
     description: string,
@@ -19,14 +19,8 @@ export interface Nutritional {
     carbohydrates: number
 }
 
-export interface UserData {
-    name?: string,
-    email: string,
-    password: string
-}
-
-export interface ArrayOrder extends Array<any>  {
-    [page: number]: Array< Order>
+export interface ArrayOrder extends Array<any> {
+    [page: number]: Array<Order>
 }
 
 export interface Order {
