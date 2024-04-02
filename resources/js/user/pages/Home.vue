@@ -1,11 +1,11 @@
 <template>
-    <div 
-        v-if="loaded" 
+    <div
+        v-if="loaded"
         class="uk-child-width-1-2@s uk-child-width-1-3@m uk-child-width-1-4@l uk-child-width-1-5@xl uk-text-center uk-width-1-1 uk-height-1-1"
         uk-grid="masonry: pack"
     >
         <div v-for="(product, key) in products[currentPage]" :key="key">
-            <ProductCard 
+            <ProductCard
                 :id="product.id"
                 :name="product.name"
                 :description="product.description"
@@ -25,9 +25,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useProductsStore } from '@user/store/products';
-import { ArrayProduct } from '@helpers/interfaces';
+import {computed, ref} from 'vue';
+import {useProductsStore} from '@user/store/products';
+import type {ArrayProduct} from '@helpers/interfaces';
 import ProductCard from '@user/components/products/ProductCard.vue';
 import Paginator from '@components/Paginator.vue';
 
@@ -41,8 +41,8 @@ const changePage = (num: number) => {
     productsStore.getPage(num);
     setTimeout(() => {
         productsStore.getLastPage < num
-        ? currentPage.value = productsStore.getLastPage
-        : currentPage.value = num;
+            ? currentPage.value = productsStore.getLastPage
+            : currentPage.value = num;
         loaded.value = true;
     }, 500);
 }

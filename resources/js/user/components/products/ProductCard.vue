@@ -9,12 +9,12 @@
         <p>{{ description }}</p>
         <Button type="primary" @click="productsStore.plus(id)">{{ price }}</Button>
         <Counter v-if="productInBasket"
-            class="counter"
-            :id="id"
-            :count="productInBasket.count!"
-            @plus="productsStore.plus(id)"
-            @minus="productsStore.minus(id)"
-            @remove="productsStore.removeById(id)"
+                 class="counter"
+                 :id="id"
+                 :count="productInBasket.count!"
+                 @plus="productsStore.plus(id)"
+                 @minus="productsStore.minus(id)"
+                 @remove="productsStore.removeById(id)"
         />
         <router-link :to="'/product/' + id">
             <Button type="default" class="uk-margin-small-left uk-margin-small-top">Подробнее</Button>
@@ -23,10 +23,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useProductsStore } from '@user/store/products';
-import Card from '@components/Card.vue';
-import Button from '@components/Button.vue';
+import {computed} from 'vue';
+import {useProductsStore} from '@user/store/products';
+import Card from '@ui/Card.vue';
+import Button from '@ui/Button.vue';
 import Counter from '@components/Counter.vue';
 
 const props = defineProps<{

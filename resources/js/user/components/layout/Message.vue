@@ -1,5 +1,6 @@
 <template>
-    <Card v-if="isActive" class="message uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle uk-padding-small border">
+    <Card v-if="isActive"
+          class="message uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle uk-padding-small border">
         <p>We would like to inform you that this online store is not a real commercial project</p>
         <div class="uk-flex uk-flex-middle uk-margin-small-left">
             <router-link to="/about">
@@ -11,8 +12,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import Button from "@components/Button.vue";
+import {onMounted, ref} from "vue";
+import Button from "@ui/Button.vue";
 
 const isActive = ref<boolean>(false);
 onMounted(() => setTimeout(() => isActive.value = true, 2000));
@@ -26,6 +27,7 @@ onMounted(() => setTimeout(() => isActive.value = true, 2000));
     transform: translateX(-50%);
     width: calc(100% - 80px);
 }
+
 .message * {
     margin: 0;
 }

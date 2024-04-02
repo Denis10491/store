@@ -2,24 +2,24 @@
     <Card>
         <ul uk-tab>
             <li v-for="(isActive, name) in menu"
-                :key="name" 
+                :key="name"
                 :class="{'uk-active': isActive}">
                 <a href="#" @click="changeTab(name)">{{ name }}</a>
             </li>
         </ul>
         <keep-alive>
-            <component :is="activeTab" />
+            <component :is="activeTab"/>
         </keep-alive>
     </Card>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue';
+import {computed, reactive} from 'vue';
 import English from '@user/components/about/English.vue';
 import Russian from '@user/components/about/Russian.vue';
 import Stack from '@user/components/about/Stack.vue';
 import Features from '@user/components/about/Features.vue';
-import Card from '@components/Card.vue';
+import Card from '@ui/Card.vue';
 
 type Menu = {
     en: boolean;
@@ -43,7 +43,7 @@ const changeTab = (name: keyof Menu): void => {
 }
 
 const activeTab = computed(() => {
-    switch(true) {
+    switch (true) {
         case menu.en:
             return English;
         case menu.ru:

@@ -2,9 +2,9 @@
     <div class="uk-flex uk-flex-center">
         <Card>
             <h3>Create new account</h3>
-            <Input type="text" placeholder="Name" v-model="data.name" />
-            <Input type="email" placeholder="Email" v-model="data.email" />
-            <Input type="password" placeholder="Password" v-model="data.password" />
+            <Input type="text" placeholder="Name" v-model="data.name"/>
+            <Input type="email" placeholder="Email" v-model="data.email"/>
+            <Input type="password" placeholder="Password" v-model="data.password"/>
             <Button type="primary" @click="send()">SignUp</Button>
             <Error v-if="!isFormRequestStatus">We cannot register you. Try again</Error>
         </Card>
@@ -12,12 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
-import { UserData } from '@helpers/interfaces';
-import { signup } from '@user/services/api';
-import Card from '@components/Card.vue';
-import Input from '@components/Input.vue';
-import Button from '@components/Button.vue';
+import {reactive, ref} from 'vue';
+import {UserData} from '@helpers/interfaces';
+import {signup} from '@user/services/api';
+import Card from '@ui/Card.vue';
+import Input from '@ui/Input.vue';
+import Button from '@ui/Button.vue';
 import Error from '@components/Error.vue';
 
 let data = reactive<UserData>({
