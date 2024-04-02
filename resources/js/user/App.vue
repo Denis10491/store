@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import Header from '@user/components/Header.vue'
+import Message from '@user/components/Message.vue'
+</script>
+
 <template>
     <main class="main container">
         <Header></Header>
@@ -5,10 +10,5 @@
             <router-view></router-view>
         </div>
     </main>
-    <Message />
+    <Message/>
 </template>
-
-<script setup lang="ts">
-import Header from '@user/components/layout/Header.vue'
-import Message from '@user/components/layout/Message.vue'
-</script>

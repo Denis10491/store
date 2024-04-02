@@ -12,4 +12,8 @@ export class Auth {
     static async login(email: string, password: string): Promise<IToken> {
         return await useLogin(email, password)
     }
+
+    static async logout(): Promise<any> {
+        return await useLogout()
+    }
 }
