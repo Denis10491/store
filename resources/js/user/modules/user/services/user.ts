@@ -4,15 +4,9 @@ import {useGetUser} from "@user/modules/user/api/useGetUser";
 export class User {
     static store: any = null
 
-    static async show(): Promise<IUser | null> {
-        const user: IUser | null = await useGetUser()
-
-        if (!user) {
-            return null
-        }
-
+    static async show(): Promise<IUser> {
+        const user: IUser = await useGetUser()
         User.store?.init(user)
-        
         return user
     }
 }

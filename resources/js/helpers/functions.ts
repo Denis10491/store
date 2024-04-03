@@ -2,6 +2,19 @@ export function getPriceOfProducts(products: Array<any>): number {
     return products.reduce((sum: number, product: { price: number; }) => sum + product.price, 0);
 }
 
+export function findIndexById(list: Array<{ id: number }>, id: number): number {
+    return list.findIndex((item: { id: string | number }): boolean => item.id === id)
+}
+
+
+export function findItemById(list: Array<{ id: number }>, id: number): any {
+    return list.find((item: { id: string | number }): boolean => item.id === id)
+}
+
+export function getImg(path: string): string {
+    return (path.slice(0, 4) == 'http') ? path : '../' + path;
+}
+
 export function getHeaders(): object {
     return {
         headers: {
