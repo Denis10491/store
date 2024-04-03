@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import Header from '@admin/components/Header.vue';
+</script>
+
 <template>
     <main class="main container uk-width-1-1">
         <Header></Header>
@@ -6,10 +10,6 @@
         </div>
     </main>
 </template>
-
-<script setup lang="ts">
-import Header from '@admin/components/layout/Header.vue';
-</script>
 
 <style>
 .main .content {
