@@ -3,8 +3,6 @@ import {useCreateOrder} from "@user/modules/order/api/useCreateOrder";
 import {useGetOrders} from "@user/modules/order/api/useGetOrders";
 
 export class Order {
-    static store: any = null
-
     static async getAll(): Promise<Array<IOrder>> {
         return await useGetOrders()
     }
