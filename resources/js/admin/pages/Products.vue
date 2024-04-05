@@ -17,11 +17,7 @@ Product.getAll()
 const productStore = useProductStore()
 const products = computed<Array<IMinifiedProduct>>(() => productStore.getList)
 
-const changeTab = (name: string) => {
-    Object.keys(menu.value).map((key: string) => {
-        menu.value[key] = key === name
-    });
-}
+const changeTab = (name: string) => Object.keys(menu.value).map((key: string) => menu.value[key] = key === name);
 </script>
 
 <template>
