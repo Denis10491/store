@@ -61,17 +61,18 @@ class ProductService implements ProductServiceContract
         });
     }
 
-    public function monthlyBestSelling(ProductStatisticsMonthlyBestSellingRequest $request
-    ): Collection {
+    public function monthlyBestSelling(ProductStatisticsMonthlyBestSellingRequest $request): Collection
+    {
         $date = $request->integer('year').'-'.$request->integer('month');
-        return Order::query()->whereBetween('created_at',
+        return Order::query()->whereBetween('orders.created_at',
             [
                 Carbon::parse($date)->startOfMonth(),
                 Carbon::parse($date)->endOfMonth()
             ])
-            ->with('products')
-            ->selectRaw('order_product.product_id, SUM(order_product.count) as total_count')
-            ->groupBy('order_product.product_id')->get();
+            ->join('order_products', 'orders.id', '=', 'order_products.order_id')
+            ->join('products', 'products.id', '=', 'order_products.product_id')
+            ->selectRaw('products.name, SUM(order_products.count) as total_count')
+            ->groupBy('order_products.product_id')->get();
     }
 
     public function setProduct(Product $product): static
