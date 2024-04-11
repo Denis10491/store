@@ -22,6 +22,11 @@ a:hover {
     padding: 40px 0;
 }
 
+.main-mail {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
 .container {
     margin: 0 40px;
 }
