@@ -1,5 +1,5 @@
 <p style="margin: 50px 0;">
- <img width="80%" src="resources/assets/images/logo.png" alt="FakeStoreLogo"/>
+ <img width="300px" src="resources/assets/images/logo.png" alt="FakeStoreLogo"/>
 </p>
 
 ## About
@@ -12,7 +12,7 @@ and top-selling products. Also have full access to change products.
 
 Frontend: Vue.js 3, TypeScript, Pinia, Chart.js, VueRouter, Axios, UIkit, Vite, ESlint
 
-Backend: Laravel 10, PHP, Docker, MySQL
+Backend: Laravel 10, PHP 8.3, Docker, MySQL
 
 ## Features
 
