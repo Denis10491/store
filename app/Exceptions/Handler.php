@@ -2,9 +2,10 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use ValueError;
 
 class Handler extends ExceptionHandler
 {
@@ -35,5 +36,14 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        if ($e instanceof ValueError) {
+            return response()->json(['message' => 'No match found.'], 422);
+        }
+
+        return parent::render($request, $e);
     }
 }

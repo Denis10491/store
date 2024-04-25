@@ -3,12 +3,13 @@
 namespace App\Traits;
 
 use App\Enums\OrderStatus;
+use Illuminate\Http\JsonResponse;
 
 trait HasOrderStatus
 {
-    public function setStatus(OrderStatus $status): OrderStatus
+    public function setStatus(OrderStatus $status): OrderStatus|JsonResponse
     {
-        $this->status = $status;
+        $this->status = OrderStatus::tryFrom($status);
 
         return $this->getStatus();
     }
