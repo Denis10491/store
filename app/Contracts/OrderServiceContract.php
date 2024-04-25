@@ -14,7 +14,9 @@ interface OrderServiceContract
 
     public function store(StoreOrderRequest $request): Order;
 
-    public function update(Order $order, UpdateOrderRequest $request): Order;
+    public function update(UpdateOrderRequest $request): Order;
 
     public function monthlyAmountByDay(OrderStatisticsMonthlyAmountByDayRequest $request): Collection;
+
+    public function setOrder(Order $order): static;
 }

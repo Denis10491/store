@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 
 class OrderService implements OrderServiceContract
 {
+    protected Order $order;
+
     public function index(): Collection
     {
         if (auth()->user()->isUser()) {
@@ -40,25 +42,25 @@ class OrderService implements OrderServiceContract
         });
     }
 
-    public function update(Order $order, UpdateOrderRequest $request): Order
+    public function update(UpdateOrderRequest $request): Order
     {
         if ($request->isMethod('put')) {
-            $order->fill($request->only('address', 'status'));
+            $this->order->fill($request->only('address', 'status'));
         }
 
         if ($request->isMethod('patch')) {
             if ($request->has('address')) {
-                $order->address = $request->str('address');
+                $this->order->address = $request->str('address');
             }
 
             if ($request->has('status')) {
-                $order->status = $request->str('status');
+                $this->order->status = $request->str('status');
             }
 
-            $order->save();
+            $this->order->save();
         }
 
-        return $order;
+        return $this->order;
     }
 
     public function monthlyAmountByDay(OrderStatisticsMonthlyAmountByDayRequest $request): Collection
@@ -73,5 +75,12 @@ class OrderService implements OrderServiceContract
             })->map(function ($orders) {
                 return $orders->count();
             });
+    }
+
+    public function setOrder(Order $order): static
+    {
+        $this->order = $order;
+
+        return $this;
     }
 }

@@ -29,7 +29,7 @@ class OrderController extends Controller
 
     public function update(Order $order, UpdateOrderRequest $request, OrderServiceContract $service): JsonResponse
     {
-        $updatedOrder = $service->update($order, $request);
+        $updatedOrder = $service->setOrder($order)->update($request);
         return response()->json(new OrderResource($updatedOrder));
     }
 }
