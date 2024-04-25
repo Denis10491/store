@@ -3,7 +3,11 @@
 namespace App\Exceptions;
 
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use ValueError;
 
@@ -38,10 +42,16 @@ class Handler extends ExceptionHandler
         });
     }
 
-    public function render($request, Throwable $e)
-    {
+    public function render(
+        $request,
+        Throwable $e
+    ): \Illuminate\Http\Response|JsonResponse|RedirectResponse|Response {
         if ($e instanceof ValueError) {
             return response()->json(['message' => 'No match found.'], 422);
+        }
+
+        if ($e instanceof ModelNotFoundException) {
+            return response()->json(['message' => 'Not found.'], 404);
         }
 
         return parent::render($request, $e);
