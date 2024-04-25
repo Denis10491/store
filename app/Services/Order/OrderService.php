@@ -5,6 +5,7 @@ namespace App\Services\Order;
 use App\Contracts\OrderServiceContract;
 use App\Http\Requests\Order\OrderStatisticsMonthlyAmountByDayRequest;
 use App\Http\Requests\Order\StoreOrderRequest;
+use App\Http\Requests\Order\UpdateOrderRequest;
 use App\Models\Order;
 use App\Models\Product;
 use Carbon\Carbon;
@@ -37,6 +38,27 @@ class OrderService implements OrderServiceContract
 
             return $order;
         });
+    }
+
+    public function update(Order $order, UpdateOrderRequest $request): Order
+    {
+        if ($request->isMethod('put')) {
+            $order->fill($request->only('address', 'status'));
+        }
+
+        if ($request->isMethod('patch')) {
+            if ($request->has('address')) {
+                $order->address = $request->str('address');
+            }
+
+            if ($request->has('status')) {
+                $order->status = $request->str('status');
+            }
+
+            $order->save();
+        }
+
+        return $order;
     }
 
     public function monthlyAmountByDay(OrderStatisticsMonthlyAmountByDayRequest $request): Collection

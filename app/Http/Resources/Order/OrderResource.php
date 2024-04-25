@@ -19,6 +19,7 @@ class OrderResource extends JsonResource
             'id' => $this->id,
             'address' => $this->address,
             'products' => OrderProductResource::collection($this->products)->additional(['count']),
+            'status' => $this->status,
             'created_at' => $this->created_at
         ];
     }

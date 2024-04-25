@@ -16,7 +16,7 @@ class OrderNotifyMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public User $user, public Order $order, public array $products)
+    public function __construct(public User $user, public Order $order)
     {
     }
 
