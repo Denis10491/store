@@ -1,53 +1,62 @@
 version: '3.7'
 
 services:
-  app: 
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: app
-    restart: always
-    environment:
-      - APP_ENV=local
-      - APP_DEBUG=true
-    ports:
-      - 8000:80
-    volumes:
-      - ./:/var/www/html
-      - .env:/var/www/html/.env
-    networks:
-      - local
-    depends_on:
-      - mysql
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: app
+        restart: always
+        environment:
+            - APP_ENV=local
+            - APP_DEBUG=true
+            - REDIS_HOST=redis
+        ports:
+            - 8000:80
+        volumes:
+            - ./:/var/www/html
+            - .env:/var/www/html/.env
+        networks:
+            - local
+        depends_on:
+            - mysql
+            - redis
 
-  mysql:
-    image: mysql:latest
-    environment:
-      MYSQL_DATABASE: storedb
-      MYSQL_ROOT_PASSWORD: root
-    ports:
-      - 3306:3306
-    volumes:
-      - local:/var/lib/mysql
-    networks:
-      - local
+    redis:
+        image: redis:latest
+        ports:
+            - 6379:6379
+        networks:
+            - local
 
-  phpmyadmin:
-    depends_on:
-      - mysql
-    image: phpmyadmin:latest
-    restart: always
-    ports:
-      - 8080:80
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-    networks:
-      - local
+    mysql:
+        image: mysql:latest
+        environment:
+            MYSQL_DATABASE: storedb
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - 3306:3306
+        volumes:
+            - local:/var/lib/mysql
+        networks:
+            - local
+
+    phpmyadmin:
+        depends_on:
+            - mysql
+        image: phpmyadmin:latest
+        restart: always
+        ports:
+            - 8080:80
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+        networks:
+            - local
 
 networks:
-  local:
-    driver: bridge
+    local:
+        driver: bridge
 
 volumes:
-  local:
-    driver: local
+    local:
+        driver: local
