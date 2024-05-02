@@ -10,6 +10,7 @@ use App\Http\Resources\Product\MinifiedProductResource;
 use App\Http\Resources\Product\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
@@ -20,12 +21,17 @@ class ProductController extends Controller
 
     public function index(): JsonResponse
     {
-        $products = Product::query()->latest()->get();
+        $products = Cache::remember('products.index', 60, static function () {
+            return Product::query()->latest()->get();
+        });
         return response()->json(MinifiedProductResource::collection($products));
     }
 
     public function show(Product $product): JsonResponse
     {
+        Cache::remember('products.show.'.$product->id, 60, static function () use ($product) {
+            return $product;
+        });
         return response()->json(new ProductResource($product));
     }
 
