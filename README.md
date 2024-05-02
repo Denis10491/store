@@ -12,16 +12,16 @@ and top-selling products. Also have full access to change products.
 
 Frontend: Vue.js 3, TypeScript, Pinia, Chart.js, VueRouter, Axios, UIkit, Vite, ESlint
 
-Backend: Laravel 10, PHP 8.3, Docker, MySQL
+Backend: Laravel 10, PHP 8.3, Docker, Redis, MySQL
 
 ## Features
 
-- Admin panel with the ability to manage products, view statistics and a list of orders.
+- Admin panel with the ability to manage products, view statistics and orders, products in the form of lists and tables.
 - Displaying monthly statistics on orders and best-selling products using chart.js
 - RESTful API with roles. Admin panel
 - Deploying an application via docker
 - SPA
-- Viewing orders and products in the form of lists and tables
+- Caching frequently accessed data using redis
 
 ## Config
 
