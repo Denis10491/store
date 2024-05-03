@@ -4,6 +4,7 @@ import ProductCard from "@user/modules/product/views/ProductCard.vue";
 import ReviewList from "@user/modules/product/views/ReviewList.vue";
 import {Product} from "@user/modules/product/services/product";
 import type {IProduct} from "@user/modules/product/interfaces/IProduct";
+import CreateReviewForm from "@user/modules/product/views/CreateReviewForm.vue";
 import Card from "@ui/Card.vue";
 
 const props = defineProps<{ id: number }>()
@@ -18,6 +19,7 @@ Product.getById(props.id).then(data => product.value = data)
 
         <Card>
             <h2>Отзывы</h2>
+            <CreateReviewForm :productId="id"/>
             <ReviewList :reviews="product!.reviews"/>
         </Card>
     </div>
