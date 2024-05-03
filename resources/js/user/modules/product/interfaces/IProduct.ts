@@ -1,3 +1,5 @@
+import type {IReview} from "@user/modules/product/interfaces/IReview";
+
 export interface IProduct {
     id: number,
     img_path: string,
@@ -10,5 +12,6 @@ export interface IProduct {
         carbohydrates: number
     },
     price: number,
-    count?: number
+    count?: number,
+    reviews: Array<IReview>
 }
