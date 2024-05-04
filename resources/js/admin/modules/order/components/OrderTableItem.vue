@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {getPriceOfProducts} from "@helpers/functions";
+import {getPriceOfProducts, toDateViewFormat} from "@helpers/functions";
 import type {IOrder} from "@admin/modules/order/interfaces/IOrder";
 
 defineProps<IOrder>()
@@ -14,7 +14,7 @@ defineProps<IOrder>()
                 {{ product.name + ' x' + product.count + ' (' + product.price + ')' }}</p>
         </td>
         <td>{{ getPriceOfProducts(products!) }}</td>
-        <td>{{ created_at!.toString().slice(0, 10).split('-').join('.') }}</td>
+        <td>{{ toDateViewFormat(created_at!) }}</td>
     </tr>
 </template>
 

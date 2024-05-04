@@ -15,6 +15,10 @@ export function getImg(path: string): string {
     return (path.slice(0, 4) == 'http') ? path : '../' + path;
 }
 
+export function toDateViewFormat(date: string | Date): string {
+    return date.toString().slice(0, 10).split('-').join('.')
+}
+
 export function getHeaders(): object {
     return {
         headers: {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type {IReview} from "@user/modules/product/interfaces/IReview";
+import {toDateViewFormat} from "../../../../helpers/functions";
 
 defineProps<{
     review: IReview
@@ -13,7 +14,7 @@ defineProps<{
                 <h3>{{ review.user_name }}</h3>
                 <span v-for="star in review.rating" :key="star" uk-icon="icon: star"></span>
             </div>
-            <p>{{ review.created_at }}</p>
+            <p>{{ toDateViewFormat(review.created_at) }}</p>
         </div>
         <p>{{ review.body }}</p>
     </div>

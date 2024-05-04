@@ -26,7 +26,7 @@ const submit = async () => {
     if (!userStore.getIsAuth) {
         window.location.href = '/login'
     }
-    
+
     if (await Order.create(formData)) {
         window.location.href = '/profile'
     }
@@ -42,12 +42,14 @@ const submit = async () => {
                :value="formData.address"/>
         <div class="uk-flex uk-flex-end uk-flex-middle">
             <Button type="primary" @click="submit()">Buy</Button>
-            <p class="uk-margin-small-left">{{ sum }}</p>
+            <p class="uk-margin-small-left">Sum: {{ sum }}</p>
         </div>
         <Error v-if="!isFormRequestStatus">We were unable to place your order. Try later</Error>
     </Card>
 </template>
 
 <style scoped>
-
+button {
+    margin: 0 !important;
+}
 </style>

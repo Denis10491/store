@@ -11,7 +11,7 @@ onMounted(() => setTimeout(() => isActive.value = true, 2000));
     <Card v-if="isActive"
           class="message uk-card uk-card-default uk-flex uk-flex-center uk-flex-middle uk-padding-small border">
         <p>We would like to inform you that this online store is not a real commercial project</p>
-        <div class="uk-flex uk-flex-middle uk-margin-small-left">
+        <div class="uk-flex uk-flex-right uk-margin-small-left">
             <router-link to="/about">
                 <Button type="default">Read more</Button>
             </router-link>
