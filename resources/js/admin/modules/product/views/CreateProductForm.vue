@@ -1,150 +1,83 @@
-<template>
-    <div
-        class="uk-card uk-card-default uk-flex uk-flex-column uk-width-1-1 uk-padding uk-height-1-1 border"
-    >
-        <div>
-            <input type="text" class="uk-input uk-margin-small-bottom" placeholder="Name" v-model="productForm.name">
-            <input type="text" class="uk-input uk-margin-small-bottom" placeholder="Description"
-                   v-model="productForm.description">
+<script setup lang="ts">
+import {ref} from "vue";
+import type {ICreateProduct} from "@admin/modules/product/interfaces/ICreateProduct";
+import Card from "@ui/Card.vue";
+import Input from "@ui/Input.vue";
+import Button from "@ui/Button.vue";
+import Error from "@components/Error.vue";
+import Textarea from "@ui/Textarea.vue";
+import {Product} from "@admin/modules/product/services/product";
+import Success from "@components/Success.vue";
 
-            <div uk-form-custom="target: true">
-                <input type="file" aria-label="Custom controls" @change="fileLoad">
-                <input class="uk-input uk-form-width-medium" type="text" placeholder="Select file"
-                       aria-label="Custom controls" disabled>
-            </div>
+const data = ref<ICreateProduct>({
+    name: '',
+    description: '',
+    composition: '',
+    fats: NaN,
+    proteins: NaN,
+    carbohydrates: NaN,
+    price: NaN,
+})
+let image = ref<HTMLInputElement>()
+let isFormRequestStatus = ref<boolean | null>(null)
+let message = ref<string>('')
 
-            <div class="uk-flex-inline uk-margin-small-top uk-margin-small-bottom">
-                <input type="text" class="uk-input" placeholder="Proteins" name="proteins"
-                       v-model="productForm.nutritional.proteins">
-                <input type="text" class="uk-input" placeholder="Fats" name="fats"
-                       v-model="productForm.nutritional.fats">
-                <input type="text" class="uk-input" placeholder="Carbohydrates" name="carbohydrates"
-                       v-model="productForm.nutritional.carbohydrates">
-            </div>
-            <input type="text" class="uk-input uk-margin-small-bottom" placeholder="Composition"
-                   v-model="productForm.composition">
+const submit = async () => {
+    const formData: FormData = new FormData()
 
-            <div class="uk-flex">
-                <input type="text" class="uk-input uk-margin-small-bottom uk-width-1-2" placeholder="Price"
-                       v-model="productForm.price">
-                <button
-                    v-if="type == 'create'"
-                    class="uk-button uk-button-primary uk-height-1-1 uk-width-1-2"
-                    @click="create()"
-                >Create
-                </button>
-                <button
-                    v-if="type == 'update'"
-                    class="uk-button uk-button-primary uk-height-1-1 uk-width-1-2"
-                    @click="update()"
-                >Update
-                </button>
-            </div>
-        </div>
+    if (image.value?.files) {
+        formData.append('image', image.value.files[0])
+    }
 
-        <div v-if="isFormRequestStatus == true" class="uk-alert-success" uk-alert>
-            <a href class="uk-alert-close" uk-close></a>
-            <p>Success</p>
-        </div>
-        <div v-if="isFormRequestStatus == false" class="uk-alert-danger uk-padding-small">
-            <p>Failed</p>
-        </div>
-    </div>
-</template>
+    formData.append('name', data.value.name)
+    formData.append('description', data.value.description)
+    formData.append('composition', data.value.composition)
+    formData.append('fats', data.value.fats.toPrecision())
+    formData.append('proteins', data.value.proteins.toPrecision())
+    formData.append('carbohydrates', data.value.carbohydrates.toPrecision())
+    formData.append('price', data.value.price.toPrecision())
 
-<script>
-import {useProductsStore} from '../../../store/products.js';
+    try {
+        const product = await Product.create(formData)
 
-export default {
-    name: 'AdminProductFormComponent',
-    props: ['type', 'page'],
+        Product.store.list.push(product)
 
-    data() {
-        return {
-            productForm: {
-                id: null,
-                name: "",
-                description: "",
-                img: null,
-                composition: "",
-                nutritional: {
-                    proteins: "",
-                    fats: "",
-                    carbohydrates: ""
-                },
-                price: ""
-            },
-            isFormRequestStatus: null
-        }
-    },
-
-    setup() {
-        const productsStore = useProductsStore();
-        return {productsStore}
-    },
-
-    methods: {
-        async create() {
-            this.isFormRequestStatus = await this.productsStore.create(this.productForm)
-            if (this.isFormRequestStatus) this.productsStore.getPage(this.currentPage);
-        },
-
-        async update() {
-            this.isFormRequestStatus = await this.productsStore.update(this.productForm);
-            if (this.isFormRequestStatus) {
-                this.productsStore.getPage(this.page);
-                setTimeout(() => {
-                    this.isFormRequestStatus = null
-                }, 5000)
-            }
-        },
-
-        renderFormProductById(data = null) {
-            if (data) this.productsStore.selectedId = data.id;
-            let product = this.productsStore.getProductById(this.productsStore.selectedId);
-
-            this.updateDataForProductForm(
-                this.productsStore.selectedId, product.name, product.description,
-                null, product.composition, product.nutritional.proteins,
-                product.nutritional.fats, product.nutritional.carbohydrates,
-                product.price
-            );
-        },
-
-        updateDataForProductForm(
-            id = null, name = "", description = "", img = null, composition = "",
-            proteins = "", fats = "", carbohydrates = "", price = ""
-        ) {
-            this.productForm = {
-                id: id,
-                name: name,
-                description: description,
-                img: img,
-                composition: composition,
-                nutritional: {
-                    proteins: proteins,
-                    fats: fats,
-                    carbohydrates: carbohydrates
-                },
-                price: price
-            }
-        },
-
-        fileLoad(e) {
-            this.productForm.img = e.target.files[0];
-        }
-    },
-
-    watch: {
-        'productsStore.$state.selectedId': function (val) {
-            if (this.type == 'update') this.renderFormProductById({id: val});
-        }
+        isFormRequestStatus.value = true
+        message.value = 'Product created.'
+    } catch (err) {
+        isFormRequestStatus.value = false
+        message.value = err.response.data.message
     }
 }
 </script>
 
-<style scoped>
-.uk-modal-title {
-    margin: 0;
-}
-</style>
+<template>
+    <Card>
+        <div>
+            <Input placeholder="Name" type="text" v-model="data.name" :value="data.name"/>
+            <Textarea placeholder="Description" v-model="data.description" :value="data.description"></Textarea>
+
+            <div uk-form-custom="target: true">
+                <input type="file" aria-label="Custom controls" ref="image">
+                <input class="uk-input uk-form-width-medium" type="text" placeholder="Select image"
+                       aria-label="Custom controls" disabled>
+            </div>
+
+            <div class="uk-flex-inline uk-margin-small-top uk-margin-small-bottom">
+                <Input placeholder="Proteins" type="number" v-model="data.proteins"
+                       :value="data.proteins"/>
+                <Input placeholder="Fats" type="number" v-model="data.fats" :value="data.fats"/>
+                <Input placeholder="Carbohydrates" type="number" v-model="data.carbohydrates"
+                       :value="data.carbohydrates"/>
+            </div>
+
+            <Textarea placeholder="Composition" v-model="data.composition" :value="data.composition"></Textarea>
+            <Input placeholder="Price" type="number" v-model="data.price" :value="data.price"/>
+
+            <Button type="primary" @click="submit()">Create</Button>
+        </div>
+
+        <Success v-if="isFormRequestStatus === true">Success. {{ message }}</Success>
+        <Error v-if="isFormRequestStatus === false">Error. {{ message }}</Error>
+    </Card>
+</template>

@@ -26,10 +26,10 @@ const remove = async () => {
         <div class="uk-width-1-1 uk-margin-left">
             <h3 class="title">{{ props.name }}</h3>
             <p class="uk-margin-small-bottom"><span>Price: </span>{{ props.price }}</p>
-            <a href="#open-form-product" uk-toggle @click="update()">
+            <a href="#update-product" uk-toggle @click="update()">
                 <Button type="primary">Update</Button>
             </a>
-            <Button type="danger" @click="remove()">Remove</Button>
+            <Button type="danger" @click="remove()" class="uk-margin-small-left">Remove</Button>
         </div>
     </div>
 </template>

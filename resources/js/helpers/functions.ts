@@ -28,6 +28,15 @@ export function getHeaders(): object {
     }
 }
 
+export function getAuthHeadersFormData(token: string): object {
+    return {
+        headers: {
+            'Authorization': token,
+            'Accept': 'application/json',
+        }
+    }
+}
+
 export function getAuthHeaders(token: string): object {
     return {
         headers: {

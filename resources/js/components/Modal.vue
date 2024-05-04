@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import Button from "@ui/Button.vue";
 
-const props = defineProps<{ title: string }>()
+const props = defineProps<{
+    id: string,
+    title: string
+}>()
 </script>
 
 <template>
-    <div id="open-form-product" uk-modal>
+    <div :id="id" uk-modal>
         <div class="uk-modal-dialog uk-margin-auto-vertical border" style="overflow: hidden;">
             <button class="uk-modal-close-default" type="button" uk-close></button>
             <div class="uk-modal-header uk-flex uk-flex-center uk-flex-middle">
