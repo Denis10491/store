@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-    <div v-for="(review, idx) in reviews.reverse()" :key="idx">
+    <div v-for="(review, idx) in reviews" :key="idx">
         <ReviewItem :review="review"/>
         <hr>
     </div>

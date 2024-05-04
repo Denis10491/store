@@ -2,13 +2,20 @@
 import {reactive, ref} from "vue";
 import type {ICreateReview} from "@user/modules/product/interfaces/ICreateReview";
 import {Review} from "@user/modules/product/services/review";
-import {Product} from "@user/modules/product/services/product";
+import type {IProduct} from "@user/modules/product/interfaces/IProduct";
 import Error from "@components/Error.vue";
 import Button from "@ui/Button.vue";
 import Input from "@ui/Input.vue";
 import Textarea from "@ui/Textarea.vue";
+import type {IReview} from "@user/modules/product/interfaces/IReview";
 
-const props = defineProps<{ productId: number }>()
+const props = defineProps<{
+    product: IProduct
+}>()
+
+const emit = defineEmits<{
+    (e: 'addReview', review: IReview): void
+}>()
 
 let data = reactive<ICreateReview>({
     body: '',
@@ -35,14 +42,14 @@ const submit = async () => {
     isFormRequestStatus.value = true
 
     if (validate()) {
-        const review = await Review.create(props.productId, data)
+        const review = await Review.create(props.product.id, data)
 
         if (!review) {
             errorMessage.value = 'Error. You need to log in.'
             isFormRequestStatus.value = false
         }
 
-        Product.store.list.unshift(review)
+        emit('addReview', review)
     }
 }
 </script>
