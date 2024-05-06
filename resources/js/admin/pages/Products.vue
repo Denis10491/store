@@ -8,6 +8,7 @@ import {Product} from "@admin/modules/product/services/product";
 import type {IMinifiedProduct} from "@admin/modules/product/interfaces/IMinifiedProduct";
 import Modal from "@components/Modal.vue";
 import Card from "@ui/Card.vue";
+import UpdateProductForm from "@admin/modules/product/views/UpdateProductForm.vue";
 
 let menu = ref({
     list: true,
@@ -23,7 +24,7 @@ const changeTab = (name: string) => Object.keys(menu.value).map((key: string) =>
 
 <template>
     <Modal id="update-product" title="Update product">
-        <!-- TODO: Insert UpdateProductForm -->
+        <UpdateProductForm/>
     </Modal>
     <Modal id="create-product" title="Create product">
         <CreateProductForm/>

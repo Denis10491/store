@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {computed, ref} from "vue";
+import {Product} from "@admin/modules/product/services/product";
 import type {ICreateProduct} from "@admin/modules/product/interfaces/ICreateProduct";
+import Success from "@components/Success.vue";
+import Error from "@components/Error.vue";
 import Card from "@ui/Card.vue";
+import Textarea from "@ui/Textarea.vue";
 import Input from "@ui/Input.vue";
 import Button from "@ui/Button.vue";
-import Error from "@components/Error.vue";
-import Textarea from "@ui/Textarea.vue";
-import {Product} from "@admin/modules/product/services/product";
-import Success from "@components/Success.vue";
+import type {IProduct} from "@admin/modules/product/interfaces/IProduct";
+import {useGetProductById} from "@user/modules/product/api/useGetProductById";
 
 const data = ref<ICreateProduct>({
     name: '',
@@ -22,6 +24,10 @@ let image = ref<HTMLInputElement>()
 let isFormRequestStatus = ref<boolean | null>(null)
 let message = ref<string>('')
 
+const product = computed(() => {
+    useGetProductById(Product.store.selectedId).then((data: IProduct) => data)
+})
+
 const submit = async () => {
     const formData: FormData = new FormData()
 
@@ -29,6 +35,7 @@ const submit = async () => {
         formData.append('image', image.value.files[0])
     }
 
+    formData.append('_method', 'PATCH');
     formData.append('name', data.value.name)
     formData.append('description', data.value.description)
     formData.append('composition', data.value.composition)
@@ -38,9 +45,9 @@ const submit = async () => {
     formData.append('price', data.value.price.toPrecision())
 
     try {
-        await Product.create(formData)
+        await Product.update(formData)
         isFormRequestStatus.value = true
-        message.value = 'Product created.'
+        message.value = 'Product updated.'
     } catch (err) {
         isFormRequestStatus.value = false
         message.value = err.response.data.message
@@ -51,7 +58,7 @@ const submit = async () => {
 <template>
     <Card>
         <div>
-            <Input placeholder="Name" type="text" v-model="data.name" :value="data.name"/>
+            <Input placeholder="Name" type="text" v-model="data.name" :value="product?.name"/>
             <Textarea placeholder="Description" v-model="data.description" :value="data.description"></Textarea>
 
             <div uk-form-custom="target: true">
@@ -71,7 +78,7 @@ const submit = async () => {
             <Textarea placeholder="Composition" v-model="data.composition" :value="data.composition"></Textarea>
             <Input placeholder="Price" type="number" v-model="data.price" :value="data.price"/>
 
-            <Button type="primary" @click="submit()">Create</Button>
+            <Button type="primary" @click="submit()">Update</Button>
         </div>
 
         <Success v-if="isFormRequestStatus === true">Success. {{ message }}</Success>

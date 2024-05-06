@@ -32,6 +32,7 @@ export function getAuthHeadersFormData(token: string): object {
     return {
         headers: {
             'Authorization': token,
+            'Content-Type': 'multipart/form-data',
             'Accept': 'application/json',
         }
     }

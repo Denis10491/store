@@ -9,7 +9,7 @@ const props = defineProps<IMinifiedProduct>()
 
 const productStore = useProductStore()
 
-const update = async () => {
+const update = () => {
     productStore.selectedId = props.id
 }
 

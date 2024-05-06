@@ -29,7 +29,8 @@ class UpdateProductRequest extends FormRequest
             'fats' => ['integer'],
             'carbohydrates' => ['integer'],
             'composition' => ['string', 'max:1000'],
-            'price' => ['integer']
+            'price' => ['integer'],
+            'image' => ['image']
         ];
     }
 }
