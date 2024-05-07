@@ -27,7 +27,8 @@ class ProductFactory extends Factory
             'imgPath' => fake()->imageUrl(640, 640, 'eat'),
             'nutritional_id' => Nutritional::factory()->create(),
             'composition' => fake()->text(255),
-            'price' => fake()->numberBetween(200, 2000)
+            'price' => fake()->numberBetween(200, 2000),
+            'amount' => fake()->numberBetween(0, 500)
         ];
     }
 }

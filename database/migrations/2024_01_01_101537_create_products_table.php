@@ -22,6 +22,7 @@ return new class extends Migration {
 
             $table->string("composition");
             $table->integer("price");
+            $table->integer("amount")->default(0);
             $table->timestamps();
         });
     }
