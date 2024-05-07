@@ -15,6 +15,7 @@ const products = computed<Array<IMinifiedProduct>>(() => productsStore.getList)
             <th>№</th>
             <th>Name</th>
             <th>Price</th>
+            <th>Amount</th>
             <th></th>
         </tr>
         </thead>
@@ -26,6 +27,7 @@ const products = computed<Array<IMinifiedProduct>>(() => productsStore.getList)
             :img_path="product.img_path"
             :name="product.name"
             :price="product.price"
+            :amount="product.amount"
         />
         </tbody>
     </table>

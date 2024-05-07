@@ -22,6 +22,7 @@ const remove = async () => {
         <td>{{ props.id }}</td>
         <td>{{ props.name }}</td>
         <td>{{ props.price }}</td>
+        <td>{{ props.amount }}</td>
         <td class="uk-align-center">
             <a uk-toggle href="#update-product" @click="update()">
                 <Button type="primary">Update</Button>

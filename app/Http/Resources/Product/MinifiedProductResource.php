@@ -19,6 +19,7 @@ class MinifiedProductResource extends JsonResource
             'name' => $this->name,
             'img_path' => $this->imgPath,
             'price' => $this->price,
+            'amount' => $this->when(auth()->user()?->isAdmin(), $this->amount)
         ];
     }
 }

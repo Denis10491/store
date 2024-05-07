@@ -9,12 +9,13 @@ const products = computed<Array<IMinifiedProduct>>(() => productsStore.getList)
 </script>
 
 <template>
-    <div v-for="(product, key) in products" :key="key" class="uk-width-1-1" uk-grid>
+    <div v-for="(product, key) in products" :key="key" class="uk-width-1-1">
         <MinifiedProductItem
             :id="product.id"
             :img_path="product.img_path"
             :name="product.name"
             :price="product.price"
+            :amount="product.amount"
         />
     </div>
 </template>

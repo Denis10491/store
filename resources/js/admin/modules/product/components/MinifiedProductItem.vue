@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import {getImg} from "@helpers/functions";
 import type {IMinifiedProduct} from "@admin/modules/product/interfaces/IMinifiedProduct";
-import {useProductStore} from "@admin/modules/product/store/product";
 import {Product} from "@admin/modules/product/services/product";
 import Button from "@ui/Button.vue";
 
 const props = defineProps<IMinifiedProduct>()
 
-const productStore = useProductStore()
-
-const update = () => {
-    productStore.selectedId = props.id
+const update = async () => {
+    const product = await Product.getById(props.id)
+    Product.store.selectedProduct = product
 }
 
 const remove = async () => {
@@ -26,6 +24,7 @@ const remove = async () => {
         <div class="uk-width-1-1 uk-margin-left">
             <h3 class="title">{{ props.name }}</h3>
             <p class="uk-margin-small-bottom"><span>Price: </span>{{ props.price }}</p>
+            <p class="uk-margin-small-bottom"><span>Amount: </span>{{ props.amount }}</p>
             <a href="#update-product" uk-toggle @click="update()">
                 <Button type="primary">Update</Button>
             </a>

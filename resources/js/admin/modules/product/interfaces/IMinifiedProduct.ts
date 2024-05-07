@@ -3,5 +3,6 @@ export interface IMinifiedProduct {
     img_path: string,
     name: string,
     price: number,
-    count?: number
+    count?: number,
+    amount?: number
 }
