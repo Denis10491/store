@@ -31,4 +31,9 @@ class Product extends Model
     {
         return $this->hasMany(Review::class);
     }
+
+    public function scopeInStock(Builder $query): Builder
+    {
+        return $query->where('amount', '>', 0);
+    }
 }

@@ -22,8 +22,13 @@ class ProductController extends Controller
     public function index(): JsonResponse
     {
         $products = Cache::remember('products.index', 60, static function () {
-            return Product::query()->latest()->get();
+            return Product::query()->inStock()->latest()->get();
         });
+
+        if (auth()->user()?->isAdmin()) {
+            $products = Product::query()->latest()->get();
+        }
+
         return response()->json(MinifiedProductResource::collection($products));
     }
 
