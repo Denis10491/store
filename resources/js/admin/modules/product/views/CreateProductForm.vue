@@ -22,6 +22,17 @@ let image = ref<HTMLInputElement>()
 let isFormRequestStatus = ref<boolean | null>(null)
 let message = ref<string>('')
 
+const updateDescription = (event: InputEvent) => {
+    if (event.target) {
+        data.value.description = event.target.value
+    }
+}
+const updateComposition = (event: InputEvent) => {
+    if (event.target) {
+        data.value.composition = event.target.value
+    }
+}
+
 const submit = async () => {
     const formData: FormData = new FormData()
 
@@ -52,7 +63,7 @@ const submit = async () => {
     <Card>
         <div>
             <Input placeholder="Name" type="text" v-model="data.name" :value="data.name"/>
-            <Textarea placeholder="Description" v-model="data.description" :value="data.description"></Textarea>
+            <Textarea placeholder="Description" @input="updateDescription" :value="data.description"></Textarea>
 
             <div uk-form-custom="target: true">
                 <input type="file" aria-label="Custom controls" ref="image">
@@ -68,7 +79,7 @@ const submit = async () => {
                        :value="data.carbohydrates"/>
             </div>
 
-            <Textarea placeholder="Composition" v-model="data.composition" :value="data.composition"></Textarea>
+            <Textarea placeholder="Composition" @input="updateComposition" :value="data.composition"></Textarea>
             <Input placeholder="Price" type="number" v-model="data.price" :value="data.price"/>
 
             <Button type="primary" @click="submit()">Create</Button>

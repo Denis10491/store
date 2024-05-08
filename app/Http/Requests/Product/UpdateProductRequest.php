@@ -30,7 +30,7 @@ class UpdateProductRequest extends FormRequest
             'carbohydrates' => ['integer'],
             'composition' => ['string', 'max:1000'],
             'price' => ['integer'],
-            'image' => ['image']
+            'image' => ['image', 'nullable']
         ];
     }
 }

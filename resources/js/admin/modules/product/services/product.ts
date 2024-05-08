@@ -6,6 +6,7 @@ import {useProductStatistics} from "@admin/modules/product/api/useProductStatist
 import type {IProduct} from "@admin/modules/product/interfaces/IProduct";
 import {useCreateProduct} from "@admin/modules/product/api/useCreateProduct";
 import {useUpdateProduct} from "@admin/modules/product/api/useUpdateProduct";
+import { useGetProductById } from "@user/modules/product/api/useGetProductById";
 
 export class Product {
     static store: any = null
@@ -16,6 +17,10 @@ export class Product {
         return products
     }
 
+    static async getById(id: number): Promise<IProduct> {
+        return await useGetProductById(id)
+    }
+
     static async create(product: FormData): Promise<IProduct> {
         const createdProduct: IProduct = await useCreateProduct(product)
         Product.store.list.push(createdProduct)
@@ -23,9 +28,9 @@ export class Product {
     }
 
     static async update(formData: FormData): Promise<IProduct> {
-        const updatedProduct: IProduct = await useUpdateProduct(this.store.selectedId, formData)
+        const updatedProduct: IProduct = await useUpdateProduct(this.store.selectedProduct.id, formData)
 
-        const index: number = findIndexById(Product.store.list, this.store.selectedId)
+        const index: number = findIndexById(Product.store.list, this.store.selectedProduct.id)
         this.store.list[index] = updatedProduct
 
         return updatedProduct

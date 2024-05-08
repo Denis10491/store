@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {computed} from "vue";
 
 const props = defineProps<{
-    placeholder: '',
-    value: ''
+    placeholder: string,
+    value: string
 }>()
 
-const value = ref<string>(props.value)
+const value = computed(() => props.value)
 </script>
 
 <template>
-    <textarea class="uk-textarea uk-padding-small border uk-margin-small-bottom" :placeholder="placeholder"
-              v-model="value"
-              rows="3"></textarea>
+    <textarea 
+        class="uk-textarea uk-padding-small border uk-margin-small-bottom" 
+        :placeholder="placeholder" 
+        rows="3"
+        @input="$emit('input', $event.target.value)"
+    >{{ value }}</textarea>
 </template>
