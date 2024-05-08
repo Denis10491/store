@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import {Product} from "@admin/modules/product/services/product";
-import {useProductStore} from "@admin/modules/product/store/product";
 import type {IMinifiedProduct} from "@admin/modules/product/interfaces/IMinifiedProduct";
 import Button from "@ui/Button.vue";
+import { getImg } from "@helpers/functions";
 
 const props = defineProps<IMinifiedProduct>()
 
-const productStore = useProductStore()
-
 const update = async () => {
-    productStore.selectedId = props.id
+    const product = await Product.getById(props.id)
+    Product.store.selectedProduct = product
 }
 
 const remove = async () => {
@@ -20,6 +19,9 @@ const remove = async () => {
 <template>
     <tr class="uk-height-1-1">
         <td>{{ props.id }}</td>
+        <th class="uk-align-center">
+            <img :src="getImg(props.img_path)" alt="">
+        </th>
         <td>{{ props.name }}</td>
         <td>{{ props.price }}</td>
         <td>{{ props.amount }}</td>
@@ -31,3 +33,9 @@ const remove = async () => {
         </td>
     </tr>
 </template>
+
+<style>
+img {
+    height: 50px;
+}
+</style>

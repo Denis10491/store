@@ -13,6 +13,7 @@ const products = computed<Array<IMinifiedProduct>>(() => productsStore.getList)
         <thead>
         <tr>
             <th>№</th>
+            <th>Image</th>
             <th>Name</th>
             <th>Price</th>
             <th>Amount</th>
