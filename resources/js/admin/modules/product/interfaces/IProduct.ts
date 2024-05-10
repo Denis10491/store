@@ -12,5 +12,6 @@ export interface IProduct {
         carbohydrates: number
     },
     price: number,
+    amount: number,
     reviews?: Array<IReview>
 }

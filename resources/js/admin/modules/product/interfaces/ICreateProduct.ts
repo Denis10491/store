@@ -5,5 +5,6 @@ export interface ICreateProduct {
     fats: number,
     proteins: number,
     carbohydrates: number,
-    price: number
+    price: number,
+    amount: number
 }

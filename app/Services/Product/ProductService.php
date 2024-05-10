@@ -46,6 +46,7 @@ class ProductService implements ProductServiceContract
                     'description' => $request->str('description'),
                     'composition' => $request->str('composition'),
                     'price' => $request->integer('price'),
+                    'amount' => $request->integer('amount')
                 ]);
                 $this->product->nutritional()->update([
                     'proteins' => $request->integer('proteins'),
@@ -53,7 +54,7 @@ class ProductService implements ProductServiceContract
                     'carbohydrates' => $request->integer('carbohydrates'),
                 ]);
             } else {
-                $this->product->update($request->only('name', 'description', 'composition', 'price'));
+                $this->product->update($request->only('name', 'description', 'composition', 'price', 'amount'));
                 $this->product->nutritional()->update($request->only('proteins', 'fats', 'carbohydrates'));
             }
 

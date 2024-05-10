@@ -18,6 +18,7 @@ const data = ref<ICreateProduct>({
     proteins: NaN,
     carbohydrates: NaN,
     price: NaN,
+    amount: NaN
 })
 let image = ref<HTMLInputElement | null>()
 let isFormRequestStatus = ref<boolean | null>(null)
@@ -31,6 +32,7 @@ const product = computed<IProduct>(() => {
     data.value.proteins = Product.store.selectedProduct.nutritional?.proteins
     data.value.carbohydrates = Product.store.selectedProduct.nutritional?.carbohydrates
     data.value.price = Product.store.selectedProduct.price
+    data.value.amount = Product.store.selectedProduct.amount
 
     return Product.store.selectedProduct
 })
@@ -62,6 +64,7 @@ const submit = async () => {
     formData.append('proteins', parseInt(data.value.proteins))
     formData.append('carbohydrates', parseInt(data.value.carbohydrates))
     formData.append('price', parseInt(data.value.price))
+    formData.append('amount', parseInt(data.value.amount))
 
     try {
         await Product.update(formData)
@@ -94,6 +97,7 @@ const submit = async () => {
 
             <Textarea placeholder="Composition" @input="updateComposition" :value="product.composition"></Textarea>
             <Input placeholder="Price" type="number" v-model="data.price" :value="product.price"/>
+            <Input placeholder="Amount" type="number" v-model="data.amount" :value="product.amount"/>
 
             <Button type="primary" @click="submit()">Update</Button>
         </div>

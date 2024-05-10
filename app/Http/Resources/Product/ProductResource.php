@@ -22,6 +22,7 @@ class ProductResource extends JsonResource
             'nutritional' => new NutritionalResource($this->nutritional),
             'composition' => $this->composition,
             'price' => $this->price,
+            'amount' => $this->when(auth()->user()?->isAdmin(), $this->amount),
             'reviews' => ReviewResource::collection($this->reviews)
         ];
     }
