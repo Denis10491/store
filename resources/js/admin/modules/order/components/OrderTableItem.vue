@@ -4,6 +4,7 @@ import type {IOrder} from "@admin/modules/order/interfaces/IOrder";
 import { Status } from "@admin/modules/order/enums/Status";
 import { ref, watch } from "vue";
 import { Order } from "@admin/modules/order/services/order";
+import Select from "@ui/Select.vue";
 
 const props = defineProps<IOrder>()
 
@@ -31,9 +32,11 @@ watch(status, (newStatus: Status) => {
         <td>
             <div class="uk-margin">
                 <div class="uk-form-controls">
-                    <select class="uk-select" v-model="status">
-                        <option v-for="val in Status" :value="val" :key="val">{{ val.charAt(0).toUpperCase() + val.slice(1) }}</option>
-                    </select>
+                    <Select 
+                        v-model="status" 
+                        :value="status" 
+                        :options="Object.values(Status)"
+                    ></Select>
                 </div>
             </div>
         </td>
