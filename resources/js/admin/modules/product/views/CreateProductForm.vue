@@ -17,6 +17,7 @@ const data = ref<ICreateProduct>({
     proteins: NaN,
     carbohydrates: NaN,
     price: NaN,
+    amount: NaN
 })
 let image = ref<HTMLInputElement>()
 let isFormRequestStatus = ref<boolean | null>(null)
@@ -47,6 +48,7 @@ const submit = async () => {
     formData.append('proteins', data.value.proteins.toPrecision())
     formData.append('carbohydrates', data.value.carbohydrates.toPrecision())
     formData.append('price', data.value.price.toPrecision())
+    formData.append('amount', data.value.amount.toPrecision())
 
     try {
         await Product.create(formData)
@@ -81,6 +83,7 @@ const submit = async () => {
 
             <Textarea placeholder="Composition" @input="updateComposition" :value="data.composition"></Textarea>
             <Input placeholder="Price" type="number" v-model="data.price" :value="data.price"/>
+            <Input placeholder="Amount" type="number" v-model="data.amount" :value="data.amount"/>
 
             <Button type="primary" @click="submit()">Create</Button>
         </div>

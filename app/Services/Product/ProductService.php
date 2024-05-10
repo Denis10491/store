@@ -25,7 +25,7 @@ class ProductService implements ProductServiceContract
             $path = uploadImage($request);
             $nutritional = Nutritional::query()->create($request->only('proteins', 'fats', 'carbohydrates'));
             return Product::query()->create([
-                ...$request->only('name', 'description', 'composition', 'price'),
+                ...$request->only('name', 'description', 'composition', 'price', 'amount'),
                 'imgPath' => config('app.url').Storage::url($path),
                 'nutritional_id' => $nutritional->id,
             ]);
