@@ -37,7 +37,7 @@ class ProductService implements ProductServiceContract
         return DB::transaction(function () use ($request): Product {
             $path = uploadImage($request);
             if ($path) {
-                $this->product->update(['imgPath' => 'storage/'.$path]);
+                $this->product->update(['imgPath' => config('app.url').Storage::url($path)]);
             }
 
             if ($request->method() === 'PUT') {

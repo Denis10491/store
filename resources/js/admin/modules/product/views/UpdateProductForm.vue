@@ -51,7 +51,6 @@ const updateComposition = (event: InputEvent) => {
 const submit = async () => {
     const formData: FormData = new FormData()
 
-    image.value = null
     if (image.value?.files) {
         formData.append('image', image.value.files[0])
     }
