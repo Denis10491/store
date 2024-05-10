@@ -4,6 +4,11 @@ export class Auth {
     static token: string = ""
 
     static async logout(): Promise<any> {
-        return await useLogout()
+        try {
+            return await useLogout()
+        } catch {
+            sessionStorage.removeItem('token')
+            Auth.token = ''
+        }
     }
 }
