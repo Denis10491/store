@@ -18,8 +18,8 @@ const remove = async () => {
 
 <template>
     <div class="product-card uk-card uk-card-default uk-padding uk-margin-small-bottom uk-flex uk-width-1-1 border">
-        <div class="product-card-img uk-card-media-left uk-cover-container">
-            <img :src="getImg(props.img_path)" class="border" alt="image" uk-cover>
+        <div class="product-card-img img uk-card-media-left uk-cover-container">
+            <img :src="props.img_path" class="border" alt="image" uk-cover>
         </div>
         <div class="uk-width-1-1 uk-margin-left">
             <h3 class="title">{{ props.name }}</h3>
@@ -40,7 +40,6 @@ const remove = async () => {
 
 .product-card-img {
     width: 320px;
-    height: 100%;
 }
 
 span {

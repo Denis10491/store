@@ -24,6 +24,12 @@ let data = reactive<ICreateReview>({
 let isFormRequestStatus = ref<boolean>(true)
 let errorMessage = ref<string>('')
 
+const updateBody = (event: InputEvent) => {
+    if (event.target) {
+        data.body = event.target.value
+    }
+}
+
 const validate = () => {
     if (!data.body) {
         errorMessage.value = 'Error. Body is empty.'
@@ -57,7 +63,7 @@ const submit = async () => {
 <template>
     <div class="uk-margin-bottom uk-width-medium">
         <Input placeholder="Rating" type="number" min="1" max="5" v-model="data.rating" :value="data.rating"/>
-        <Textarea placeholder="Text" v-model="data.body" :value="data.body"/>
+        <Textarea placeholder="Text" @input="updateBody" :value="data.body"/>
         <Button type="primary" @click="submit()">Rate</Button>
         <Error v-if="!isFormRequestStatus">{{ errorMessage }}</Error>
     </div>
