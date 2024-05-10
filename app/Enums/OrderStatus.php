@@ -11,4 +11,6 @@ enum OrderStatus: string
     case Accepted = 'accepted';
 
     case Processing = 'processing';
+
+    case Canceled = 'canceled';
 }
