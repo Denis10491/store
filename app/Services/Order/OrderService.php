@@ -3,6 +3,7 @@
 namespace App\Services\Order;
 
 use App\Contracts\OrderServiceContract;
+use App\Enums\OrderStatus;
 use App\Http\Requests\Order\OrderStatisticsMonthlyAmountByDayRequest;
 use App\Http\Requests\Order\StoreOrderRequest;
 use App\Http\Requests\Order\UpdateOrderRequest;
@@ -54,7 +55,7 @@ class OrderService implements OrderServiceContract
             }
 
             if ($request->has('status')) {
-                $this->order->status = $request->str('status');
+                $this->order->status = OrderStatus::tryFrom($request->str('status'));
             }
 
             $this->order->save();

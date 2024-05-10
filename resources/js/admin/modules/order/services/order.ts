@@ -1,6 +1,8 @@
 import type {IOrder} from "@admin/modules/order/interfaces/IOrder";
 import {useGetOrders} from "@admin/modules/order/api/useGetOrders";
 import {useOrderStatistics} from "@admin/modules/order/api/useOrderStatistics";
+import { useUpdateOrder } from "@admin/modules/order/api/useUpdateOrder";
+import type { Status } from "@admin/modules/order/enums/Status";
 
 export class Order {
     static store: any = null
@@ -13,5 +15,11 @@ export class Order {
 
     static async statistics(year: number, month: number) {
         return await useOrderStatistics(year, month)
+    }
+
+    static async updateStatus(orderId: number, status: Status): Promise<IOrder> {
+        return await useUpdateOrder(orderId, {
+            status: status
+        })
     }
 }

@@ -16,6 +16,7 @@ defineProps<{
             <th>Products</th>
             <th>Price</th>
             <th>Date</th>
+            <th>Status</th>
         </tr>
         </thead>
         <tbody>
@@ -24,6 +25,7 @@ defineProps<{
             :key="key"
             :id="order.id"
             :address="order.address"
+            :status="order.status"
             :products="order.products"
             :created_at="order.created_at"
         />
