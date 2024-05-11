@@ -11,7 +11,7 @@ Route::apiResource('products.reviews', ReviewController::class)
     ->only('store', 'update', 'destroy')->shallow();
 
 Route::controller(ProductStatisticsController::class)
-    ->middleware(['auth:sanctum', 'role.admin'])
+    ->middleware(['auth:sanctum'])
     ->prefix('products/statistics')
     ->as('products.statistics.')
     ->group(function () {
