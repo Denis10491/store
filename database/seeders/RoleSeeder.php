@@ -2,22 +2,20 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Role as RoleEnum;
+use App\Models\Role;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class RoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        if (env('APP_ENV') === 'dev') {
-            $this->call(DevSeeder::class);
-        }
-
-        if (env('APP_ENV') === 'prod') {
-            $this->call(ProdSeeder::class);
+        foreach(RoleEnum::cases() as $role) {
+            Role::create(['name' => $role]);
         }
     }
 }
