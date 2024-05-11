@@ -13,12 +13,6 @@ use Illuminate\Http\JsonResponse;
 
 class ReviewController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:sanctum');
-        $this->middleware('access.review')->only('update', 'destroy');
-    }
-
     public function store(StoreReviewRequest $request, ReviewServiceContract $service, Product $product): JsonResponse
     {
         $createdReview = $service->setProduct($product)->store($request);

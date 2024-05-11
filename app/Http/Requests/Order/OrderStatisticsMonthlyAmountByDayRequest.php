@@ -4,6 +4,7 @@ namespace App\Http\Requests\Order;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class OrderStatisticsMonthlyAmountByDayRequest extends FormRequest
 {
@@ -12,7 +13,7 @@ class OrderStatisticsMonthlyAmountByDayRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Gate::check('read-order-statistics');
     }
 
     /**

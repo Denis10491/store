@@ -4,6 +4,7 @@ namespace App\Http\Resources\Product;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Gate;
 
 class MinifiedProductResource extends JsonResource
 {
@@ -19,7 +20,7 @@ class MinifiedProductResource extends JsonResource
             'name' => $this->name,
             'img_path' => $this->imgPath,
             'price' => $this->price,
-            'amount' => $this->when(auth()->user()?->isAdmin(), $this->amount)
+            'amount' => $this->when(Gate::check('read-product-amount'), $this->amount)
         ];
     }
 }

@@ -12,6 +12,7 @@ use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class OrderService implements OrderServiceContract
 {
@@ -19,7 +20,7 @@ class OrderService implements OrderServiceContract
 
     public function index(): Collection
     {
-        if (auth()->user()->isUser()) {
+        if (Gate::denies('read-all-orders')) {
             return Order::query()->where('user_id', auth()->user()->id)->latest()->get();
         }
         return Order::query()->latest()->get();

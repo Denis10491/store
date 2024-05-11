@@ -11,21 +11,17 @@ use App\Http\Resources\Product\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(['auth:sanctum', 'role.admin'])->only('store', 'update', 'destroy');
-    }
-
     public function index(): JsonResponse
     {
         $products = Cache::remember('products.index', 60, static function () {
             return Product::query()->inStock()->latest()->get();
         });
 
-        if (auth()->user()?->isAdmin()) {
+        if (Gate::check('read-product-amount')) {
             $products = Product::query()->latest()->get();
         }
 

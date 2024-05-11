@@ -4,6 +4,7 @@ namespace App\Http\Resources\Product;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Gate;
 
 class ProductResource extends JsonResource
 {
@@ -22,7 +23,7 @@ class ProductResource extends JsonResource
             'nutritional' => new NutritionalResource($this->nutritional),
             'composition' => $this->composition,
             'price' => $this->price,
-            'amount' => $this->when(auth()->user()?->isAdmin(), $this->amount),
+            'amount' => $this->when(Gate::check('read-product-amount'), $this->amount),
             'reviews' => ReviewResource::collection($this->reviews)
         ];
     }
