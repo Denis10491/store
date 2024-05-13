@@ -28,4 +28,22 @@ class GetProductsTest extends TestCase
             ]
         ]);
     }
+
+    public function test_admin_success(): void
+    {
+        $this->login(true);
+
+        $response = $this->get(route('products.index'));
+
+        $response->assertOk();
+        $response->assertJsonStructure([
+            '*' => [
+                'id',
+                'name',
+                'img_path',
+                'price',
+                'amount' // Admin can see amount
+            ]
+        ]);
+    }
 }

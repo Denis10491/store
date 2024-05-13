@@ -39,6 +39,7 @@ class UpdateProductTest extends TestCase
             ],
             'composition',
             'price',
+            'amount',
             'reviews'
         ]);
         $response->assertJson([
@@ -50,6 +51,7 @@ class UpdateProductTest extends TestCase
                 'carbohydrates' => 0
             ],
             'composition' => '',
+            'amount' => 0,
             'price' => 0
         ]);
     }
@@ -59,7 +61,8 @@ class UpdateProductTest extends TestCase
         $data = [
             'name' => fake()->sentence,
             'fats' => fake()->numberBetween(5, 50),
-            'price' => fake()->numberBetween(100, 5000)
+            'price' => fake()->numberBetween(100, 5000),
+            'amount' => fake()->numberBetween(0, 10)
         ];
 
         $response = $this->patch(route('products.update', $this->product->id), $data);
@@ -76,7 +79,8 @@ class UpdateProductTest extends TestCase
                 'carbohydrates'
             ],
             'composition',
-            'price'
+            'price',
+            'amount'
         ]);
         $response->assertJson([
             'name' => $data['name'],
@@ -87,7 +91,8 @@ class UpdateProductTest extends TestCase
                 'carbohydrates' => $this->product->nutritional->carbohydrates,
             ],
             'composition' => $this->product->composition,
-            'price' => $data['price']
+            'price' => $data['price'],
+            'amount' => $data['amount']
         ]);
     }
 }

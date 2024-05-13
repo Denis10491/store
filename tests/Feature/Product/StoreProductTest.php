@@ -49,7 +49,8 @@ class StoreProductTest extends TestCase
             'fats' => fake()->numberBetween(100, 500),
             'carbohydrates' => fake()->numberBetween(100, 500),
             'composition' => fake()->text(50),
-            'price' => fake()->numberBetween(100, 5000)
+            'price' => fake()->numberBetween(100, 5000),
+            'amount' => fake()->numberBetween(0, 50)
         ];
 
         $response = $this->post(route('products.store'), $data);
@@ -64,7 +65,8 @@ class StoreProductTest extends TestCase
                 'proteins', 'fats', 'carbohydrates'
             ],
             'composition',
-            'price'
+            'price',
+            'amount'
         ]);
         $response->assertJson([
             'name' => $data['name'],
@@ -75,7 +77,8 @@ class StoreProductTest extends TestCase
                 'carbohydrates' => $data['carbohydrates']
             ],
             'composition' => $data['composition'],
-            'price' => $data['price']
+            'price' => $data['price'],
+            'amount' => $data['amount']
         ]);
     }
 }
