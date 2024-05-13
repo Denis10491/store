@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::apiResource('products', ProductController::class);
 
 Route::apiResource('products.reviews', ReviewController::class)
+    ->middleware(['auth:sanctum'])
     ->only('store', 'update', 'destroy')->shallow();
 
 Route::controller(ProductStatisticsController::class)

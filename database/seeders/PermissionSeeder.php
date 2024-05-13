@@ -28,6 +28,13 @@ class PermissionSeeder extends Seeder
             'delete-product' => [RoleEnum::Admin],
 
             /**
+             * Review - Permissions
+             */
+            'create-review' => [RoleEnum::Admin, RoleEnum::User],
+            'update-review' => [RoleEnum::Admin, RoleEnum::User],
+            'delete-review' => [RoleEnum::Admin, RoleEnum::User],
+
+            /**
              * Order - Permissions
              */
             'create-order' => [RoleEnum::Admin, RoleEnum::User],

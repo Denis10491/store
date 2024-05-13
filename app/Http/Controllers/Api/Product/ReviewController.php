@@ -10,6 +10,7 @@ use App\Http\Resources\Product\ReviewResource;
 use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class ReviewController extends Controller
 {
@@ -27,6 +28,7 @@ class ReviewController extends Controller
 
     public function destroy(Review $review): JsonResponse
     {
+        Gate::authorize('delete-review');
         $review->delete();
         return responseOk();
     }
