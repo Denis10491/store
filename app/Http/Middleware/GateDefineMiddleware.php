@@ -3,7 +3,9 @@
 namespace App\Http\Middleware;
 
 use App\Models\Permission;
+use App\Models\User;
 use Closure;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate ;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,12 +20,18 @@ class GateDefineMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (auth()->check()) {
-            $permissions = Permission::whereHas('roles', function($query) {
-                $query->where('roles.id', auth()->user()->role_id);
-            })->get();
- 
-            foreach ($permissions as $permission) {
-                Gate::define($permission->name, fn() => true);
+            foreach (Permission::all() as $permission) {
+                Gate::define($permission->name, function(Model $resource = null) use ($permission) {
+                    if (isset($resource) && auth()->user()->id === $resource->user_id) {
+                        return true;
+                    }
+
+                    if ($permission->roles()->where('roles.id', '=', auth()->user()->role_id)->exists()) {
+                        return true;
+                    }
+
+                    return false;
+                });
             }
         }
 
