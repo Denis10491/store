@@ -27,7 +27,7 @@ class GetUserTest extends TestCase
 
         $response->assertOk();
         $response->assertJsonStructure([
-            'id', 'name', 'email'
+            'id', 'name', 'email', 'role'
         ]);
     }
 }
