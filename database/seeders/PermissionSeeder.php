@@ -41,6 +41,7 @@ class PermissionSeeder extends Seeder
             'read-all-orders' => [RoleEnum::Admin],
             'read-personal-orders' => [RoleEnum::User],
             'read-order-statistics' => [RoleEnum::Admin],
+            'update-status-order' => [RoleEnum::Admin, RoleEnum::Manager],
             'update-order' => [RoleEnum::Admin],
         ];
 
