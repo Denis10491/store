@@ -48,6 +48,91 @@ class UpdateOrderTest extends TestCase
         ]);
     }
 
+    public function test_success_patch_status(): void
+    {
+        $this->login(Role::Manager);
+
+        $data['status'] = OrderStatus::Accepted->value;
+
+        $response = $this->patch(route('orders.update', ['order' => $this->order->id]), $data);
+
+        $response->assertOk();
+        $response->assertJsonStructure([
+            'id',
+            'address',
+            'products',
+            'status',
+            'created_at'
+        ]);
+        $response->assertJsonFragment([
+            'id' => $this->order->id,
+            'address' => $this->order->address,
+            'products' => OrderProductResource::collection($this->order->products)->additional(['count'])->jsonSerialize(),
+            'status' => $data['status'],
+            'created_at' => $this->order->created_at
+        ]);
+    } 
+
+    public function test_success_put_status(): void
+    {
+        $this->login(Role::Manager);
+
+        $data['status'] = OrderStatus::Accepted->value;
+
+        $response = $this->put(route('orders.update', ['order' => $this->order->id]), $data);
+
+        $response->assertOk();
+        $response->assertJsonStructure([
+            'id',
+            'address',
+            'products',
+            'status',
+            'created_at'
+        ]);
+        $response->assertJsonFragment([
+            'id' => $this->order->id,
+            'address' => $this->order->address,
+            'products' => OrderProductResource::collection($this->order->products)->additional(['count'])->jsonSerialize(),
+            'status' => $data['status'],
+            'created_at' => $this->order->created_at
+        ]);
+    }
+
+    public function test_error_patch_status(): void
+    {
+        $this->login();
+
+        $data['status'] = OrderStatus::Accepted->value;
+
+        $response = $this->patch(route('orders.update', ['order' => $this->order->id]), $data);
+
+        $response->assertForbidden();
+        $response->assertJsonStructure([
+            'message'
+        ]);
+        $response->assertJson([
+            'message' => 'This action is unauthorized.'
+        ]);
+    } 
+
+    public function test_error_put_status(): void
+    {
+        $this->login();
+
+        $data['address'] = 'status';
+        $data['status'] = OrderStatus::Accepted->value;
+
+        $response = $this->patch(route('orders.update', ['order' => $this->order->id]), $data);
+
+        $response->assertForbidden();
+        $response->assertJsonStructure([
+            'message'
+        ]);
+        $response->assertJson([
+            'message' => 'This action is unauthorized.'
+        ]);
+    } 
+
     public function test_error_validation_address(): void
     {
         $this->login(Role::Admin);
