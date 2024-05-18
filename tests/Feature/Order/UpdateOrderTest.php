@@ -3,6 +3,7 @@
 namespace Tests\Feature\Order;
 
 use App\Enums\OrderStatus;
+use App\Enums\Role;
 use App\Http\Resources\Product\OrderProductResource;
 use App\Models\Order;
 use App\Models\Product;
@@ -23,7 +24,7 @@ class UpdateOrderTest extends TestCase
 
     public function test_success_put_all(): void
     {
-        $this->login(true);
+        $this->login(Role::Admin);
 
         $data['address'] = 'example';
         $data['status'] = OrderStatus::Accepted->value;
@@ -49,7 +50,7 @@ class UpdateOrderTest extends TestCase
 
     public function test_error_validation_address(): void
     {
-        $this->login(true);
+        $this->login(Role::Admin);
 
         $data['address'] = '';
 
@@ -72,7 +73,7 @@ class UpdateOrderTest extends TestCase
 
     public function test_error_validation_status(): void
     {
-        $this->login(true);
+        $this->login(Role::Admin);
 
         $data['status'] = 'new status';
 
@@ -105,7 +106,7 @@ class UpdateOrderTest extends TestCase
 
     public function test_error_permission(): void
     {
-        $this->login();
+        $this->login(Role::User);
 
         $data['address'] = 'example';
         $data['status'] = OrderStatus::Accepted->value;
@@ -117,7 +118,7 @@ class UpdateOrderTest extends TestCase
             'message'
         ]);
         $response->assertJson([
-            'message' => 'Forbidden'
+            'message' => 'This action is unauthorized.'
         ]);
     }
 }

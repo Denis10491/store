@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Product;
 
+use App\Enums\Role;
 use App\Models\Product;
 use Tests\TestCase;
 
@@ -31,7 +32,7 @@ class GetProductsTest extends TestCase
 
     public function test_admin_success(): void
     {
-        $this->login(true);
+        $this->login(Role::Admin);
 
         $response = $this->get(route('products.index'));
 

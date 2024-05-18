@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Order;
 
+use App\Enums\Role;
 use App\Models\Order;
 use App\Models\Product;
 use Tests\TestCase;
@@ -19,7 +20,7 @@ class CreateOrderTest extends TestCase
 
     public function test_error_validation(): void
     {
-        $this->login();
+        $this->login(Role::User);
 
         $data = [
             'address' => '',
@@ -61,7 +62,7 @@ class CreateOrderTest extends TestCase
 
     public function test_success(): void
     {
-        $this->login();
+        $this->login(Role::User);
 
         $data = [
             'address' => fake()->address(),

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Order;
 
+use App\Enums\Role;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -12,7 +13,6 @@ class GetOrdersTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
 
         User::factory(2)->create();
         Order::factory(3)
@@ -35,7 +35,7 @@ class GetOrdersTest extends TestCase
 
     public function test_success(): void
     {
-        $this->login();
+        $this->login(Role::User);
 
         $response = $this->get(route('orders.index'));
 

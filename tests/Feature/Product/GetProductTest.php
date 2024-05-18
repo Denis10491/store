@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Product;
 
+use App\Enums\Role;
 use App\Models\Nutritional;
 use App\Models\Product;
 use Tests\TestCase;
@@ -88,7 +89,7 @@ class GetProductTest extends TestCase
 
     public function test_success_admin(): void
     {
-        $this->login(true);
+        $this->login(Role::Admin);
 
         $data = [
             'name' => fake()->sentence,

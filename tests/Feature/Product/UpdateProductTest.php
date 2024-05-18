@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Product;
 
+use App\Enums\Role;
 use App\Models\Product;
 use Tests\TestCase;
 
@@ -13,7 +14,7 @@ class UpdateProductTest extends TestCase
     {
         parent::setUp();
 
-        $this->login(true);
+        $this->login(Role::Admin);
 
         $this->product = Product::factory()->createOne();
     }

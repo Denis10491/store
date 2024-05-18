@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Product;
 
+use App\Enums\Role;
 use App\Models\Product;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
@@ -14,7 +15,7 @@ class StoreProductTest extends TestCase
     {
         parent::setUp();
 
-        $this->login(true);
+        $this->login(Role::Admin);
     }
 
     public function test_error_validation(): void
