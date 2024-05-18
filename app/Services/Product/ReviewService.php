@@ -10,6 +10,8 @@ use App\Models\Review;
 
 class ReviewService implements ReviewServiceContract
 {
+    protected Product $product;
+    
     protected Review $review;
 
     public function store(StoreReviewRequest $request): Review
