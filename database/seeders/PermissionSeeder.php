@@ -22,7 +22,7 @@ class PermissionSeeder extends Seeder
              * Product - Permissions
              */
             'create-product' => [RoleEnum::Admin],
-            'read-product-amount' => [RoleEnum::Admin],
+            'read-product-amount' => [RoleEnum::Admin, RoleEnum::Manager],
             'read-product-statistics' => [RoleEnum::Admin],
             'update-product' => [RoleEnum::Admin],
             'delete-product' => [RoleEnum::Admin],
@@ -37,12 +37,19 @@ class PermissionSeeder extends Seeder
             /**
              * Order - Permissions
              */
-            'create-order' => [RoleEnum::Admin, RoleEnum::User],
-            'read-all-orders' => [RoleEnum::Admin],
+            'create-order' => [RoleEnum::Admin, RoleEnum::Manager, RoleEnum::User],
+            'read-all-orders' => [RoleEnum::Admin, RoleEnum::Manager],
             'read-personal-orders' => [RoleEnum::User],
             'read-order-statistics' => [RoleEnum::Admin],
-            'update-status-order' => [RoleEnum::Admin, RoleEnum::Manager],
-            'update-order' => [RoleEnum::Admin],
+            'update-order' => [RoleEnum::Admin, RoleEnum::Manager],
+
+            /**
+             * Role - Permissions
+             */
+            'create-role' => [RoleEnum::Admin],
+            'read-roles' => [RoleEnum::Admin],
+            'update-role' => [RoleEnum::Admin],
+            'delete-role' => [RoleEnum::Admin],
         ];
 
 
