@@ -54,6 +54,10 @@ class Handler extends ExceptionHandler
             return response()->json(['message' => 'Not found.'], 404);
         }
 
+        if ($e instanceof ForbiddenException) {
+            return response()->json(['message' => 'Forbidden.'], 403);
+        }
+
         return parent::render($request, $e);
     }
 }
