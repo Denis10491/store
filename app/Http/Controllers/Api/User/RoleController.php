@@ -16,11 +16,19 @@ class RoleController extends Controller
 {
     public function index(): JsonResponse
     {
+        if (Gate::denies('read-roles')) {
+            throw new ForbiddenException();
+        }
+
         return response()->json(RoleResource::collection(Role::query()->get()));
     }
 
     public function show(Role $role): JsonResponse
     {
+        if (Gate::denies('read-roles')) {
+            throw new ForbiddenException();
+        }
+        
         return response()->json(new RoleResource($role));
     }
 

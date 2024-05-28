@@ -13,10 +13,6 @@ class UpdateOrderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (request()->has('status') && Gate::allows('update-status-order')) {
-            return true;
-        }
-
         return Gate::check('update-order');
     }
 

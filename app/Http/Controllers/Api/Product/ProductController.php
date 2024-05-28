@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Product;
 
 use App\Contracts\ProductServiceContract;
+use App\Exceptions\ForbiddenException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
@@ -53,6 +54,10 @@ class ProductController extends Controller
 
     public function destroy(Product $product): JsonResponse
     {
+        if (Gate::denies('delete-product')) {
+            throw new ForbiddenException();
+        }
+
         $product->delete();
         return responseOk();
     }
