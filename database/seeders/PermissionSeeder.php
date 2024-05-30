@@ -50,6 +50,20 @@ class PermissionSeeder extends Seeder
             'read-roles' => [RoleEnum::Admin],
             'update-role' => [RoleEnum::Admin],
             'delete-role' => [RoleEnum::Admin],
+
+            /**
+             * Permission - Permissions
+             */
+            'create-permission' => [RoleEnum::Admin],
+            'read-permissions' => [RoleEnum::Admin],
+            'update-permission' => [RoleEnum::Admin],
+            'delete-permission' => [RoleEnum::Admin],
+
+            /**
+             * Permission - Role - Permissions
+             */
+            'create-permission-role' => [RoleEnum::Admin],
+            'delete-permission-role' => [RoleEnum::Admin],
         ];
 
 

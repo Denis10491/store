@@ -15,3 +15,7 @@ Route::apiResource('roles', RoleController::class)->middleware(['auth:sanctum'])
 Route::apiResource('permissions', PermissionController::class)
     ->middleware(['auth:sanctum'])
     ->only('store', 'update', 'destroy');
+
+Route::apiResource('roles.permissions', PermissionRoleController::class)
+    ->middleware(['auth:sanctum'])
+    ->only('store', 'destroy');
