@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Gate;
 
 class PermissionController extends Controller
 {
+    public function index(): JsonResponse
+    {
+        if (Gate::denies('read-permissions')) {
+            throw new ForbiddenException();
+        }
+
+        return response()->json(PermissionResource::collection(Permission::all()));
+    }
+
     public function store(StorePermissionRequest $request, PermissionServiceContract $service): JsonResponse
     {
         $createdPermission = $service->create($request);
