@@ -17,6 +17,10 @@ const routes = [
     {
         path: basePath + '/statistics',
         component: () => import('@admin/pages/Statistics.vue')
+    },
+    {
+        path: basePath + '/users',
+        component: () => import('@admin/pages/Users.vue')
     }
 ]
 
