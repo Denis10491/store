@@ -1,49 +1,54 @@
 version: '3.7'
 
 services:
+    nginx:
+        build:
+            context: ./docker/nginx
+            dockerfile: Dockerfile
+        container_name: nginx
+        restart: always
+        ports:
+            - 80:80
+        volumes:
+            - ./docker/nginx/hosts:/etc/nginx/conf.d
+            - ./:/var/www/html/fakestore
+        networks:
+            - app
+
     app:
         build:
-            context: .
+            context: ./docker/php
             dockerfile: Dockerfile
-        image: app
+        container_name: app
         restart: always
-        environment:
-            - APP_ENV=dev
-            - APP_DEBUG=true
-            - REDIS_HOST=redis
-        ports:
-            - 8000:80
         volumes:
-            - ./:/var/www/html
-            - .env:/var/www/html/.env
+            - ./:/var/www/html/fakestore
         networks:
-            - local
+            - app
         depends_on:
-            - mysql
+            - nginx
             - redis
+            - mysql
 
     redis:
         image: redis:latest
-        ports:
-            - 6379:6379
+        container_name: redis
         networks:
-            - local
+            - app
 
     mysql:
         image: mysql:latest
+        container_name: mysql
+        restart: always
         environment:
-            MYSQL_DATABASE: storedb
-            MYSQL_ROOT_PASSWORD: root
-        ports:
-            - 3306:3306
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
         volumes:
             - local:/var/lib/mysql
         networks:
-            - local
+            - app
 
     phpmyadmin:
-        depends_on:
-            - mysql
         image: phpmyadmin:latest
         restart: always
         ports:
@@ -52,10 +57,12 @@ services:
             PMA_HOST: mysql
             MYSQL_ROOT_PASSWORD: password
         networks:
-            - local
+            - app
+        depends_on:
+            - mysql
 
 networks:
-    local:
+    app:
         driver: bridge
 
 volumes:

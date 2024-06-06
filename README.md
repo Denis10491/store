@@ -5,14 +5,16 @@
 ## About
 
 SPA Online FakeStore on Laravel and Vue where you can order products from home. With the ability for the admin to track
-statistics on sales
-and top-selling products. Also have full access to change products.
+statistics on sales and top-selling products. Frequently requested data is cached using Redis. 
+CRUD for products, orders.
 
 ## Stack
 
 Frontend: Vue.js 3, TypeScript, Pinia, Chart.js, VueRouter, Axios, UIkit, Vite, ESlint
 
-Backend: Laravel 10, PHP 8.3, Docker, Redis, MySQL
+Backend: Laravel 10, PHP 8.3, Redis, MySQL
+
+Docker, Nginx, PHP:8.3-FPM
 
 ## Features
 
@@ -21,24 +23,9 @@ Backend: Laravel 10, PHP 8.3, Docker, Redis, MySQL
 - RESTful API with roles. Admin panel
 - Deploying an application via docker
 - SPA
+- ERP
 - Caching frequently accessed data using redis
-
-## Config
-
-Admin account
-
-- Login: admin@admin
-- Password: admin
-- Path: /admin
-
-Database
-
-- DB_CONNECTION=mysql
-- DB_HOST: mysql
-- DB_PORT: 3306
-- DB_DATABASE: storedb
-- DB_USERNAME: root
-- DB_PASSWORD: root
+- The project is covered with tests
 
 ## Run Locally
 
@@ -72,12 +59,6 @@ Connect image storage
   php artisan storage:link
 ```
 
-Run docker build an application image
-
-```bash
-  docker build -t app .
-```
-
 Run docker compose
 
 ```bash
@@ -90,10 +71,15 @@ Generate application key
   docker-compose exec app php artisan key:generate
 ```
 
-Run migrations and seeds
+Run migrations
 
 ```bash
-  docker-compose exec app php artisan migrate:fresh --seed
+  docker-compose exec app php artisan migrate:fresh
+```
+
+Run seeds
+```bash
+  docker-compose exec app php artisan db:seed --class=DatabaseSeeeder
 ```
 
 Run a local server for the client side
@@ -102,4 +88,5 @@ Run a local server for the client side
   npm run dev
 ```
 
-Open project: http://127.0.0.1:8000
+Add fakestore to hosts in OS
+Open project: http://fakestore
